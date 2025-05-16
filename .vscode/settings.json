@@ -1,0 +1,7 @@
+{
+  "editor.formatOnSave": true,
+  "[java]": {
+    "editor.detectIndentation": false,
+  },
+  "java.compile.nullAnalysis.mode": "automatic",
+}
