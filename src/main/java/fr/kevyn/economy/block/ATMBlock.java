@@ -34,7 +34,6 @@ public class ATMBlock extends Block implements EntityBlock {
         .strength(1f, 10f)
         .noOcclusion()
         .isRedstoneConductor((bs, br, bp) -> false));
-    this.registerDefaultState(this.stateDefinition.any().setValue(BlockStateProperties.POWERED, false));
   }
 
   public BlockEntity newBlockEntity(BlockPos pos, BlockState state) {
@@ -59,9 +58,7 @@ public class ATMBlock extends Block implements EntityBlock {
   @Override
   protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder) {
     super.createBlockStateDefinition(builder);
-    builder.add(
-        FACING,
-        BlockStateProperties.POWERED);
+    builder.add(FACING);
   }
 
   @Override
@@ -79,32 +76,13 @@ public class ATMBlock extends Block implements EntityBlock {
     return this.SHAPE;
   }
 
-  // emit redstone on right click
-
   @Override
   public InteractionResult useWithoutItem(BlockState state, Level level, BlockPos pos, Player player,
       BlockHitResult hitResult) {
     if (!level.isClientSide) {
-      level.scheduleTick(pos, this, 10); // schedule block tick in 1 tick
-      level.setBlock(pos, state.setValue(BlockStateProperties.POWERED, true), 3);
+      // on right click
     }
     return InteractionResult.SUCCESS;
   }
 
-  @Override
-  public void tick(BlockState state, ServerLevel level, BlockPos pos, RandomSource random) {
-    if (state.getValue(BlockStateProperties.POWERED)) {
-      level.setBlock(pos, state.setValue(BlockStateProperties.POWERED, false), 3);
-    }
-  }
-
-  @Override
-  public boolean isSignalSource(BlockState state) {
-    return true;
-  }
-
-  @Override
-  public int getSignal(BlockState state, BlockGetter level, BlockPos pos, Direction direction) {
-    return state.getValue(BlockStateProperties.POWERED) ? 15 : 0;
-  }
 }
