@@ -26,10 +26,6 @@ public class ATMBlockEntity extends BlockEntity implements MenuProvider {
 
     protected void onContentsChanged(int slot) {
       setChanged();
-      var lvl = level;
-      if (lvl != null && !lvl.isClientSide()) {
-        lvl.sendBlockUpdated(getBlockPos(), getBlockState(), getBlockState(), 3);
-      }
     };
 
     public boolean isItemValid(int slot, net.minecraft.world.item.ItemStack stack) {

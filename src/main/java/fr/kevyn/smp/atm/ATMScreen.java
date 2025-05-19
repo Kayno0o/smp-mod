@@ -3,12 +3,12 @@ package fr.kevyn.smp.atm;
 import com.mojang.blaze3d.systems.RenderSystem;
 
 import fr.kevyn.smp.SmpMod;
+import fr.kevyn.smp.custom.SilentButton;
 import fr.kevyn.smp.helper.MoneyHelper;
 import fr.kevyn.smp.init.DataAttachment;
 import fr.kevyn.smp.network.ATMWithdraw;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
-import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
 import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.client.renderer.GameRenderer;
@@ -37,24 +37,28 @@ public class ATMScreen extends AbstractContainerScreen<ATMMenu> {
     int l = this.leftPos + 10, r = this.leftPos + this.imageWidth - w - 10;
 
     // top left
-    this.addRenderableWidget(Button.builder(Component.literal("1€"), btn -> {
-      PacketDistributor.sendToServer(new ATMWithdraw(1));
-    }).bounds(l, r1, w, h).build());
+    this.addRenderableWidget(new SilentButton(Component.literal("1€"), l, r1, w, h, btn -> {
+      boolean shift = hasShiftDown();
+      PacketDistributor.sendToServer(new ATMWithdraw(1, shift ? 64 : 1));
+    }));
 
     // bottom left
-    this.addRenderableWidget(Button.builder(Component.literal("10€"), btn -> {
-      PacketDistributor.sendToServer(new ATMWithdraw(10));
-    }).bounds(l, r2, w, h).build());
+    this.addRenderableWidget(new SilentButton(Component.literal("10€"), l, r2, w, h, btn -> {
+      boolean shift = hasShiftDown();
+      PacketDistributor.sendToServer(new ATMWithdraw(10, shift ? 64 : 1));
+    }));
 
     // top right
-    this.addRenderableWidget(Button.builder(Component.literal("100€"), btn -> {
-      PacketDistributor.sendToServer(new ATMWithdraw(100));
-    }).bounds(r, r1, w, h).build());
+    this.addRenderableWidget(new SilentButton(Component.literal("100€"), r, r1, w, h, btn -> {
+      boolean shift = hasShiftDown();
+      PacketDistributor.sendToServer(new ATMWithdraw(100, shift ? 64 : 1));
+    }));
 
     // bottom right
-    this.addRenderableWidget(Button.builder(Component.literal("1000€"), btn -> {
-      PacketDistributor.sendToServer(new ATMWithdraw(1000));
-    }).bounds(r, r2, w, h).build());
+    this.addRenderableWidget(new SilentButton(Component.literal("1000€"), r, r2, w, h, btn -> {
+      boolean shift = hasShiftDown();
+      PacketDistributor.sendToServer(new ATMWithdraw(1000, shift ? 64 : 1));
+    }));
   }
 
   @Override

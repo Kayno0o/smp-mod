@@ -7,6 +7,8 @@ import fr.kevyn.smp.item.MoneyItem;
 import fr.kevyn.smp.network.MoneyData;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.sounds.SoundEvents;
+import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.Container;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
@@ -58,6 +60,8 @@ public class ATMMenu extends AbstractContainerMenu {
 
       var money = player.getData(DataAttachment.MONEY);
       player.setData(DataAttachment.MONEY, money + amount);
+
+      player.playNotifySound(SoundEvents.NOTE_BLOCK_BELL.value(), SoundSource.PLAYERS, 1.0f, 1.0f);
 
       if (player instanceof ServerPlayer serverPlayer)
         PacketDistributor.sendToPlayer(serverPlayer, new MoneyData(money + amount));

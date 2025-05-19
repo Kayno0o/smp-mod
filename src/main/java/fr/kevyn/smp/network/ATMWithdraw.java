@@ -7,13 +7,15 @@ import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
 import net.minecraft.resources.ResourceLocation;
 
-public record ATMWithdraw(int money) implements CustomPacketPayload {
+public record ATMWithdraw(int money, int count) implements CustomPacketPayload {
   public static final CustomPacketPayload.Type<ATMWithdraw> TYPE = new CustomPacketPayload.Type<>(
       ResourceLocation.fromNamespaceAndPath(SmpMod.MODID, "money_withdraw"));
 
   public static final StreamCodec<ByteBuf, ATMWithdraw> STREAM_CODEC = StreamCodec.composite(
       ByteBufCodecs.VAR_INT,
       ATMWithdraw::money,
+      ByteBufCodecs.VAR_INT,
+      ATMWithdraw::count,
       ATMWithdraw::new);
 
   @Override
