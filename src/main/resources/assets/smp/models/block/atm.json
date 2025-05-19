@@ -1,0 +1,10 @@
+{
+  "parent": "smp:custom/atm",
+  "textures": {
+    "all": "smp:block/atm",
+    "particle": "smp:block/atm",
+    "0": "smp:block/atm",
+    "missing": "smp:block/atm"
+  },
+  "render_type": "solid"
+}

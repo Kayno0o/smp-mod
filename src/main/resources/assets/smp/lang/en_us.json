@@ -1,0 +1,14 @@
+{
+  "gui.smp.atmgui.button_10": "10",
+  "gui.smp.atmgui.button_100": "100",
+  "block.smp.atm": "ATM",
+  "item.smp.money_1000": "1000€",
+  "item.smp.money_100": "100€",
+  "item.smp.card": "CB",
+  "item.smp.money_10": "10€",
+  "item_group.smp.smp_tab": "Smp",
+  "item.smp.money_1": "1€",
+  "gui.smp.atmgui.button_1000": "1000",
+  "gui.smp.atmgui.label_atm": "ATM",
+  "gui.smp.atmgui.button_1": "1"
+}

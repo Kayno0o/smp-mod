@@ -2,6 +2,8 @@
   "editor.formatOnSave": true,
   "[java]": {
     "editor.detectIndentation": false,
+    "editor.defaultFormatter": "redhat.java",
   },
   "java.compile.nullAnalysis.mode": "automatic",
+  "java.configuration.updateBuildConfiguration": "interactive",
 }
