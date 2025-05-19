@@ -5,6 +5,7 @@ import fr.kevyn.smp.init.DataAttachment;
 import fr.kevyn.smp.init.Menus;
 import fr.kevyn.smp.item.CardItem;
 import fr.kevyn.smp.item.MoneyItem;
+import fr.kevyn.smp.network.ATMWithdraw;
 import fr.kevyn.smp.network.MoneyData;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.server.level.ServerPlayer;
@@ -31,13 +32,13 @@ public class ATMMenu extends AbstractContainerMenu {
   public static int CARD_SLOT = 0;
   public static int DEPOSIT_SLOT = 1;
 
-  public final ItemStackHandler inventory = new ItemStackHandler(1) {
+  public final ItemStackHandler inventory = new ItemStackHandler(2) {
     protected int getStackLimit(int slot, net.minecraft.world.item.ItemStack stack) {
       return 1;
     };
 
     protected void onContentsChanged(int slot) {
-      checkDeposit();
+      deposit();
     };
 
     public boolean isItemValid(int slot, net.minecraft.world.item.ItemStack stack) {
@@ -91,7 +92,7 @@ public class ATMMenu extends AbstractContainerMenu {
     }
   }
 
-  private void checkDeposit() {
+  private void deposit() {
     ItemStack cardStack = inventory.getStackInSlot(CARD_SLOT);
     if (cardStack.isEmpty() || !(cardStack.getItem() instanceof CardItem)) {
       return;
@@ -112,6 +113,16 @@ public class ATMMenu extends AbstractContainerMenu {
     }
   }
 
+  public void withdraw(int money, boolean shift) {
+    ItemStack cardStack = inventory.getStackInSlot(CARD_SLOT);
+    if (cardStack.isEmpty() || !(cardStack.getItem() instanceof CardItem)) {
+      player.playNotifySound(SoundEvents.VILLAGER_NO, SoundSource.PLAYERS, 1.0f, 1.0f);
+      return;
+    }
+
+    PacketDistributor.sendToServer(new ATMWithdraw(money, shift ? 64 : 1));
+  }
+
   @Override
   public boolean stillValid(Player player) {
     return stillValid(ContainerLevelAccess.create(level, blockEntity.getBlockPos()), player, Blocks.ATM.get());
@@ -120,7 +131,7 @@ public class ATMMenu extends AbstractContainerMenu {
   @Override
   public void slotsChanged(Container changedContainer) {
     super.slotsChanged(changedContainer);
-    checkDeposit();
+    deposit();
   }
 
   private void addPlayerInventory(Inventory inv) {

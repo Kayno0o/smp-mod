@@ -6,7 +6,6 @@ import fr.kevyn.smp.SmpMod;
 import fr.kevyn.smp.custom.SilentButton;
 import fr.kevyn.smp.helper.MoneyHelper;
 import fr.kevyn.smp.init.DataAttachment;
-import fr.kevyn.smp.network.ATMWithdraw;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
@@ -15,7 +14,6 @@ import net.minecraft.client.renderer.GameRenderer;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.player.Inventory;
-import net.neoforged.neoforge.network.PacketDistributor;
 
 public class ATMScreen extends AbstractContainerScreen<ATMMenu> {
   private static final ResourceLocation TEXTURE = ResourceLocation.fromNamespaceAndPath(SmpMod.MODID,
@@ -38,26 +36,22 @@ public class ATMScreen extends AbstractContainerScreen<ATMMenu> {
 
     // top left
     this.addRenderableWidget(new SilentButton(Component.literal("1€"), l, r1, w, h, btn -> {
-      boolean shift = hasShiftDown();
-      PacketDistributor.sendToServer(new ATMWithdraw(1, shift ? 64 : 1));
+      menu.withdraw(1, hasShiftDown());
     }));
 
     // bottom left
     this.addRenderableWidget(new SilentButton(Component.literal("10€"), l, r2, w, h, btn -> {
-      boolean shift = hasShiftDown();
-      PacketDistributor.sendToServer(new ATMWithdraw(10, shift ? 64 : 1));
+      menu.withdraw(10, hasShiftDown());
     }));
 
     // top right
     this.addRenderableWidget(new SilentButton(Component.literal("100€"), r, r1, w, h, btn -> {
-      boolean shift = hasShiftDown();
-      PacketDistributor.sendToServer(new ATMWithdraw(100, shift ? 64 : 1));
+      menu.withdraw(100, hasShiftDown());
     }));
 
     // bottom right
     this.addRenderableWidget(new SilentButton(Component.literal("1000€"), r, r2, w, h, btn -> {
-      boolean shift = hasShiftDown();
-      PacketDistributor.sendToServer(new ATMWithdraw(1000, shift ? 64 : 1));
+      menu.withdraw(1000, hasShiftDown());
     }));
   }
 
