@@ -31,7 +31,7 @@ public class ATMScreen extends AbstractContainerScreen<ATMMenu> {
 
     int w = 40, h = 16;
 
-    int r1 = this.topPos + 20, r2 = this.topPos + 40;
+    int r1 = this.topPos + 24, r2 = r1 + 24;
     int l = this.leftPos + 10, r = this.leftPos + this.imageWidth - w - 10;
 
     // top left
