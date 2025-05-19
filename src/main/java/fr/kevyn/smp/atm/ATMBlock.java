@@ -1,11 +1,8 @@
 package fr.kevyn.smp.atm;
 
-import fr.kevyn.smp.item.CardItem;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerPlayer;
-import net.minecraft.sounds.SoundEvents;
-import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.Containers;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.ItemInteractionResult;
@@ -93,29 +90,24 @@ public class ATMBlock extends Block implements EntityBlock {
   protected ItemInteractionResult useItemOn(ItemStack stack, BlockState state, Level level, BlockPos pos, Player player,
       InteractionHand hand, BlockHitResult hitResult) {
     if (level.getBlockEntity(pos) instanceof ATMBlockEntity atmBlockEntity) {
-      ItemStack cardSlotStack = atmBlockEntity.inventory.getStackInSlot(ATMBlockEntity.CARD_SLOT);
 
-      // drop card into ATM
-      if (cardSlotStack.isEmpty() && !stack.isEmpty() && stack.getItem() instanceof CardItem) {
-        atmBlockEntity.inventory.insertItem(ATMBlockEntity.CARD_SLOT, stack.copy(), false);
-        stack.shrink(1);
-        level.playSound(player, pos, SoundEvents.ITEM_PICKUP, SoundSource.BLOCKS, 1f, 2f);
-      }
+      // ItemStack cardSlotStack = menu.inventory.getStackInSlot(ATMMenu.CARD_SLOT);
+
+      // // drop card into ATM
+      // if (cardSlotStack.isEmpty() && !stack.isEmpty() && stack.getItem() instanceof
+      // CardItem) {
+      // menu.inventory.insertItem(ATMMenu.CARD_SLOT, stack.copy(), false);
+      // stack.shrink(1);
+      // level.playSound(player, pos, SoundEvents.ITEM_PICKUP, SoundSource.BLOCKS, 1f,
+      // 2f);
+      // }
 
       if (!level.isClientSide()) {
-        ((ServerPlayer) player).openMenu(new SimpleMenuProvider(atmBlockEntity, Component.literal("ATM")), pos);
+        ((ServerPlayer) player).openMenu(new SimpleMenuProvider(atmBlockEntity, Component.literal("ATM")),
+            pos);
       }
     }
     return ItemInteractionResult.SUCCESS;
-  }
-
-  @Override
-  public void destroy(LevelAccessor level, BlockPos pos, BlockState state) {
-    BlockEntity blockEntity = level.getBlockEntity(pos);
-
-    if (blockEntity instanceof ATMBlockEntity) {
-      drop(level, pos, ((ATMBlockEntity) blockEntity).inventory);
-    }
   }
 
   public void drop(LevelAccessor level, BlockPos pos, ItemStackHandler inventory) {

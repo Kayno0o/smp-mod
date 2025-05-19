@@ -3,6 +3,7 @@ package fr.kevyn.smp.atm;
 import fr.kevyn.smp.init.Blocks;
 import fr.kevyn.smp.init.DataAttachment;
 import fr.kevyn.smp.init.Menus;
+import fr.kevyn.smp.item.CardItem;
 import fr.kevyn.smp.item.MoneyItem;
 import fr.kevyn.smp.network.MoneyData;
 import net.minecraft.network.FriendlyByteBuf;
@@ -18,6 +19,7 @@ import net.minecraft.world.inventory.Slot;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntity;
+import net.neoforged.neoforge.items.ItemStackHandler;
 import net.neoforged.neoforge.items.SlotItemHandler;
 import net.neoforged.neoforge.network.PacketDistributor;
 
@@ -26,8 +28,46 @@ public class ATMMenu extends AbstractContainerMenu {
   public final Level level;
   public final Player player;
 
+  public static int CARD_SLOT = 0;
+  public static int DEPOSIT_SLOT = 1;
+
+  public final ItemStackHandler inventory = new ItemStackHandler(1) {
+    protected int getStackLimit(int slot, net.minecraft.world.item.ItemStack stack) {
+      return 1;
+    };
+
+    protected void onContentsChanged(int slot) {
+      checkDeposit();
+    };
+
+    public boolean isItemValid(int slot, net.minecraft.world.item.ItemStack stack) {
+      if (slot == CARD_SLOT) {
+        return stack.getItem() instanceof CardItem;
+      }
+
+      ItemStack cardStack = inventory.getStackInSlot(CARD_SLOT);
+      if (cardStack.isEmpty() || !(cardStack.getItem() instanceof CardItem)) {
+        player.playNotifySound(SoundEvents.VILLAGER_NO, SoundSource.PLAYERS, 1.0f, 1.0f);
+        return false;
+      }
+
+      if (slot == DEPOSIT_SLOT) {
+        return stack.getItem() instanceof MoneyItem;
+      }
+
+      return super.isItemValid(slot, stack);
+    };
+
+  };
+
   public ATMMenu(int id, Inventory inv, FriendlyByteBuf extraData) {
     this(id, inv, inv.player.level().getBlockEntity(extraData.readBlockPos()));
+  }
+
+  @Override
+  public void removed(Player player) {
+    this.setCarried(inventory.getStackInSlot(CARD_SLOT));
+    super.removed(player);
   }
 
   public ATMMenu(int containerId, Inventory inv, BlockEntity blockEntity) {
@@ -42,8 +82,8 @@ public class ATMMenu extends AbstractContainerMenu {
     addPlayerInventory(inv);
     addPlayerHotbar(inv);
 
-    this.addSlot(new SlotItemHandler(this.blockEntity.inventory, ATMBlockEntity.CARD_SLOT, 80, 24));
-    this.addSlot(new SlotItemHandler(this.blockEntity.inventory, ATMBlockEntity.DEPOSIT_SLOT, 80, 48));
+    this.addSlot(new SlotItemHandler(this.inventory, CARD_SLOT, 80, 24));
+    this.addSlot(new SlotItemHandler(this.inventory, DEPOSIT_SLOT, 80, 48));
 
     if (player instanceof ServerPlayer serverPlayer) {
       var money = player.getData(DataAttachment.MONEY);
@@ -52,11 +92,15 @@ public class ATMMenu extends AbstractContainerMenu {
   }
 
   private void checkDeposit() {
-    ItemStack depositStack = blockEntity.inventory.getStackInSlot(ATMBlockEntity.DEPOSIT_SLOT);
+    ItemStack cardStack = inventory.getStackInSlot(CARD_SLOT);
+    if (cardStack.isEmpty() || !(cardStack.getItem() instanceof CardItem)) {
+      return;
+    }
+    ItemStack depositStack = inventory.getStackInSlot(DEPOSIT_SLOT);
 
     if (!depositStack.isEmpty() && depositStack.getItem() instanceof MoneyItem item) {
       var amount = item.getValue() * depositStack.getCount();
-      blockEntity.inventory.setStackInSlot(ATMBlockEntity.DEPOSIT_SLOT, ItemStack.EMPTY);
+      inventory.setStackInSlot(DEPOSIT_SLOT, ItemStack.EMPTY);
 
       var money = player.getData(DataAttachment.MONEY);
       player.setData(DataAttachment.MONEY, money + amount);
@@ -137,7 +181,6 @@ public class ATMMenu extends AbstractContainerMenu {
       sourceSlot.setChanged();
     }
     sourceSlot.onTake(playerIn, sourceStack);
-    checkDeposit();
     return copyOfSourceStack;
   }
 }
