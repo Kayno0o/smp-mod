@@ -1,11 +1,12 @@
-package fr.kevyn.smp.atm;
+package fr.kevyn.smp.ui.screen;
 
 import com.mojang.blaze3d.systems.RenderSystem;
 
 import fr.kevyn.smp.SmpMod;
-import fr.kevyn.smp.custom.SilentButton;
-import fr.kevyn.smp.helper.MoneyHelper;
 import fr.kevyn.smp.init.DataAttachment;
+import fr.kevyn.smp.ui.SilentButton;
+import fr.kevyn.smp.ui.menu.ATMMenu;
+import fr.kevyn.smp.utils.NumberUtils;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
@@ -76,7 +77,7 @@ public class ATMScreen extends AbstractContainerScreen<ATMMenu> {
         && mc.player instanceof LocalPlayer player) {
       var money = player.getData(DataAttachment.MONEY);
 
-      var moneyStr = MoneyHelper.CURRENCY_FORMAT.format(money);
+      var moneyStr = NumberUtils.CURRENCY_FORMAT.format(money);
 
       // Calculate position to center the text
       int x = (width - imageWidth) / 2;

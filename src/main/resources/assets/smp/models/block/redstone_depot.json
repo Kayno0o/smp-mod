@@ -1,0 +1,11 @@
+{
+  "parent": "block/cube",
+  "textures": {
+    "north": "smp:block/redstone_depot_north",
+    "south": "smp:block/redstone_depot_south",
+    "east": "smp:block/redstone_depot_east",
+    "west": "smp:block/redstone_depot_west",
+    "up": "smp:block/redstone_depot_top",
+    "down": "smp:block/redstone_depot_bottom"
+  }
+}

@@ -1,11 +1,11 @@
-package fr.kevyn.smp.kubejs;
+package fr.kevyn.smp.integration.kubejs;
 
 import dev.latvian.mods.kubejs.event.EventGroupRegistry;
 import dev.latvian.mods.kubejs.plugin.KubeJSPlugin;
 import dev.latvian.mods.kubejs.script.ScriptType;
 import fr.kevyn.smp.event.OnPlayerLevelUpEvent;
-import fr.kevyn.smp.kubejs.event.OnPlayerLevelUpEventJS;
-import fr.kevyn.smp.kubejs.event.SmpJSEvents;
+import fr.kevyn.smp.integration.kubejs.event.OnPlayerLevelUpEventJS;
+import fr.kevyn.smp.integration.kubejs.event.SmpJSEvents;
 import net.neoforged.bus.api.EventPriority;
 import net.neoforged.neoforge.common.NeoForge;
 

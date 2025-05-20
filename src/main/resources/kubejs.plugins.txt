@@ -1,1 +1,1 @@
-fr.kevyn.smp.kubejs.SmpKubeJSPlugin
+fr.kevyn.smp.integration.kubejs.SmpKubeJSPlugin

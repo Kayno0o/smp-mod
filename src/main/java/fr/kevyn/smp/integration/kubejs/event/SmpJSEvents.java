@@ -1,4 +1,4 @@
-package fr.kevyn.smp.kubejs.event;
+package fr.kevyn.smp.integration.kubejs.event;
 
 import dev.latvian.mods.kubejs.event.EventGroup;
 import dev.latvian.mods.kubejs.event.EventHandler;

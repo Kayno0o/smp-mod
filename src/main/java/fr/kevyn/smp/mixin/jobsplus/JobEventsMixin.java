@@ -1,4 +1,4 @@
-package fr.kevyn.smp.mixin;
+package fr.kevyn.smp.mixin.jobsplus;
 
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;

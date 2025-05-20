@@ -1,4 +1,4 @@
-package fr.kevyn.smp.custom;
+package fr.kevyn.smp.ui;
 
 import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.sounds.SoundManager;

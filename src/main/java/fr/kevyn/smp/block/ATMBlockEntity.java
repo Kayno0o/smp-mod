@@ -1,6 +1,7 @@
-package fr.kevyn.smp.atm;
+package fr.kevyn.smp.block;
 
 import fr.kevyn.smp.init.BlockEntities;
+import fr.kevyn.smp.ui.menu.ATMMenu;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.MenuProvider;

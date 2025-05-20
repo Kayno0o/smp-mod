@@ -1,7 +1,5 @@
 package fr.kevyn.smp;
 
-import fr.kevyn.smp.atm.ATMScreen;
-
 import org.slf4j.Logger;
 
 import com.mojang.logging.LogUtils;
@@ -9,10 +7,11 @@ import com.mojang.logging.LogUtils;
 import fr.kevyn.smp.init.BlockEntities;
 import fr.kevyn.smp.init.Blocks;
 import fr.kevyn.smp.init.DataAttachment;
-import fr.kevyn.smp.init.ModComponents;
 import fr.kevyn.smp.init.Items;
 import fr.kevyn.smp.init.Menus;
+import fr.kevyn.smp.init.ModComponents;
 import fr.kevyn.smp.init.Tabs;
+import fr.kevyn.smp.ui.screen.ATMScreen;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.bus.api.SubscribeEvent;
@@ -41,7 +40,7 @@ public class SmpMod {
   }
 
   @EventBusSubscriber(modid = MODID, bus = EventBusSubscriber.Bus.MOD, value = Dist.CLIENT)
-  public static class ClientModEvents {
+  public static class ClientInit {
     @SubscribeEvent
     public static void registerScreens(RegisterMenuScreensEvent event) {
       event.register(Menus.ATM_MENU.get(), ATMScreen::new);

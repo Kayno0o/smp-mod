@@ -3,7 +3,7 @@ package fr.kevyn.smp.init;
 import java.util.function.Supplier;
 
 import fr.kevyn.smp.SmpMod;
-import fr.kevyn.smp.atm.ATMBlockEntity;
+import fr.kevyn.smp.block.ATMBlockEntity;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.neoforged.neoforge.registries.DeferredRegister;

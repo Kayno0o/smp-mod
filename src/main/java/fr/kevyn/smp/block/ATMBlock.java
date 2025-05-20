@@ -1,19 +1,16 @@
-package fr.kevyn.smp.atm;
+package fr.kevyn.smp.block;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerPlayer;
-import net.minecraft.world.Containers;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.ItemInteractionResult;
-import net.minecraft.world.SimpleContainer;
 import net.minecraft.world.SimpleMenuProvider;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.EntityBlock;
 import net.minecraft.world.level.block.SoundType;
@@ -27,7 +24,6 @@ import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
-import net.neoforged.neoforge.items.ItemStackHandler;
 
 public class ATMBlock extends Block implements EntityBlock {
   private VoxelShape SHAPE = Shapes.or(box(0, 0, 0, 16, 32, 16));
@@ -108,15 +104,5 @@ public class ATMBlock extends Block implements EntityBlock {
       }
     }
     return ItemInteractionResult.SUCCESS;
-  }
-
-  public void drop(LevelAccessor level, BlockPos pos, ItemStackHandler inventory) {
-    if (level instanceof Level realLevel) {
-      SimpleContainer inv = new SimpleContainer(inventory.getSlots());
-      for (int i = 0; i < inventory.getSlots(); i++) {
-        inv.setItem(i, inventory.getStackInSlot(i));
-      }
-      Containers.dropContents(realLevel, pos, inv);
-    }
   }
 }

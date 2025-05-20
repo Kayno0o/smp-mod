@@ -1,7 +1,7 @@
 package fr.kevyn.smp.init;
 
 import fr.kevyn.smp.SmpMod;
-import fr.kevyn.smp.atm.ATMMenu;
+import fr.kevyn.smp.ui.menu.ATMMenu;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.inventory.MenuType;

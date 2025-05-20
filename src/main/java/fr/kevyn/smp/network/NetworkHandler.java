@@ -11,10 +11,7 @@ public class NetworkHandler {
   @SubscribeEvent
   public static void register(final RegisterPayloadHandlersEvent event) {
     final PayloadRegistrar registrar = event.registrar("1");
-    registrar.playToClient(
-        MoneyData.TYPE,
-        MoneyData.STREAM_CODEC,
-        MoneyPayloadHandler::handleDataOnNetwork);
-    registrar.playToServer(ATMWithdraw.TYPE, ATMWithdraw.STREAM_CODEC, ATMWithdrawHandler::handleDataOnNetwork);
+    registrar.playToClient(MoneyData.TYPE, MoneyData.STREAM_CODEC, MoneyData::handleOnClient);
+    registrar.playToServer(ATMWithdraw.TYPE, ATMWithdraw.STREAM_CODEC, ATMWithdraw::handleOnServer);
   }
 }

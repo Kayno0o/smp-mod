@@ -1,4 +1,4 @@
-package fr.kevyn.smp.kubejs.event;
+package fr.kevyn.smp.integration.kubejs.event;
 
 import com.daqem.jobsplus.player.JobsPlayer;
 import com.daqem.jobsplus.player.job.Job;

@@ -1,5 +1,6 @@
-package fr.kevyn.smp.atm;
+package fr.kevyn.smp.ui.menu;
 
+import fr.kevyn.smp.block.ATMBlockEntity;
 import fr.kevyn.smp.init.Blocks;
 import fr.kevyn.smp.init.DataAttachment;
 import fr.kevyn.smp.init.Menus;
