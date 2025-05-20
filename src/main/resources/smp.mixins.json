@@ -1,0 +1,12 @@
+{
+  "required": true,
+  "package": "fr.kevyn.smp.mixin",
+  "refmap": "smp.refmap.json",
+  "compatibilityLevel": "JAVA_17",
+  "mixins": [
+    "JobEventsMixin"
+  ],
+  "injectors": {
+    "defaultRequire": 1
+  }
+}
