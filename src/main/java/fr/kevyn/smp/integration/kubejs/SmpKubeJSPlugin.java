@@ -21,12 +21,12 @@ public class SmpKubeJSPlugin implements KubeJSPlugin {
   }
 
   private void subscribeToNeoForgeEvents() {
-    NeoForge.EVENT_BUS.addListener(EventPriority.LOW, this::postAddEntityInFrameDataEvent);
+    NeoForge.EVENT_BUS.addListener(EventPriority.LOW, this::onPlayerLevelUpEvent);
   }
 
   // --
 
-  private void postAddEntityInFrameDataEvent(OnPlayerLevelUpEvent event) {
+  private void onPlayerLevelUpEvent(OnPlayerLevelUpEvent event) {
     SmpJSEvents.ON_PLAYER_LEVEL_UP.post(ScriptType.SERVER,
         new OnPlayerLevelUpEventJS(event.getJobsPlayer(), event.getJob()));
   }
