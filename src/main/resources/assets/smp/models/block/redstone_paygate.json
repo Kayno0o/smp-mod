@@ -1,0 +1,11 @@
+{
+  "parent": "block/cube",
+  "textures": {
+    "north": "smp:block/redstone_paygate_north",
+    "south": "smp:block/redstone_paygate_south",
+    "east": "smp:block/redstone_paygate_east",
+    "west": "smp:block/redstone_paygate_west",
+    "up": "smp:block/redstone_paygate_top",
+    "down": "smp:block/redstone_paygate_bottom"
+  }
+}

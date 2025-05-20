@@ -8,7 +8,7 @@ import fr.kevyn.smp.SmpMod;
 import fr.kevyn.smp.item.ATMBlockItem;
 import fr.kevyn.smp.item.CardItem;
 import fr.kevyn.smp.item.MoneyItem;
-import fr.kevyn.smp.item.RedstoneDepotBlockItem;
+import fr.kevyn.smp.item.RedstonePaygateBlockItem;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.neoforged.neoforge.registries.DeferredItem;
@@ -25,8 +25,8 @@ public class Items {
   public static final DeferredItem<Item> MONEY_100 = REGISTRY.register("money_100", () -> register(100));
   public static final DeferredItem<Item> MONEY_1000 = REGISTRY.register("money_1000", () -> register(1000));
   public static final DeferredItem<Item> CARD = REGISTRY.register("card", CardItem::new);
-  public static final DeferredItem<Item> REDSTONE_DEPOT = REGISTRY.register("redstone_depot",
-      RedstoneDepotBlockItem::new);
+  public static final DeferredItem<Item> REDSTONE_PAYGATE = REGISTRY.register("redstone_paygate",
+      RedstonePaygateBlockItem::new);
 
   private static Item register(int value) {
     Item item = new MoneyItem(value);

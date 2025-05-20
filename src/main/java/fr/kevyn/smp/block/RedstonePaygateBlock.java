@@ -21,11 +21,11 @@ import net.minecraft.world.level.block.state.properties.BooleanProperty;
 import net.minecraft.world.level.block.state.properties.DirectionProperty;
 import net.minecraft.world.phys.BlockHitResult;
 
-public class RedstoneDepotBlock extends Block {
+public class RedstonePaygateBlock extends Block {
   public static final BooleanProperty POWERED = BlockStateProperties.POWERED;
   public static final DirectionProperty FACING = BlockStateProperties.FACING;
 
-  public RedstoneDepotBlock() {
+  public RedstonePaygateBlock() {
     super(BlockBehaviour.Properties.of()
         .sound(SoundType.METAL)
         .strength(1f, 10f)

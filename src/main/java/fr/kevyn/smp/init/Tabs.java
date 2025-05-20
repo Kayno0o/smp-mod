@@ -21,6 +21,6 @@ public class Tabs {
             tabData.accept(Items.MONEY_1000.get());
             tabData.accept(Items.CARD.get());
             tabData.accept(Blocks.ATM.get().asItem());
-            tabData.accept(Blocks.REDSTONE_DEPOT.get().asItem());
+            tabData.accept(Blocks.REDSTONE_PAYGATE.get().asItem());
           }).build());
 }

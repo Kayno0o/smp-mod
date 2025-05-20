@@ -1,5 +1,5 @@
 {
-  "parent": "smp:block/redstone_depot",
+  "parent": "smp:block/redstone_paygate",
   "display": {
     "thirdperson": {
       "rotation": [
