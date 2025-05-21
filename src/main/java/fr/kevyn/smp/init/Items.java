@@ -20,15 +20,15 @@ public class Items {
   public static final DeferredRegister.Items REGISTRY = DeferredRegister.createItems(SmpMod.MODID);
   public static final DeferredItem<Item> ATM = REGISTRY.register(ATMBlockItem.BLOCK.getId().getPath(),
       ATMBlockItem::new);
-  public static final DeferredItem<Item> MONEY_1 = REGISTRY.register("money_1", () -> register(1));
-  public static final DeferredItem<Item> MONEY_10 = REGISTRY.register("money_10", () -> register(10));
-  public static final DeferredItem<Item> MONEY_100 = REGISTRY.register("money_100", () -> register(100));
-  public static final DeferredItem<Item> MONEY_1000 = REGISTRY.register("money_1000", () -> register(1000));
+  public static final DeferredItem<Item> MONEY_1 = REGISTRY.register("money_1", () -> registerMoneyItem(1));
+  public static final DeferredItem<Item> MONEY_10 = REGISTRY.register("money_10", () -> registerMoneyItem(10));
+  public static final DeferredItem<Item> MONEY_100 = REGISTRY.register("money_100", () -> registerMoneyItem(100));
+  public static final DeferredItem<Item> MONEY_1000 = REGISTRY.register("money_1000", () -> registerMoneyItem(1000));
   public static final DeferredItem<Item> CARD = REGISTRY.register("card", CardItem::new);
   public static final DeferredItem<Item> REDSTONE_PAYGATE = REGISTRY.register("redstone_paygate",
       RedstonePaygateBlockItem::new);
 
-  private static Item register(int value) {
+  private static Item registerMoneyItem(int value) {
     Item item = new MoneyItem(value);
     VALUE_TO_MONEY.put(value, item);
     return item;
