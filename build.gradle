@@ -116,10 +116,6 @@ configurations {
 }
 
 dependencies {
-    implementation 'org.spongepowered:mixin:0.8.5'
-
-    implementation name: 'jobsplus-1.5.4-1.21.1-neoforge'
-
     implementation name: 'kubejs-neoforge-2101.7.1-build.181'
 
     implementation name: 'rhino-2101.2.7-build.74'
