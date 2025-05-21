@@ -116,9 +116,15 @@ configurations {
 }
 
 dependencies {
-    implementation name: 'kubejs-neoforge-2101.7.1-build.181'
+    implementation 'org.spongepowered:mixin:0.8.5'
 
-    implementation name: 'rhino-2101.2.7-build.74'
+    implementation name: 'astages-1.2.2-1.21.1'
+
+    implementation name: 'FarmersDelight-1.21.1-1.2.7'
+
+    // implementation name: 'kubejs-neoforge-2101.7.1-build.181'
+
+    // implementation name: 'rhino-2101.2.7-build.74'
 
     // Example optional mod dependency with JEI
     // The JEI API is declared for compile time use, while the full JEI artifact is used at runtime

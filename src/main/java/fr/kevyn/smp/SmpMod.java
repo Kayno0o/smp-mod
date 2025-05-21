@@ -12,6 +12,10 @@ import fr.kevyn.smp.init.Menus;
 import fr.kevyn.smp.init.ModComponents;
 import fr.kevyn.smp.init.Tabs;
 import fr.kevyn.smp.ui.screen.ATMScreen;
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.entity.BlockEntity;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.bus.api.SubscribeEvent;
@@ -19,6 +23,8 @@ import net.neoforged.fml.ModContainer;
 import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.fml.common.Mod;
 import net.neoforged.neoforge.client.event.RegisterMenuScreensEvent;
+import net.neoforged.neoforge.event.level.BlockEvent.EntityPlaceEvent;
+import vectorwing.farmersdelight.common.block.entity.CookingPotBlockEntity;
 
 @Mod(SmpMod.MODID)
 public class SmpMod {
@@ -44,6 +50,23 @@ public class SmpMod {
     @SubscribeEvent
     public static void registerScreens(RegisterMenuScreensEvent event) {
       event.register(Menus.ATM_MENU.get(), ATMScreen::new);
+    }
+  }
+
+  @EventBusSubscriber(modid = MODID, bus = EventBusSubscriber.Bus.GAME)
+  public static class ServerInit {
+    @SubscribeEvent
+    public static void onBlockPlaced(EntityPlaceEvent event) {
+      if (event.getEntity() instanceof Player player) {
+        BlockPos pos = event.getPos();
+        BlockEntity blockEntity = event.getLevel().getBlockEntity(pos);
+
+        if (blockEntity != null
+            && blockEntity instanceof CookingPotBlockEntity
+            && blockEntity.getLevel() instanceof Level) {
+          blockEntity.getPersistentData().putUUID("smp:owner", player.getUUID());
+        }
+      }
     }
   }
 }
