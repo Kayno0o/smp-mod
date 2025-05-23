@@ -1,6 +1,9 @@
 package fr.kevyn.smp.network;
 
 import fr.kevyn.smp.SmpMod;
+import fr.kevyn.smp.network.client.UpdateMoneyNet;
+import fr.kevyn.smp.network.server.ATMWithdrawNet;
+import fr.kevyn.smp.network.server.MenuActionNet;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.network.event.RegisterPayloadHandlersEvent;
@@ -11,7 +14,11 @@ public class NetworkHandler {
   @SubscribeEvent
   public static void register(final RegisterPayloadHandlersEvent event) {
     final PayloadRegistrar registrar = event.registrar("1");
-    registrar.playToClient(MoneyData.TYPE, MoneyData.STREAM_CODEC, MoneyData::handleOnClient);
-    registrar.playToServer(ATMWithdraw.TYPE, ATMWithdraw.STREAM_CODEC, ATMWithdraw::handleOnServer);
+    registrar.playToClient(
+        UpdateMoneyNet.TYPE, UpdateMoneyNet.STREAM_CODEC, UpdateMoneyNet::handleOnClient);
+    registrar.playToServer(
+        ATMWithdrawNet.TYPE, ATMWithdrawNet.STREAM_CODEC, ATMWithdrawNet::handleOnServer);
+    registrar.playToServer(
+        MenuActionNet.TYPE, MenuActionNet.STREAM_CODEC, MenuActionNet::handleOnServer);
   }
 }

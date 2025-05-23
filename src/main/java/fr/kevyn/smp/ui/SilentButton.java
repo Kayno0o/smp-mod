@@ -5,7 +5,7 @@ import net.minecraft.client.sounds.SoundManager;
 import net.minecraft.network.chat.Component;
 
 public class SilentButton extends Button {
-  public SilentButton(Component message, int x, int y, int width, int height, OnPress onPress) {
+  public SilentButton(int x, int y, int width, int height, Component message, OnPress onPress) {
     super(x, y, width, height, message, onPress, DEFAULT_NARRATION);
   }
 

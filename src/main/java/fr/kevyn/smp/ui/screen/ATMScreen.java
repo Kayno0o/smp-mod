@@ -1,29 +1,27 @@
 package fr.kevyn.smp.ui.screen;
 
-import com.mojang.blaze3d.systems.RenderSystem;
-
 import fr.kevyn.smp.SmpMod;
-import fr.kevyn.smp.init.DataAttachment;
+import fr.kevyn.smp.init.SmpDataAttachments;
 import fr.kevyn.smp.ui.SilentButton;
 import fr.kevyn.smp.ui.menu.ATMMenu;
 import fr.kevyn.smp.utils.NumberUtils;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
-import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
 import net.minecraft.client.player.LocalPlayer;
-import net.minecraft.client.renderer.GameRenderer;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.player.Inventory;
 
-public class ATMScreen extends AbstractContainerScreen<ATMMenu> {
-  private static final ResourceLocation TEXTURE = ResourceLocation.fromNamespaceAndPath(SmpMod.MODID,
-      "textures/gui/atm/atm_gui.png");
+public class ATMScreen extends AbstractScreen<ATMMenu> {
+  private static final ResourceLocation TEXTURE =
+      ResourceLocation.fromNamespaceAndPath(SmpMod.MODID, "textures/gui/atm/atm_gui.png");
+
+  public ResourceLocation getTexture() {
+    return TEXTURE;
+  }
 
   public ATMScreen(ATMMenu menu, Inventory inv, Component title) {
     super(menu, inv, title);
-    this.imageWidth = 176;
-    this.imageHeight = 166;
   }
 
   @Override
@@ -36,46 +34,35 @@ public class ATMScreen extends AbstractContainerScreen<ATMMenu> {
     int l = this.leftPos + 10, r = this.leftPos + this.imageWidth - w - 10;
 
     // top left
-    this.addRenderableWidget(new SilentButton(Component.literal("1€"), l, r1, w, h, btn -> {
+    this.addRenderableWidget(new SilentButton(l, r1, w, h, Component.literal("1€"), btn -> {
       menu.withdraw(1, hasShiftDown());
     }));
 
     // bottom left
-    this.addRenderableWidget(new SilentButton(Component.literal("10€"), l, r2, w, h, btn -> {
+    this.addRenderableWidget(new SilentButton(l, r2, w, h, Component.literal("10€"), btn -> {
       menu.withdraw(10, hasShiftDown());
     }));
 
     // top right
-    this.addRenderableWidget(new SilentButton(Component.literal("100€"), r, r1, w, h, btn -> {
+    this.addRenderableWidget(new SilentButton(r, r1, w, h, Component.literal("100€"), btn -> {
       menu.withdraw(100, hasShiftDown());
     }));
 
     // bottom right
-    this.addRenderableWidget(new SilentButton(Component.literal("1000€"), r, r2, w, h, btn -> {
+    this.addRenderableWidget(new SilentButton(r, r2, w, h, Component.literal("1000€"), btn -> {
       menu.withdraw(1000, hasShiftDown());
     }));
   }
 
   @Override
-  protected void renderBg(GuiGraphics guiGraphics, float partialTick, int mouseX, int mouseY) {
-    RenderSystem.setShader(GameRenderer::getPositionTexShader);
-    RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, 1.0F);
-    RenderSystem.setShaderTexture(0, TEXTURE);
+  public void render(GuiGraphics guiGraphics, int mouseX, int mouseY, float partialTick) {
+    super.render(guiGraphics, mouseX, mouseY, partialTick);
+    this.renderTooltip(guiGraphics, mouseX, mouseY);
 
-    int x = (width - imageWidth) / 2;
-    int y = (height - imageHeight) / 2;
-
-    guiGraphics.blit(TEXTURE, x, y, 0, 0, imageWidth, imageHeight);
-  }
-
-  @Override
-  public void render(GuiGraphics pGuiGraphics, int pMouseX, int pMouseY, float pPartialTick) {
-    super.render(pGuiGraphics, pMouseX, pMouseY, pPartialTick);
-    this.renderTooltip(pGuiGraphics, pMouseX, pMouseY);
-
-    if (this.menu.level.isClientSide() && this.minecraft instanceof Minecraft mc
+    if (this.menu.level.isClientSide()
+        && this.minecraft instanceof Minecraft mc
         && mc.player instanceof LocalPlayer player) {
-      var money = player.getData(DataAttachment.MONEY);
+      var money = player.getData(SmpDataAttachments.MONEY);
 
       var moneyStr = NumberUtils.CURRENCY_FORMAT.format(money);
 
@@ -83,10 +70,13 @@ public class ATMScreen extends AbstractContainerScreen<ATMMenu> {
       int x = (width - imageWidth) / 2;
       int y = (height - imageHeight) / 2;
       // Render player name centered at the top of the ATM GUI
-      pGuiGraphics.drawString(this.font, moneyStr,
+      guiGraphics.drawString(
+          this.font,
+          moneyStr,
           x + (imageWidth / 2) - (font.width(moneyStr) / 2), // Center horizontally
           y + 10, // Position it 10 pixels from the top of the GUI
-          0x3F3F3F, false); // Dark gray color
+          0x3F3F3F,
+          false); // Dark gray color
     }
   }
 }

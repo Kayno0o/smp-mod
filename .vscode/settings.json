@@ -1,9 +1,18 @@
 {
+  "emeraldwalk.runonsave": {
+    "commands": [
+      {
+        "match": "\\.java$",
+        "cmd": "./gradlew spotlessApply"
+      }
+    ]
+  },
   "[java]": {
     "editor.detectIndentation": false,
     "editor.defaultFormatter": "redhat.java",
-    "editor.formatOnSave": true,
+    "editor.formatOnSave": false,
   },
   "java.compile.nullAnalysis.mode": "automatic",
   "java.configuration.updateBuildConfiguration": "automatic",
+  "java.format.settings.profile": "GoogleStyle",
 }

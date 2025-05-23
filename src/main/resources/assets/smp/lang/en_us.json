@@ -2,9 +2,9 @@
   "block.smp.atm": "ATM",
   "block.smp.redstone_paygate": "Redstone Paygate",
   "item.smp.card": "CB",
-  "item.smp.money_1": "1€",
-  "item.smp.money_10": "10€",
-  "item.smp.money_100": "100€",
-  "item.smp.money_1000": "1000€",
+  "item.smp.coin": "1€",
+  "item.smp.small_bill": "10€",
+  "item.smp.big_bill": "100€",
+  "item.smp.money_ingot": "1000€",
   "item_group.smp.smp_tab": "SMP"
 }

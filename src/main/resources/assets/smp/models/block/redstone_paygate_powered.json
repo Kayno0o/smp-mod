@@ -1,11 +1,13 @@
 {
   "parent": "block/cube",
   "textures": {
-    "north": "smp:block/redstone_paygate_powered_north",
-    "south": "smp:block/redstone_paygate_powered_south",
-    "east": "smp:block/redstone_paygate_powered_east",
-    "west": "smp:block/redstone_paygate_powered_west",
-    "up": "smp:block/redstone_paygate_powered_top",
-    "down": "smp:block/redstone_paygate_powered_bottom"
+    "north": "smp:block/redstone_paygate_powered_1",
+    "south": "smp:block/redstone_paygate_powered_0",
+    "east": "smp:block/redstone_paygate_powered_0",
+    "west": "smp:block/redstone_paygate_powered_0",
+    "up": "smp:block/redstone_paygate_powered_0",
+    "down": "smp:block/redstone_paygate_powered_0",
+
+    "particle": "smp:block/redstone_paygate_powered_0"
   }
 }

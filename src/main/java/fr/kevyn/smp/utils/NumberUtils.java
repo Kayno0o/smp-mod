@@ -5,6 +5,7 @@ import java.util.Locale;
 
 public class NumberUtils {
   public static final NumberFormat CURRENCY_FORMAT;
+
   static {
     CURRENCY_FORMAT = NumberFormat.getCurrencyInstance(Locale.FRANCE);
     CURRENCY_FORMAT.setMaximumFractionDigits(0);

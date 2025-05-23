@@ -1,0 +1,126 @@
+package fr.kevyn.smp.block;
+
+import fr.kevyn.smp.init.SmpBlockEntities;
+import fr.kevyn.smp.init.SmpDataAttachments;
+import fr.kevyn.smp.item.CardItem;
+import fr.kevyn.smp.network.client.UpdateMoneyNet;
+import fr.kevyn.smp.ui.menu.RedstonePaygateMenu;
+import java.util.UUID;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.HolderLookup;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.network.protocol.Packet;
+import net.minecraft.network.protocol.game.ClientGamePacketListener;
+import net.minecraft.network.protocol.game.ClientboundBlockEntityDataPacket;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.entity.player.Inventory;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.inventory.AbstractContainerMenu;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.block.state.BlockState;
+import net.neoforged.neoforge.items.ItemStackHandler;
+import net.neoforged.neoforge.network.PacketDistributor;
+
+public class RedstonePaygateBlockEntity extends AbstractBlockEntity {
+  public static int CARD_SLOT = 0;
+
+  private UUID ownerId;
+  private int price = 0;
+  private int balance = 0;
+
+  public final ItemStackHandler inventory = new ItemStackHandler(1) {
+    protected int getStackLimit(int slot, ItemStack stack) {
+      return 1;
+    }
+
+    public boolean isItemValid(int slot, ItemStack stack) {
+      if (slot == CARD_SLOT) {
+        return stack.getItem() instanceof CardItem;
+      }
+      return super.isItemValid(slot, stack);
+    }
+
+    protected void onContentsChanged(int slot) {
+      setChanged();
+    }
+  };
+
+  public RedstonePaygateBlockEntity(BlockPos pos, BlockState state) {
+    super(SmpBlockEntities.REDSTONE_PAYGATE.get(), pos, state, "Redstone Paygate");
+  }
+
+  @Override
+  public AbstractContainerMenu createMenu(int i, Inventory inventory, Player player) {
+    return new RedstonePaygateMenu(i, inventory, this);
+  }
+
+  @Override
+  public CompoundTag getUpdateTag(HolderLookup.Provider registries) {
+    CompoundTag tag = new CompoundTag();
+    saveAdditional(tag, registries);
+    return tag;
+  }
+
+  @Override
+  public Packet<ClientGamePacketListener> getUpdatePacket() {
+    return ClientboundBlockEntityDataPacket.create(this);
+  }
+
+  @Override
+  protected void saveAdditional(CompoundTag tag, HolderLookup.Provider registries) {
+    super.saveAdditional(tag, registries);
+
+    tag.put("inventory", inventory.serializeNBT(registries));
+
+    if (ownerId != null) tag.putUUID("owner", ownerId);
+
+    tag.putInt("price", price);
+    tag.putInt("balance", balance);
+  }
+
+  @Override
+  protected void loadAdditional(CompoundTag tag, HolderLookup.Provider registries) {
+    super.loadAdditional(tag, registries);
+
+    inventory.deserializeNBT(registries, tag.getCompound("inventory"));
+
+    if (tag.contains("owner")) ownerId = tag.getUUID("owner");
+
+    price = tag.getInt("price");
+    balance = tag.getInt("balance");
+  }
+
+  public void setPrice(int price) {
+    this.price = price;
+    this.setChanged();
+  }
+
+  public UUID getOwnerId() {
+    return ownerId;
+  }
+
+  public void setOwnerId(UUID ownerId) {
+    this.ownerId = ownerId;
+  }
+
+  public int getPrice() {
+    return this.price;
+  }
+
+  public int getBalance() {
+    return this.balance;
+  }
+
+  public boolean withdraw(ServerPlayer player) {
+    if (level == null) return false;
+
+    int money = player.getData(SmpDataAttachments.MONEY);
+    if (money < this.price) return false;
+
+    if (!(this.inventory.getStackInSlot(CARD_SLOT).getItem() instanceof CardItem)) return false;
+
+    player.setData(SmpDataAttachments.MONEY, money - price);
+    PacketDistributor.sendToPlayer(player, new UpdateMoneyNet(money - price));
+    return true;
+  }
+}

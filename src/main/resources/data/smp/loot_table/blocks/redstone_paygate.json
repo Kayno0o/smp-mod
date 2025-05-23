@@ -1,0 +1,20 @@
+{
+  "type": "minecraft:block",
+  "random_sequence": "smp:blocks/redstone_paygate",
+  "pools": [
+    {
+      "rolls": 1.0,
+      "conditions": [
+        {
+          "condition": "minecraft:survives_explosion"
+        }
+      ],
+      "entries": [
+        {
+          "type": "minecraft:item",
+          "name": "smp:redstone_paygate"
+        }
+      ]
+    }
+  ]
+}

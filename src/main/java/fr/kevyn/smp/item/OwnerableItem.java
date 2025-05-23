@@ -1,13 +1,11 @@
 package fr.kevyn.smp.item;
 
+import fr.kevyn.smp.component.OwnershipData;
+import fr.kevyn.smp.init.SmpComponents;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
-
 import javax.annotation.Nullable;
-
-import fr.kevyn.smp.component.OwnershipData;
-import fr.kevyn.smp.init.ModComponents;
 import net.minecraft.ChatFormatting;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.network.chat.Component;
@@ -21,7 +19,7 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.component.ItemLore;
 import net.minecraft.world.level.Level;
 
-abstract public class OwnerableItem extends Item {
+public abstract class OwnerableItem extends Item {
   public OwnerableItem(Properties properties) {
     super(properties);
   }
@@ -32,10 +30,9 @@ abstract public class OwnerableItem extends Item {
     setOwner(stack, player);
   }
 
-  @Nullable
-  public Player getOwner(ItemStack stack, Level level) {
-    if (stack.has(ModComponents.OWNERSHIP)) {
-      OwnershipData ownerData = stack.get(ModComponents.OWNERSHIP);
+  @Nullable public Player getOwner(ItemStack stack, Level level) {
+    if (stack.has(SmpComponents.OWNERSHIP)) {
+      OwnershipData ownerData = stack.get(SmpComponents.OWNERSHIP);
       if (!ownerData.ownerUUID().isEmpty()) {
         return level.getPlayerByUUID(UUID.fromString(ownerData.ownerUUID()));
       }
@@ -44,10 +41,11 @@ abstract public class OwnerableItem extends Item {
   }
 
   public void setOwner(ItemStack stack, Player owner) {
-    stack.set(ModComponents.OWNERSHIP, OwnershipData.create(owner.getStringUUID()));
+    stack.set(SmpComponents.OWNERSHIP, OwnershipData.create(owner.getStringUUID()));
 
     List<Component> loreList = new ArrayList<>();
-    loreList.add(Component.literal("Owner: ").withStyle(ChatFormatting.GRAY)
+    loreList.add(Component.literal("Owner: ")
+        .withStyle(ChatFormatting.GRAY)
         .append(Component.literal(owner.getName().getString()).withStyle(ChatFormatting.BLUE)));
     stack.set(DataComponents.LORE, new ItemLore(loreList));
   }
@@ -61,22 +59,25 @@ abstract public class OwnerableItem extends Item {
   }
 
   public void clearOwner(ItemStack stack) {
-    stack.remove(ModComponents.OWNERSHIP);
+    stack.remove(SmpComponents.OWNERSHIP);
     stack.remove(DataComponents.LORE);
   }
 
   @Override
-  public InteractionResultHolder<ItemStack> use(Level level, Player player, InteractionHand usedHand) {
+  public InteractionResultHolder<ItemStack> use(
+      Level level, Player player, InteractionHand usedHand) {
     if (player.isCrouching()) {
       ItemStack stack = player.getItemInHand(usedHand);
       if (this.isOwner(stack, player, level)) {
         this.clearOwner(stack);
         // level.playSound(player, player.getOnPos(), SoundEvents.BONE_BLOCK_BREAK,
         // SoundSource.BLOCKS, 1f, 1f);
-        level.playSound(player, player.getOnPos(), SoundEvents.BONE_BLOCK_BREAK, SoundSource.BLOCKS, 1f, 0f);
+        level.playSound(
+            player, player.getOnPos(), SoundEvents.BONE_BLOCK_BREAK, SoundSource.BLOCKS, 1f, 0f);
       } else {
         this.setOwner(stack, player);
-        level.playSound(player, player.getOnPos(), SoundEvents.AMETHYST_BLOCK_HIT, SoundSource.BLOCKS, 1f, 1f);
+        level.playSound(
+            player, player.getOnPos(), SoundEvents.AMETHYST_BLOCK_HIT, SoundSource.BLOCKS, 1f, 1f);
       }
     }
     return super.use(level, player, usedHand);

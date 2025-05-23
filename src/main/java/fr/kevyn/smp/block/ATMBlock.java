@@ -1,11 +1,9 @@
 package fr.kevyn.smp.block;
 
 import net.minecraft.core.BlockPos;
-import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.ItemInteractionResult;
-import net.minecraft.world.SimpleMenuProvider;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.context.BlockPlaceContext;
@@ -21,12 +19,8 @@ import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.level.block.state.properties.DirectionProperty;
 import net.minecraft.world.phys.BlockHitResult;
-import net.minecraft.world.phys.shapes.CollisionContext;
-import net.minecraft.world.phys.shapes.Shapes;
-import net.minecraft.world.phys.shapes.VoxelShape;
 
 public class ATMBlock extends Block implements EntityBlock {
-  private VoxelShape SHAPE = Shapes.or(box(0, 0, 0, 16, 32, 16));
   public static final DirectionProperty FACING = BlockStateProperties.HORIZONTAL_FACING;
 
   public ATMBlock() {
@@ -58,7 +52,6 @@ public class ATMBlock extends Block implements EntityBlock {
 
   @Override
   protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder) {
-    super.createBlockStateDefinition(builder);
     builder.add(FACING);
   }
 
@@ -68,40 +61,17 @@ public class ATMBlock extends Block implements EntityBlock {
   }
 
   @Override
-  public VoxelShape getShape(BlockState state, BlockGetter world, BlockPos pos, CollisionContext context) {
-    return this.SHAPE;
-  }
-
-  @Override
-  protected VoxelShape getCollisionShape(BlockState state, BlockGetter level, BlockPos pos, CollisionContext context) {
-    return this.SHAPE;
-  }
-
-  @Override
-  protected VoxelShape getInteractionShape(BlockState state, BlockGetter level, BlockPos pos) {
-    return this.SHAPE;
-  }
-
-  @Override
-  protected ItemInteractionResult useItemOn(ItemStack stack, BlockState state, Level level, BlockPos pos, Player player,
-      InteractionHand hand, BlockHitResult hitResult) {
+  protected ItemInteractionResult useItemOn(
+      ItemStack stack,
+      BlockState state,
+      Level level,
+      BlockPos pos,
+      Player player,
+      InteractionHand hand,
+      BlockHitResult hitResult) {
     if (level.getBlockEntity(pos) instanceof ATMBlockEntity atmBlockEntity) {
-
-      // ItemStack cardSlotStack = menu.inventory.getStackInSlot(ATMMenu.CARD_SLOT);
-
-      // // drop card into ATM
-      // if (cardSlotStack.isEmpty() && !stack.isEmpty() && stack.getItem() instanceof
-      // CardItem) {
-      // menu.inventory.insertItem(ATMMenu.CARD_SLOT, stack.copy(), false);
-      // stack.shrink(1);
-      // level.playSound(player, pos, SoundEvents.ITEM_PICKUP, SoundSource.BLOCKS, 1f,
-      // 2f);
-      // }
-
-      if (!level.isClientSide()) {
-        ((ServerPlayer) player).openMenu(new SimpleMenuProvider(atmBlockEntity, Component.literal("ATM")),
-            pos);
-      }
+      if (!level.isClientSide())
+        ((ServerPlayer) player).openMenu(atmBlockEntity.getMenuProvider(), pos);
     }
     return ItemInteractionResult.SUCCESS;
   }
