@@ -1,7 +1,7 @@
 package fr.kevyn.smp.network.server;
 
 import fr.kevyn.smp.SmpMod;
-import fr.kevyn.smp.ui.menu.IMenuNet;
+import fr.kevyn.smp.ui.menu.IMenuActionHandler;
 import io.netty.buffer.ByteBuf;
 import net.minecraft.network.codec.ByteBufCodecs;
 import net.minecraft.network.codec.StreamCodec;
@@ -31,7 +31,7 @@ public record MenuActionNet(String id, String action, int amount) implements Cus
   public static void handleOnServer(final MenuActionNet data, final IPayloadContext context) {
     context.enqueueWork(() -> {
       if (context.player() instanceof ServerPlayer player
-          && player.containerMenu instanceof IMenuNet menu) {
+          && player.containerMenu instanceof IMenuActionHandler menu) {
         if (!menu.getMenuIdentifier().equals(data.id)) return;
 
         menu.handleMenuAction(data);

@@ -19,6 +19,8 @@ public class SmpMod {
   public static final String MODID = "smp";
   public static final Logger LOGGER = LogUtils.getLogger();
 
+  public static final int LABEL_COLOR = 0x253b41;
+
   public SmpMod(IEventBus modEventBus, ModContainer modContainer) {
     LOGGER.info("Smp Mod Initializing");
 

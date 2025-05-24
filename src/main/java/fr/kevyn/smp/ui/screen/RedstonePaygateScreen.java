@@ -15,6 +15,8 @@ public class RedstonePaygateScreen extends AbstractScreen<RedstonePaygateMenu> {
   private static final ResourceLocation TEXTURE = ResourceLocation.fromNamespaceAndPath(
       SmpMod.MODID, "textures/gui/redstone_paygate/redstone_paygate_gui.png");
 
+  public static final int HEIGHT = 182;
+
   private EditBox amountInput;
 
   public ResourceLocation getTexture() {
@@ -23,20 +25,21 @@ public class RedstonePaygateScreen extends AbstractScreen<RedstonePaygateMenu> {
 
   public RedstonePaygateScreen(RedstonePaygateMenu menu, Inventory inv, Component title) {
     super(menu, inv, title);
+    this.imageHeight = HEIGHT;
   }
 
   @Override
   protected void init() {
     super.init();
 
-    int inputWidth = 40;
+    int inputWidth = 32;
     int h = 16;
     int inputX = getLeft();
-    int inputY = topPos + 24;
+    int inputY = topPos + 48;
 
     amountInput = new EditBox(font, inputX, inputY, inputWidth, h, Component.literal("Amount"));
     amountInput.setFilter(s -> s.matches("\\d*"));
-    amountInput.setMaxLength(4);
+    amountInput.setMaxLength(3);
     amountInput.setValue(String.valueOf(menu.blockEntity.getPrice()));
     amountInput.setResponder((String value) -> {
       int price = value.length() > 0 ? Integer.parseInt(value) : 0;
@@ -47,7 +50,7 @@ public class RedstonePaygateScreen extends AbstractScreen<RedstonePaygateMenu> {
     });
     this.addRenderableWidget(amountInput);
 
-    int withdrawWidth = 40;
+    int withdrawWidth = 56;
     int withdrawX = getRight(withdrawWidth);
     int withdrawY = topPos + 48;
     this.addRenderableWidget(new SilentButton(
@@ -55,6 +58,13 @@ public class RedstonePaygateScreen extends AbstractScreen<RedstonePaygateMenu> {
           PacketDistributor.sendToServer(
               new MenuActionNet(menu.getMenuIdentifier(), RedstonePaygateMenu.ACTION_WITHDRAW, -1));
         }));
+  }
+
+  @Override
+  protected void renderLabels(GuiGraphics guiGraphics, int mouseX, int mouseY) {
+    super.renderLabels(guiGraphics, mouseX, mouseY);
+
+    guiGraphics.drawString(font, "Price", 8, 27, SmpMod.LABEL_COLOR, false);
   }
 
   @Override

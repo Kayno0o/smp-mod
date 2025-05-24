@@ -8,6 +8,7 @@ import fr.kevyn.smp.item.CardItem;
 import fr.kevyn.smp.item.MoneyItem;
 import fr.kevyn.smp.network.client.UpdateMoneyNet;
 import fr.kevyn.smp.network.server.ATMWithdrawNet;
+import fr.kevyn.smp.ui.screen.ATMScreen;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvents;
@@ -42,7 +43,6 @@ public class ATMMenu extends AbstractMenu<ATMMenu, ATMBlockEntity> {
 
       ItemStack cardStack = inventory.getStackInSlot(CARD_SLOT);
       if (cardStack.isEmpty() || !(cardStack.getItem() instanceof CardItem)) {
-        player.playNotifySound(SoundEvents.VILLAGER_NO, SoundSource.PLAYERS, 1.0f, 1.0f);
         return false;
       }
 
@@ -68,11 +68,11 @@ public class ATMMenu extends AbstractMenu<ATMMenu, ATMBlockEntity> {
   public ATMMenu(int containerId, Inventory inv, ATMBlockEntity atm) {
     super(SmpMenus.ATM_MENU.get(), containerId, atm, inv.player, 2);
 
-    addPlayerInventory(inv);
-    addPlayerHotbar(inv);
+    addPlayerInventory(inv, ATMScreen.HEIGHT);
+    addPlayerHotbar(inv, ATMScreen.HEIGHT);
 
-    addSlot(new SlotItemHandler(inventory, CARD_SLOT, 80, 24));
-    addSlot(new SlotItemHandler(inventory, DEPOSIT_SLOT, 80, 48));
+    addSlot(new SlotItemHandler(inventory, DEPOSIT_SLOT, 152, 29));
+    addSlot(new SlotItemHandler(inventory, CARD_SLOT, 152, 51));
 
     if (player instanceof ServerPlayer serverPlayer) {
       var money = player.getData(SmpDataAttachments.MONEY);

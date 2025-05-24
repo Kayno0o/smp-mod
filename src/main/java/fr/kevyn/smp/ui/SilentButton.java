@@ -1,12 +1,11 @@
 package fr.kevyn.smp.ui;
 
-import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.sounds.SoundManager;
 import net.minecraft.network.chat.Component;
 
-public class SilentButton extends Button {
+public class SilentButton extends AbstractButton {
   public SilentButton(int x, int y, int width, int height, Component message, OnPress onPress) {
-    super(x, y, width, height, message, onPress, DEFAULT_NARRATION);
+    super(x, y, width, height, message, onPress);
   }
 
   @Override

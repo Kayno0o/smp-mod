@@ -16,12 +16,15 @@ public class ATMScreen extends AbstractScreen<ATMMenu> {
   private static final ResourceLocation TEXTURE =
       ResourceLocation.fromNamespaceAndPath(SmpMod.MODID, "textures/gui/atm/atm_gui.png");
 
+  public static final int HEIGHT = 176;
+
   public ResourceLocation getTexture() {
     return TEXTURE;
   }
 
   public ATMScreen(ATMMenu menu, Inventory inv, Component title) {
     super(menu, inv, title);
+    this.imageHeight = HEIGHT;
   }
 
   @Override
@@ -30,8 +33,10 @@ public class ATMScreen extends AbstractScreen<ATMMenu> {
 
     int w = 40, h = 16;
 
-    int r1 = this.topPos + 24, r2 = r1 + 24;
-    int l = this.leftPos + 10, r = this.leftPos + this.imageWidth - w - 10;
+    int r1 = this.topPos + 29;
+    int r2 = r1 + h + 6;
+    int l = getLeft();
+    int r = getRight(w, 42);
 
     // top left
     this.addRenderableWidget(new SilentButton(l, r1, w, h, Component.literal("1€"), btn -> {
@@ -66,17 +71,13 @@ public class ATMScreen extends AbstractScreen<ATMMenu> {
 
       var moneyStr = NumberUtils.CURRENCY_FORMAT.format(money);
 
-      // Calculate position to center the text
-      int x = (width - imageWidth) / 2;
-      int y = (height - imageHeight) / 2;
-      // Render player name centered at the top of the ATM GUI
       guiGraphics.drawString(
           this.font,
           moneyStr,
-          x + (imageWidth / 2) - (font.width(moneyStr) / 2), // Center horizontally
-          y + 10, // Position it 10 pixels from the top of the GUI
-          0x3F3F3F,
-          false); // Dark gray color
+          getRight(font.width(moneyStr)),
+          this.topPos + 6,
+          SmpMod.LABEL_COLOR,
+          false);
     }
   }
 }

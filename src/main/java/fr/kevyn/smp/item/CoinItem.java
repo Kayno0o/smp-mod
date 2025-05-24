@@ -19,9 +19,11 @@ public class CoinItem extends MoneyItem {
     if (!level.isClientSide) {
       CoinProjectile coin = new CoinProjectile(level, player);
       coin.setItem(stack);
-      coin.shootFromRotation(player, player.getXRot(), player.getYRot(), 0.0F, 2.5F, 0.1F);
+      coin.shootFromRotation(player, player.getXRot(), player.getYRot(), 0.0F, 3F, 0.2F);
       level.addFreshEntity(coin);
-      stack.shrink(1);
+      if (!player.getAbilities().instabuild) {
+        stack.shrink(1);
+      }
     }
 
     return InteractionResultHolder.sidedSuccess(stack, level.isClientSide());

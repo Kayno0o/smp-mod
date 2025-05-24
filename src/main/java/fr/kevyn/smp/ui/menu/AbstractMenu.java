@@ -26,16 +26,24 @@ public abstract class AbstractMenu<T extends AbstractContainerMenu, B extends Bl
   }
 
   protected void addPlayerInventory(Inventory inv) {
+    addPlayerInventory(inv, 166);
+  }
+
+  protected void addPlayerInventory(Inventory inv, int height) {
     for (int row = 0; row < 3; ++row) {
       for (int col = 0; col < 9; ++col) {
-        this.addSlot(new Slot(inv, col + row * 9 + 9, 8 + col * 18, 84 + row * 18));
+        this.addSlot(new Slot(inv, col + row * 9 + 9, 8 + col * 18, height - 82 + row * 18));
       }
     }
   }
 
   protected void addPlayerHotbar(Inventory inv) {
+    addPlayerHotbar(inv, 166);
+  }
+
+  protected void addPlayerHotbar(Inventory inv, int height) {
     for (int col = 0; col < 9; ++col) {
-      this.addSlot(new Slot(inv, col, 8 + col * 18, 142));
+      this.addSlot(new Slot(inv, col, 8 + col * 18, height - 24));
     }
   }
 

@@ -5,6 +5,7 @@
 		"0": "smp:item/coin",
 		"particle": "smp:item/coin"
 	},
+  "gui_light": "front",
 	"elements": [
 		{
 			"from": [1, 1, 8],

@@ -1,6 +1,7 @@
 package fr.kevyn.smp.ui.screen;
 
 import com.mojang.blaze3d.systems.RenderSystem;
+import fr.kevyn.smp.SmpMod;
 import fr.kevyn.smp.ui.menu.AbstractMenu;
 import fr.kevyn.smp.utils.GuiUtils;
 import net.minecraft.client.gui.GuiGraphics;
@@ -21,6 +22,14 @@ public abstract class AbstractScreen<T extends AbstractMenu<?, ?>>
   }
 
   @Override
+  protected void init() {
+    super.init();
+
+    this.inventoryLabelX = 8;
+    this.inventoryLabelY = this.imageHeight - 94;
+  }
+
+  @Override
   protected void renderBg(GuiGraphics guiGraphics, float partialTick, int mouseX, int mouseY) {
     RenderSystem.setShader(GameRenderer::getPositionTexShader);
     RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, 1.0F);
@@ -30,6 +39,19 @@ public abstract class AbstractScreen<T extends AbstractMenu<?, ?>>
     int y = (height - imageHeight) / 2;
 
     guiGraphics.blit(getTexture(), x, y, 0, 0, this.imageWidth, this.imageHeight);
+  }
+
+  @Override
+  protected void renderLabels(GuiGraphics guiGraphics, int mouseX, int mouseY) {
+    guiGraphics.drawString(
+        this.font, this.title, this.titleLabelX, this.titleLabelY, SmpMod.LABEL_COLOR, false);
+    guiGraphics.drawString(
+        this.font,
+        this.playerInventoryTitle,
+        this.inventoryLabelX,
+        this.inventoryLabelY,
+        SmpMod.LABEL_COLOR,
+        false);
   }
 
   protected int getCenterX() {
@@ -49,7 +71,7 @@ public abstract class AbstractScreen<T extends AbstractMenu<?, ?>>
   }
 
   protected int getLeft() {
-    return this.leftPos + 10;
+    return this.leftPos + 8;
   }
 
   protected int getLeft(int padding) {
@@ -57,10 +79,14 @@ public abstract class AbstractScreen<T extends AbstractMenu<?, ?>>
   }
 
   protected int getRight(int width) {
-    return this.leftPos + this.imageWidth - width - 10;
+    return this.leftPos + this.imageWidth - width - 8;
   }
 
   protected int getRight(int width, int padding) {
     return this.leftPos + this.imageWidth - width - padding;
+  }
+
+  protected int getRightLabel(int width) {
+    return this.imageWidth - width - 8;
   }
 }
