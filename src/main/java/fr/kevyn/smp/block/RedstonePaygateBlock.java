@@ -28,6 +28,7 @@ import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.level.block.state.properties.BooleanProperty;
 import net.minecraft.world.level.block.state.properties.DirectionProperty;
+import net.minecraft.world.level.material.FluidState;
 import net.minecraft.world.level.material.PushReaction;
 import net.minecraft.world.phys.BlockHitResult;
 
@@ -105,12 +106,17 @@ public class RedstonePaygateBlock extends Block implements EntityBlock {
   }
 
   @Override
-  public BlockState playerWillDestroy(Level level, BlockPos pos, BlockState state, Player player) {
+  public boolean onDestroyedByPlayer(
+      BlockState state,
+      Level level,
+      BlockPos pos,
+      Player player,
+      boolean willHarvest,
+      FluidState fluid) {
     if (level.getBlockEntity(pos) instanceof RedstonePaygateBlockEntity paygate)
-      if (player.getUUID().equals(paygate.getOwnerId()))
-        return super.playerWillDestroy(level, pos, state, player);
+      if (!player.getUUID().equals(paygate.getOwnerId())) return false;
 
-    return state;
+    return super.onDestroyedByPlayer(state, level, pos, player, willHarvest, fluid);
   }
 
   @Override

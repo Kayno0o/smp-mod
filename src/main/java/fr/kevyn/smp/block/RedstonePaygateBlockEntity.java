@@ -20,11 +20,13 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.state.BlockState;
 import net.neoforged.neoforge.items.ItemStackHandler;
 import net.neoforged.neoforge.network.PacketDistributor;
+import org.jetbrains.annotations.Nullable;
 
 public class RedstonePaygateBlockEntity extends AbstractBlockEntity {
   public static int CARD_SLOT = 0;
 
-  private UUID ownerId;
+  @Nullable private UUID ownerId;
+
   private int price = 0;
   private int balance = 0;
 
@@ -112,15 +114,26 @@ public class RedstonePaygateBlockEntity extends AbstractBlockEntity {
   }
 
   public boolean withdraw(ServerPlayer player) {
-    if (level == null) return false;
+    if (this.ownerId == null) return false;
 
-    int money = player.getData(SmpDataAttachments.MONEY);
-    if (money < this.price) return false;
+    if (level != null) {
+      var owner = ((ServerPlayer) level.getPlayerByUUID(this.ownerId));
+      if (owner == null) return false;
 
-    if (!(this.inventory.getStackInSlot(CARD_SLOT).getItem() instanceof CardItem)) return false;
+      int money = player.getData(SmpDataAttachments.MONEY);
+      if (money < this.price) return false;
 
-    player.setData(SmpDataAttachments.MONEY, money - price);
-    PacketDistributor.sendToPlayer(player, new UpdateMoneyNet(money - price));
-    return true;
+      if (!(this.inventory.getStackInSlot(CARD_SLOT).getItem() instanceof CardItem)) return false;
+
+      player.setData(SmpDataAttachments.MONEY, money - price);
+      PacketDistributor.sendToPlayer(player, new UpdateMoneyNet(money - price));
+
+      int ownerMoney = player.getData(SmpDataAttachments.MONEY);
+      owner.setData(SmpDataAttachments.MONEY, ownerMoney + price);
+      PacketDistributor.sendToPlayer(owner, new UpdateMoneyNet(ownerMoney + price));
+      return true;
+    }
+
+    return false;
   }
 }
