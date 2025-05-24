@@ -19,8 +19,8 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.component.ItemLore;
 import net.minecraft.world.level.Level;
 
-public abstract class OwnerableItem extends Item {
-  public OwnerableItem(Properties properties) {
+public abstract class AbstractOwnerableItem extends Item {
+  public AbstractOwnerableItem(Properties properties) {
     super(properties);
   }
 

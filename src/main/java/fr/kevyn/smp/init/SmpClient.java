@@ -2,6 +2,7 @@ package fr.kevyn.smp.init;
 
 import fr.kevyn.smp.SmpMod;
 import fr.kevyn.smp.renderer.CoinProjectileRenderer;
+import fr.kevyn.smp.renderer.RedstonePaygateRenderer;
 import fr.kevyn.smp.ui.screen.ATMScreen;
 import fr.kevyn.smp.ui.screen.RedstonePaygateScreen;
 import net.neoforged.api.distmarker.Dist;
@@ -21,5 +22,7 @@ public class SmpClient {
   @SubscribeEvent
   public static void registerRenderers(EntityRenderersEvent.RegisterRenderers event) {
     event.registerEntityRenderer(SmpEntities.COIN_PROJECTILE.get(), CoinProjectileRenderer::new);
+    event.registerBlockEntityRenderer(
+        SmpBlockEntities.REDSTONE_PAYGATE.get(), RedstonePaygateRenderer::new);
   }
 }
