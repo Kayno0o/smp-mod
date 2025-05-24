@@ -41,7 +41,7 @@ public class RedstonePaygateMenu
     addPlayerHotbar(inv, RedstonePaygateScreen.HEIGHT);
 
     this.addSlot(
-        new SlotItemHandler(blockEntity.inventory, RedstonePaygateBlockEntity.CARD_SLOT, 80, 26));
+        new SlotItemHandler(blockEntity.inventory, RedstonePaygateBlockEntity.CARD_SLOT, 80, 33));
 
     if (player instanceof ServerPlayer serverPlayer) {
       var money = player.getData(SmpDataAttachments.MONEY);

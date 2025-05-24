@@ -1,6 +1,7 @@
 package fr.kevyn.smp.ui.screen;
 
 import fr.kevyn.smp.SmpMod;
+import fr.kevyn.smp.block.RedstonePaygateBlockEntity;
 import fr.kevyn.smp.network.server.MenuActionNet;
 import fr.kevyn.smp.ui.SilentButton;
 import fr.kevyn.smp.ui.menu.RedstonePaygateMenu;
@@ -15,7 +16,7 @@ public class RedstonePaygateScreen extends AbstractScreen<RedstonePaygateMenu> {
   private static final ResourceLocation TEXTURE = ResourceLocation.fromNamespaceAndPath(
       SmpMod.MODID, "textures/gui/redstone_paygate/redstone_paygate_gui.png");
 
-  public static final int HEIGHT = 182;
+  public static final int HEIGHT = 162;
 
   private EditBox amountInput;
 
@@ -32,10 +33,10 @@ public class RedstonePaygateScreen extends AbstractScreen<RedstonePaygateMenu> {
   protected void init() {
     super.init();
 
-    int inputWidth = 32;
+    int inputWidth = 54;
     int h = 16;
     int inputX = getLeft();
-    int inputY = topPos + 48;
+    int inputY = topPos + 39;
 
     amountInput = new EditBox(font, inputX, inputY, inputWidth, h, Component.literal("Amount"));
     amountInput.setFilter(s -> s.matches("\\d*"));
@@ -52,7 +53,7 @@ public class RedstonePaygateScreen extends AbstractScreen<RedstonePaygateMenu> {
 
     int withdrawWidth = 56;
     int withdrawX = getRight(withdrawWidth);
-    int withdrawY = topPos + 48;
+    int withdrawY = topPos + 39;
     this.addRenderableWidget(new SilentButton(
         withdrawX, withdrawY, withdrawWidth, h, Component.literal("Withdraw"), btn -> {
           PacketDistributor.sendToServer(
@@ -65,11 +66,23 @@ public class RedstonePaygateScreen extends AbstractScreen<RedstonePaygateMenu> {
     super.renderLabels(guiGraphics, mouseX, mouseY);
 
     guiGraphics.drawString(font, "Price", 8, 27, SmpMod.LABEL_COLOR, false);
+    // guiGraphics.drawString(font, "Balance:", 114, 27, SmpMod.LABEL_COLOR, false);
+
   }
 
   @Override
   public void render(GuiGraphics guiGraphics, int mouseX, int mouseY, float partialTick) {
     super.render(guiGraphics, mouseX, mouseY, partialTick);
     this.renderTooltip(guiGraphics, mouseX, mouseY);
+
+    var balanceStr = String.valueOf(menu.blockEntity.getBalance()) + "/"
+        + String.valueOf(RedstonePaygateBlockEntity.MAX_BALANCE) + " €";
+    guiGraphics.drawString(
+        font,
+        balanceStr,
+        getRight(font.width(balanceStr)),
+        this.topPos + 27,
+        SmpMod.LABEL_COLOR,
+        false);
   }
 }

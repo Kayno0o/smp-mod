@@ -134,7 +134,7 @@ public class RedstonePaygateBlock extends Block implements EntityBlock {
         if (!stack.isEmpty() && stack.getItem() instanceof CardItem) {
           if (
           /*player.getUUID().equals(paygate.getOwnerId()) ||*/
-          paygate.withdraw((ServerPlayer) player)) {
+          paygate.pay((ServerPlayer) player)) {
             this.activate(level, state, pos);
           }
 
