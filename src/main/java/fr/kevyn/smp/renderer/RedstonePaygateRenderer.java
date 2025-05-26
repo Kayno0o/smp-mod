@@ -2,9 +2,11 @@ package fr.kevyn.smp.renderer;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import fr.kevyn.smp.block.RedstonePaygateBlockEntity;
+import fr.kevyn.smp.item.CardItem;
 import fr.kevyn.smp.utils.NumberUtils;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Font;
+import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.blockentity.BlockEntityRenderer;
 import net.minecraft.client.renderer.blockentity.BlockEntityRendererProvider;
@@ -24,51 +26,52 @@ public class RedstonePaygateRenderer implements BlockEntityRenderer<RedstonePayg
       MultiBufferSource buffer,
       int packedLight,
       int packedOverlay) {
-    if (Minecraft.renderNames()) {
-      Minecraft mc = Minecraft.getInstance();
+    Minecraft mc = Minecraft.getInstance();
 
-      if (mc.player == null
-          || mc.hitResult == null
-          || mc.hitResult.getType() != HitResult.Type.BLOCK) return;
+    if (mc.player == null || mc.hitResult == null || mc.hitResult.getType() != HitResult.Type.BLOCK)
+      return;
 
-      BlockPos hitPos = ((BlockHitResult) mc.hitResult).getBlockPos();
-      if (!hitPos.equals(blockEntity.getBlockPos())) return;
+    BlockPos hitPos = ((BlockHitResult) mc.hitResult).getBlockPos();
+    if (!hitPos.equals(blockEntity.getBlockPos())) return;
 
-      double distSq = mc.player.distanceToSqr(Vec3.atCenterOf(blockEntity.getBlockPos()));
-      if (distSq > 64) return;
+    LocalPlayer player = mc.player;
+    var holdItem = player.getMainHandItem();
+    if (!(holdItem.getItem() instanceof CardItem)) return;
 
-      String text = "Price: " + NumberUtils.CURRENCY_FORMAT.format(blockEntity.getPrice());
-      Font font = mc.font;
+    double distSq = player.distanceToSqr(Vec3.atCenterOf(blockEntity.getBlockPos()));
+    if (distSq > 64) return;
 
-      poseStack.pushPose();
+    String text = "Price: " + NumberUtils.CURRENCY_FORMAT.format(blockEntity.getPrice());
+    Font font = mc.font;
 
-      Vec3 cameraPos = mc.getEntityRenderDispatcher().camera.getPosition();
-      Vec3 blockCenter = Vec3.atCenterOf(blockEntity.getBlockPos());
+    poseStack.pushPose();
 
-      Vec3 direction = cameraPos.subtract(blockCenter).normalize();
+    Vec3 cameraPos = mc.getEntityRenderDispatcher().camera.getPosition();
+    Vec3 blockCenter = Vec3.atCenterOf(blockEntity.getBlockPos());
 
-      double offsetDistance = 1;
-      poseStack.translate(
-          0.5 + direction.x * offsetDistance,
-          0.5 + direction.y * offsetDistance,
-          0.5 + direction.z * offsetDistance);
+    Vec3 direction = cameraPos.subtract(blockCenter).normalize();
 
-      poseStack.mulPose(mc.getEntityRenderDispatcher().cameraOrientation());
-      poseStack.scale(0.01f, -0.01f, 0.01f);
+    double offsetDistance = 1;
+    poseStack.translate(
+        0.5 + direction.x * offsetDistance,
+        0.5 + direction.y * offsetDistance,
+        0.5 + direction.z * offsetDistance);
 
-      font.drawInBatch(
-          text,
-          -font.width(text) / 2f,
-          0,
-          0xFFFFFFFF,
-          false,
-          poseStack.last().pose(),
-          buffer,
-          Font.DisplayMode.NORMAL,
-          0,
-          packedLight);
+    poseStack.mulPose(mc.getEntityRenderDispatcher().cameraOrientation());
+    poseStack.scale(0.01f, -0.01f, 0.01f);
 
-      poseStack.popPose();
-    }
+    font.drawInBatch(
+        text,
+        -font.width(text) / 2f,
+        0,
+        0xFFFFFFFF,
+        false,
+        poseStack.last().pose(),
+        buffer,
+        Font.DisplayMode.NORMAL,
+        0,
+        packedLight);
+
+    poseStack.popPose();
   }
 }
