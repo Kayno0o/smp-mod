@@ -16,7 +16,7 @@ public class CoinItem extends MoneyItem {
   public InteractionResultHolder<ItemStack> use(Level level, Player player, InteractionHand hand) {
     ItemStack stack = player.getItemInHand(hand);
 
-    if (!level.isClientSide) {
+    if (!level.isClientSide()) {
       CoinProjectile coin = new CoinProjectile(level, player);
       coin.setItem(stack);
       coin.shootFromRotation(player, player.getXRot(), player.getYRot(), 0.0F, 3F, 0.2F);

@@ -1,9 +1,9 @@
 package fr.kevyn.smp.ui.screen;
 
 import fr.kevyn.smp.SmpMod;
-import fr.kevyn.smp.init.SmpDataAttachments;
 import fr.kevyn.smp.ui.SilentButton;
 import fr.kevyn.smp.ui.menu.ATMMenu;
+import fr.kevyn.smp.utils.AccountUtils;
 import fr.kevyn.smp.utils.NumberUtils;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
@@ -67,7 +67,9 @@ public class ATMScreen extends AbstractScreen<ATMMenu> {
     if (this.menu.level.isClientSide()
         && this.minecraft instanceof Minecraft mc
         && mc.player instanceof LocalPlayer player) {
-      var money = player.getData(SmpDataAttachments.MONEY);
+      int money =
+          AccountUtils.getMoney(this.menu.inventory.getStackInSlot(ATMMenu.CARD_SLOT), player);
+      if (money == -1) return;
 
       var moneyStr = NumberUtils.CURRENCY_FORMAT.format(money);
 

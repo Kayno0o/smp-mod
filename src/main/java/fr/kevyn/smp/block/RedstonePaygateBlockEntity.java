@@ -1,10 +1,9 @@
 package fr.kevyn.smp.block;
 
 import fr.kevyn.smp.init.SmpBlockEntities;
-import fr.kevyn.smp.init.SmpDataAttachments;
 import fr.kevyn.smp.item.CardItem;
-import fr.kevyn.smp.network.client.UpdateMoneyNet;
 import fr.kevyn.smp.ui.menu.RedstonePaygateMenu;
+import fr.kevyn.smp.utils.AccountUtils;
 import java.util.UUID;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.HolderLookup;
@@ -12,16 +11,17 @@ import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.protocol.Packet;
 import net.minecraft.network.protocol.game.ClientGamePacketListener;
 import net.minecraft.network.protocol.game.ClientboundBlockEntityDataPacket;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
+import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.state.BlockState;
 import net.neoforged.neoforge.items.ItemStackHandler;
-import net.neoforged.neoforge.network.PacketDistributor;
 import org.jetbrains.annotations.Nullable;
 
 public class RedstonePaygateBlockEntity extends AbstractBlockEntity {
@@ -123,10 +123,17 @@ public class RedstonePaygateBlockEntity extends AbstractBlockEntity {
   }
 
   public void withdraw(ServerPlayer player) {
-    int money = player.getData(SmpDataAttachments.MONEY);
+    if (!(this.inventory.getStackInSlot(CARD_SLOT).getItem() instanceof CardItem)) return;
 
-    player.setData(SmpDataAttachments.MONEY, money + this.balance);
-    PacketDistributor.sendToPlayer(player, new UpdateMoneyNet(money + this.balance));
+    var blockOwner = ((ServerPlayer) level.getPlayerByUUID(this.ownerId));
+    if (blockOwner == null || !player.getUUID().equals(blockOwner.getUUID())) return;
+
+    var blockAccount = AccountUtils.getAccount(
+        (ServerLevel) player.level(),
+        this.inventory.getStackInSlot(RedstonePaygateBlockEntity.CARD_SLOT));
+    if (blockAccount == null) return;
+
+    AccountUtils.addMoney(blockAccount, blockOwner, this.balance);
 
     this.setBalance(0);
     this.level.sendBlockUpdated(this.worldPosition, this.getBlockState(), this.getBlockState(), 3);
@@ -139,11 +146,12 @@ public class RedstonePaygateBlockEntity extends AbstractBlockEntity {
       if (level.getBlockState(this.worldPosition) instanceof BlockState bs)
         if (bs.getValue(RedstonePaygateBlock.POWERED) == true) return false;
 
-      var owner = ((ServerPlayer) level.getPlayerByUUID(this.ownerId));
-      if (owner == null) return false;
+      var blockOwner = ((ServerPlayer) level.getPlayerByUUID(this.ownerId));
+      if (blockOwner == null) return false;
 
-      int money = player.getData(SmpDataAttachments.MONEY);
-      if (money < this.price) return false;
+      var playerAccount =
+          AccountUtils.getAccount(level, player.getItemInHand(InteractionHand.MAIN_HAND));
+      if (playerAccount == null) return false;
 
       if (!(this.inventory.getStackInSlot(CARD_SLOT).getItem() instanceof CardItem)) {
         if (this.price > MAX_BALANCE - this.balance) {
@@ -156,20 +164,21 @@ public class RedstonePaygateBlockEntity extends AbstractBlockEntity {
         level.playSound(
             player, player.getOnPos(), SoundEvents.AMETHYST_BLOCK_HIT, SoundSource.BLOCKS, 1f, 1f);
 
-        player.setData(SmpDataAttachments.MONEY, money - price);
-        PacketDistributor.sendToPlayer(player, new UpdateMoneyNet(money - price));
+        AccountUtils.addMoney(playerAccount, player, -price);
 
         this.setBalance(this.balance + this.price);
 
         return true;
       }
 
-      player.setData(SmpDataAttachments.MONEY, money - price);
-      PacketDistributor.sendToPlayer(player, new UpdateMoneyNet(money - price));
+      var blockAccount = AccountUtils.getAccount(
+          level, this.inventory.getStackInSlot(RedstonePaygateBlockEntity.CARD_SLOT));
+      if (blockAccount == null || !AccountUtils.hasAccessToAccount(blockAccount, blockOwner))
+        return false;
 
-      int ownerMoney = player.getData(SmpDataAttachments.MONEY);
-      owner.setData(SmpDataAttachments.MONEY, ownerMoney + price);
-      PacketDistributor.sendToPlayer(owner, new UpdateMoneyNet(ownerMoney + price));
+      if (!AccountUtils.addMoney(playerAccount, player, -this.price)) return false;
+
+      AccountUtils.addMoney(blockAccount, blockOwner, this.price);
 
       level.playSound(
           player, player.getOnPos(), SoundEvents.AMETHYST_BLOCK_HIT, SoundSource.BLOCKS, 1f, 1f);

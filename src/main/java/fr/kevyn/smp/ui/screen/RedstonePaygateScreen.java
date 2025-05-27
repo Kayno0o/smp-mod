@@ -5,8 +5,12 @@ import fr.kevyn.smp.block.RedstonePaygateBlockEntity;
 import fr.kevyn.smp.network.server.MenuActionNet;
 import fr.kevyn.smp.ui.SilentButton;
 import fr.kevyn.smp.ui.menu.RedstonePaygateMenu;
+import fr.kevyn.smp.utils.AccountUtils;
+import fr.kevyn.smp.utils.NumberUtils;
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.EditBox;
+import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.player.Inventory;
@@ -84,5 +88,24 @@ public class RedstonePaygateScreen extends AbstractScreen<RedstonePaygateMenu> {
         this.topPos + 27,
         SmpMod.LABEL_COLOR,
         false);
+
+    if (this.menu.level.isClientSide()
+        && this.minecraft instanceof Minecraft mc
+        && mc.player instanceof LocalPlayer player) {
+      int money = AccountUtils.getMoney(
+          this.menu.blockEntity.inventory.getStackInSlot(RedstonePaygateBlockEntity.CARD_SLOT),
+          player);
+      if (money == -1) return;
+
+      var moneyStr = NumberUtils.CURRENCY_FORMAT.format(money);
+
+      guiGraphics.drawString(
+          this.font,
+          moneyStr,
+          getRight(font.width(moneyStr)),
+          this.topPos + 6,
+          SmpMod.LABEL_COLOR,
+          false);
+    }
   }
 }

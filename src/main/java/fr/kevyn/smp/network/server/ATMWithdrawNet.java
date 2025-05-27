@@ -1,27 +1,30 @@
 package fr.kevyn.smp.network.server;
 
 import fr.kevyn.smp.SmpMod;
-import fr.kevyn.smp.init.SmpDataAttachments;
 import fr.kevyn.smp.init.SmpItems;
-import fr.kevyn.smp.network.client.UpdateMoneyNet;
+import fr.kevyn.smp.network.CustomByteBufCodecs;
+import fr.kevyn.smp.utils.AccountUtils;
 import io.netty.buffer.ByteBuf;
+import java.util.UUID;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.codec.ByteBufCodecs;
 import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
-import net.neoforged.neoforge.network.PacketDistributor;
 import net.neoforged.neoforge.network.handling.IPayloadContext;
 
-public record ATMWithdrawNet(int money, int count) implements CustomPacketPayload {
+public record ATMWithdrawNet(UUID account, int money, int count) implements CustomPacketPayload {
   public static final CustomPacketPayload.Type<ATMWithdrawNet> TYPE =
       new CustomPacketPayload.Type<>(
           ResourceLocation.fromNamespaceAndPath(SmpMod.MODID, "money_withdraw"));
 
   public static final StreamCodec<ByteBuf, ATMWithdrawNet> STREAM_CODEC = StreamCodec.composite(
+      CustomByteBufCodecs.UUID,
+      ATMWithdrawNet::account,
       ByteBufCodecs.VAR_INT,
       ATMWithdrawNet::money,
       ByteBufCodecs.VAR_INT,
@@ -45,21 +48,16 @@ public record ATMWithdrawNet(int money, int count) implements CustomPacketPayloa
             int total = moneyWithdraw * countWithdraw;
 
             moneyStack.ifPresent(stack -> {
-              int current = player.getData(SmpDataAttachments.MONEY);
-              if (current < total) {
+              if (!AccountUtils.hasAccessToAccount(data.account(), player, player.level())) return;
+              if (!AccountUtils.addMoney(data.account(), (ServerLevel) player.level(), -total)) {
                 player.playNotifySound(SoundEvents.VILLAGER_NO, SoundSource.PLAYERS, 1.0f, 1.0f);
 
                 return;
               }
 
-              player.setData(SmpDataAttachments.MONEY, current - total);
               player.getInventory().add(stack);
               player.playNotifySound(
                   SoundEvents.NOTE_BLOCK_PLING.value(), SoundSource.PLAYERS, 1.0f, 1.0f);
-
-              if (player instanceof ServerPlayer serverPlayer) {
-                PacketDistributor.sendToPlayer(serverPlayer, new UpdateMoneyNet(current - total));
-              }
             });
           }
         })

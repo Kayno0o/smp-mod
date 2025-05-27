@@ -2,9 +2,7 @@ package fr.kevyn.smp.ui.menu;
 
 import fr.kevyn.smp.block.RedstonePaygateBlockEntity;
 import fr.kevyn.smp.init.SmpBlocks;
-import fr.kevyn.smp.init.SmpDataAttachments;
 import fr.kevyn.smp.init.SmpMenus;
-import fr.kevyn.smp.network.client.UpdateMoneyNet;
 import fr.kevyn.smp.network.server.MenuActionNet;
 import fr.kevyn.smp.ui.screen.RedstonePaygateScreen;
 import net.minecraft.network.FriendlyByteBuf;
@@ -14,7 +12,6 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.ContainerLevelAccess;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.neoforged.neoforge.items.SlotItemHandler;
-import net.neoforged.neoforge.network.PacketDistributor;
 
 public class RedstonePaygateMenu
     extends AbstractMenu<RedstonePaygateMenu, RedstonePaygateBlockEntity>
@@ -42,11 +39,6 @@ public class RedstonePaygateMenu
 
     this.addSlot(
         new SlotItemHandler(blockEntity.inventory, RedstonePaygateBlockEntity.CARD_SLOT, 80, 33));
-
-    if (player instanceof ServerPlayer serverPlayer) {
-      var money = player.getData(SmpDataAttachments.MONEY);
-      PacketDistributor.sendToPlayer(serverPlayer, new UpdateMoneyNet(money));
-    }
   }
 
   @Override

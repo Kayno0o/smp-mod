@@ -2,13 +2,13 @@ package fr.kevyn.smp.ui.menu;
 
 import fr.kevyn.smp.block.ATMBlockEntity;
 import fr.kevyn.smp.init.SmpBlocks;
-import fr.kevyn.smp.init.SmpDataAttachments;
 import fr.kevyn.smp.init.SmpMenus;
 import fr.kevyn.smp.item.CardItem;
 import fr.kevyn.smp.item.MoneyItem;
-import fr.kevyn.smp.network.client.UpdateMoneyNet;
 import fr.kevyn.smp.network.server.ATMWithdrawNet;
 import fr.kevyn.smp.ui.screen.ATMScreen;
+import fr.kevyn.smp.utils.AccountUtils;
+import java.util.UUID;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvents;
@@ -73,11 +73,6 @@ public class ATMMenu extends AbstractMenu<ATMMenu, ATMBlockEntity> {
 
     addSlot(new SlotItemHandler(inventory, DEPOSIT_SLOT, 152, 29));
     addSlot(new SlotItemHandler(inventory, CARD_SLOT, 152, 51));
-
-    if (player instanceof ServerPlayer serverPlayer) {
-      var money = player.getData(SmpDataAttachments.MONEY);
-      PacketDistributor.sendToPlayer(serverPlayer, new UpdateMoneyNet(money));
-    }
   }
 
   @Override
@@ -87,25 +82,26 @@ public class ATMMenu extends AbstractMenu<ATMMenu, ATMBlockEntity> {
   }
 
   private void deposit() {
-    if (level == null || level.isClientSide()) return;
+    if (level == null || level.isClientSide() || !(this.player instanceof ServerPlayer)) return;
+
+    var player = (ServerPlayer) this.player;
 
     ItemStack cardStack = inventory.getStackInSlot(CARD_SLOT);
-    if (cardStack.isEmpty() || !(cardStack.getItem() instanceof CardItem)) {
-      return;
-    }
+    if (cardStack.isEmpty() || !(cardStack.getItem() instanceof CardItem)) return;
+
     ItemStack depositStack = inventory.getStackInSlot(DEPOSIT_SLOT);
 
     if (!depositStack.isEmpty() && depositStack.getItem() instanceof MoneyItem item) {
       var amount = item.getValue() * depositStack.getCount();
       inventory.setStackInSlot(DEPOSIT_SLOT, ItemStack.EMPTY);
 
-      var money = player.getData(SmpDataAttachments.MONEY);
-      player.setData(SmpDataAttachments.MONEY, money + amount);
+      if (!AccountUtils.hasAccessToAccount(cardStack, player, level)) return;
 
-      player.playNotifySound(SoundEvents.NOTE_BLOCK_BELL.value(), SoundSource.PLAYERS, 1.0f, 1.0f);
-
-      if (player instanceof ServerPlayer serverPlayer)
-        PacketDistributor.sendToPlayer(serverPlayer, new UpdateMoneyNet(money + amount));
+      UUID accountId = AccountUtils.getAccountUUID(cardStack);
+      if (AccountUtils.addMoney(accountId, player, amount)) {
+        player.playNotifySound(
+            SoundEvents.NOTE_BLOCK_BELL.value(), SoundSource.PLAYERS, 1.0f, 1.0f);
+      }
     }
   }
 
@@ -116,7 +112,13 @@ public class ATMMenu extends AbstractMenu<ATMMenu, ATMBlockEntity> {
       return;
     }
 
-    PacketDistributor.sendToServer(new ATMWithdrawNet(money, shift ? 64 : 1));
+    var account = AccountUtils.getAccountUUID(cardStack);
+    if (account == null) {
+      player.playNotifySound(SoundEvents.VILLAGER_NO, SoundSource.PLAYERS, 1.0f, 1.0f);
+      return;
+    }
+
+    PacketDistributor.sendToServer(new ATMWithdrawNet(account, money, shift ? 64 : 1));
   }
 
   @Override
