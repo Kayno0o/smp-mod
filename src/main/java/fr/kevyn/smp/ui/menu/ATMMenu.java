@@ -41,7 +41,7 @@ public class ATMMenu extends AbstractBlockEntityMenu<ATMMenu, ATMBlockEntity> {
     @Override
     public boolean isItemValid(int slot, net.minecraft.world.item.ItemStack stack) {
       if (slot == CARD_SLOT) {
-        return stack.getItem() instanceof CardItem;
+        return stack.getItem() instanceof CardItem && AccountUtils.getAccountUUID(stack) != null;
       }
 
       ItemStack cardStack = inventory.getStackInSlot(CARD_SLOT);
