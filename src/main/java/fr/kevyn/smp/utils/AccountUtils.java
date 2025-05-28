@@ -18,6 +18,8 @@ import net.neoforged.neoforge.network.PacketDistributor;
 import org.jetbrains.annotations.Nullable;
 
 public class AccountUtils {
+  private AccountUtils() {}
+
   @Nullable public static UUID getAccountUUID(ItemStack stack) {
     if (stack.has(SmpComponents.OWNERSHIP)) {
       AccountData accountData = stack.get(SmpComponents.OWNERSHIP);

@@ -6,6 +6,8 @@ import com.mojang.serialization.codecs.PrimitiveCodec;
 import java.util.UUID;
 
 public class CustomCodec {
+  private CustomCodec() {}
+
   public static final PrimitiveCodec<UUID> UUID = new PrimitiveCodec<UUID>() {
     @Override
     public <T> DataResult<UUID> read(DynamicOps<T> ops, T input) {

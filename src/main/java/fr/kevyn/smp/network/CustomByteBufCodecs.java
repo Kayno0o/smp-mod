@@ -5,6 +5,8 @@ import java.util.UUID;
 import net.minecraft.network.codec.StreamCodec;
 
 public final class CustomByteBufCodecs {
+  private CustomByteBufCodecs() {}
+
   public static final StreamCodec<ByteBuf, UUID> UUID = new StreamCodec<ByteBuf, UUID>() {
     @Override
     public UUID decode(ByteBuf buf) {
@@ -15,8 +17,7 @@ public final class CustomByteBufCodecs {
 
     @Override
     public void encode(ByteBuf buf, UUID uuid) {
-      buf.writeLong(uuid.getMostSignificantBits());
-      buf.writeLong(uuid.getLeastSignificantBits());
+      buf.writeLong(uuid.getMostSignificantBits()).writeLong(uuid.getLeastSignificantBits());
     }
   };
 }

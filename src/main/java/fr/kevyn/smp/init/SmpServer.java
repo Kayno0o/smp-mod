@@ -20,15 +20,15 @@ import vectorwing.farmersdelight.common.block.entity.CookingPotBlockEntity;
 
 @EventBusSubscriber(modid = SmpMod.MODID, bus = EventBusSubscriber.Bus.GAME)
 public class SmpServer {
+  private SmpServer() {}
+
   @SubscribeEvent
   public static void onBlockPlaced(EntityPlaceEvent event) {
     if (event.getEntity() instanceof Player player) {
       BlockPos pos = event.getPos();
       BlockEntity blockEntity = event.getLevel().getBlockEntity(pos);
 
-      if (blockEntity != null
-          && blockEntity instanceof CookingPotBlockEntity
-          && blockEntity.getLevel() instanceof Level) {
+      if (blockEntity instanceof CookingPotBlockEntity && blockEntity.getLevel() instanceof Level) {
         blockEntity.getPersistentData().putUUID("smp:owner", player.getUUID());
       }
     }

@@ -69,9 +69,10 @@ public class ATMBlock extends Block implements EntityBlock {
       Player player,
       InteractionHand hand,
       BlockHitResult hitResult) {
-    if (level.getBlockEntity(pos) instanceof ATMBlockEntity atmBlockEntity) {
-      if (!level.isClientSide())
-        ((ServerPlayer) player).openMenu(atmBlockEntity.getMenuProvider(), pos);
+    if (level.getBlockEntity(pos) instanceof ATMBlockEntity atmBlockEntity
+        && !level.isClientSide()
+        && player instanceof ServerPlayer serverPlayer) {
+      serverPlayer.openMenu(atmBlockEntity.getMenuProvider(), pos);
     }
     return ItemInteractionResult.SUCCESS;
   }

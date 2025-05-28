@@ -8,10 +8,13 @@ import net.neoforged.neoforge.registries.DeferredBlock;
 import net.neoforged.neoforge.registries.DeferredRegister;
 
 public class SmpBlocks {
+  private SmpBlocks() {}
+
   public static final DeferredRegister.Blocks REGISTRY =
       DeferredRegister.createBlocks(SmpMod.MODID);
 
-  public static final DeferredBlock<Block> ATM = REGISTRY.register("atm", ATMBlock::new);
+  public static final DeferredBlock<Block> ATM =
+      REGISTRY.register("atm", registry -> new ATMBlock());
   public static final DeferredBlock<Block> REDSTONE_PAYGATE =
-      REGISTRY.register("redstone_paygate", RedstonePaygateBlock::new);
+      REGISTRY.register("redstone_paygate", registry -> new RedstonePaygateBlock());
 }

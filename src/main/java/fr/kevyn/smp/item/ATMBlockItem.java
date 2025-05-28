@@ -8,7 +8,7 @@ import net.minecraft.world.level.block.Block;
 import net.neoforged.neoforge.registries.DeferredBlock;
 
 public class ATMBlockItem extends BlockItem {
-  public static DeferredBlock<Block> BLOCK = SmpBlocks.ATM;
+  public static final DeferredBlock<Block> BLOCK = SmpBlocks.ATM;
 
   public ATMBlockItem() {
     super(BLOCK.get(), new Item.Properties().stacksTo(1).rarity(Rarity.EPIC));

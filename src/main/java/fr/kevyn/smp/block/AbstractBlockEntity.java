@@ -11,7 +11,7 @@ import net.minecraft.world.level.block.state.BlockState;
 public abstract class AbstractBlockEntity extends BlockEntity implements MenuProvider {
   private final String displayName;
 
-  public AbstractBlockEntity(
+  protected AbstractBlockEntity(
       BlockEntityType<?> type, BlockPos pos, BlockState blockState, String displayName) {
     super(type, pos, blockState);
 

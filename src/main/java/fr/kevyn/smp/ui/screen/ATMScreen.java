@@ -31,7 +31,8 @@ public class ATMScreen extends AbstractMenuScreen<ATMMenu> {
   protected void init() {
     super.init();
 
-    int w = 40, h = 16;
+    int w = 40;
+    int h = 16;
 
     int r1 = this.topPos + 29;
     int r2 = r1 + h + 6;
@@ -39,24 +40,20 @@ public class ATMScreen extends AbstractMenuScreen<ATMMenu> {
     int r = getRight(w, 42);
 
     // top left
-    this.addRenderableWidget(new SilentButton(l, r1, w, h, Component.literal("1€"), btn -> {
-      menu.withdraw(1, hasShiftDown());
-    }));
+    this.addRenderableWidget(new SilentButton(
+        l, r1, w, h, Component.literal("1€"), btn -> menu.withdraw(1, hasShiftDown())));
 
     // bottom left
-    this.addRenderableWidget(new SilentButton(l, r2, w, h, Component.literal("10€"), btn -> {
-      menu.withdraw(10, hasShiftDown());
-    }));
+    this.addRenderableWidget(new SilentButton(
+        l, r2, w, h, Component.literal("10€"), btn -> menu.withdraw(10, hasShiftDown())));
 
     // top right
-    this.addRenderableWidget(new SilentButton(r, r1, w, h, Component.literal("100€"), btn -> {
-      menu.withdraw(100, hasShiftDown());
-    }));
+    this.addRenderableWidget(new SilentButton(
+        r, r1, w, h, Component.literal("100€"), btn -> menu.withdraw(100, hasShiftDown())));
 
     // bottom right
-    this.addRenderableWidget(new SilentButton(r, r2, w, h, Component.literal("1000€"), btn -> {
-      menu.withdraw(1000, hasShiftDown());
-    }));
+    this.addRenderableWidget(new SilentButton(
+        r, r2, w, h, Component.literal("1000€"), btn -> menu.withdraw(1000, hasShiftDown())));
   }
 
   @Override

@@ -46,8 +46,12 @@ public class AccountSelectionScreen extends AbstractMenuScreen<AccountSelectionM
     this.accounts = accounts;
     this.hasExistingAccount = currentAccount != null;
     this.imageHeight = HEIGHT;
-    this.hasInventory = false;
     this.currentAccount = currentAccount;
+  }
+
+  @Override
+  protected boolean hasInventory() {
+    return false;
   }
 
   @Override

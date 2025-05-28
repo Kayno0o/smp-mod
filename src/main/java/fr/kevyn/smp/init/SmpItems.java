@@ -15,6 +15,8 @@ import net.neoforged.neoforge.registries.DeferredItem;
 import net.neoforged.neoforge.registries.DeferredRegister;
 
 public class SmpItems {
+  private SmpItems() {}
+
   private static final Map<Integer, Item> VALUE_TO_MONEY = new HashMap<>();
 
   public static final DeferredRegister.Items REGISTRY = DeferredRegister.createItems(SmpMod.MODID);

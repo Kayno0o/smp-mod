@@ -35,7 +35,7 @@ public class WorldAccountSavedData extends SavedData {
           data.accounts.put(accountId, entry);
         } catch (IllegalArgumentException e) {
           // Skip invalid UUID keys
-          SmpMod.LOGGER.warn("Invalid UUID key in saved data: " + key);
+          SmpMod.LOGGER.warn("Invalid UUID key in saved data: {}", key);
         }
       }
     }

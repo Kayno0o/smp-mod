@@ -11,7 +11,6 @@ import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.protocol.Packet;
 import net.minecraft.network.protocol.game.ClientGamePacketListener;
 import net.minecraft.network.protocol.game.ClientboundBlockEntityDataPacket;
-import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
@@ -34,10 +33,12 @@ public class RedstonePaygateBlockEntity extends AbstractBlockEntity {
   private int balance = 0;
 
   public final ItemStackHandler inventory = new ItemStackHandler(1) {
+    @Override
     protected int getStackLimit(int slot, ItemStack stack) {
       return 1;
     }
 
+    @Override
     public boolean isItemValid(int slot, ItemStack stack) {
       if (slot == CARD_SLOT) {
         return stack.getItem() instanceof CardItem;
@@ -45,6 +46,7 @@ public class RedstonePaygateBlockEntity extends AbstractBlockEntity {
       return super.isItemValid(slot, stack);
     }
 
+    @Override
     protected void onContentsChanged(int slot) {
       setChanged();
     }
@@ -129,8 +131,7 @@ public class RedstonePaygateBlockEntity extends AbstractBlockEntity {
     if (blockOwner == null || !player.getUUID().equals(blockOwner.getUUID())) return;
 
     var blockAccount = AccountUtils.getAccount(
-        (ServerLevel) player.level(),
-        this.inventory.getStackInSlot(RedstonePaygateBlockEntity.CARD_SLOT));
+        player.serverLevel(), this.inventory.getStackInSlot(RedstonePaygateBlockEntity.CARD_SLOT));
     if (blockAccount == null) return;
 
     AccountUtils.addMoney(blockAccount, blockOwner, this.balance);
@@ -143,8 +144,8 @@ public class RedstonePaygateBlockEntity extends AbstractBlockEntity {
     if (this.ownerId == null) return false;
 
     if (level != null) {
-      if (level.getBlockState(this.worldPosition) instanceof BlockState bs)
-        if (bs.getValue(RedstonePaygateBlock.POWERED) == true) return false;
+      if (level.getBlockState(this.worldPosition) instanceof BlockState bs
+          && Boolean.TRUE.equals(bs.getValue(RedstonePaygateBlock.POWERED))) return false;
 
       var blockOwner = ((ServerPlayer) level.getPlayerByUUID(this.ownerId));
       if (blockOwner == null) return false;

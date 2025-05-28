@@ -16,8 +16,8 @@ import net.neoforged.neoforge.items.SlotItemHandler;
 public class RedstonePaygateMenu
     extends AbstractBlockEntityMenu<RedstonePaygateMenu, RedstonePaygateBlockEntity>
     implements IMenuActionHandler {
-  public static String ACTION_SET_PRICE = "set_price";
-  public static String ACTION_WITHDRAW = "withdraw";
+  public static final String ACTION_SET_PRICE = "set_price";
+  public static final String ACTION_WITHDRAW = "withdraw";
 
   public RedstonePaygateMenu(int id, Inventory inv, FriendlyByteBuf extraData) {
     this(id, inv, castBlockEntity(inv.player.level().getBlockEntity(extraData.readBlockPos())));
@@ -61,9 +61,8 @@ public class RedstonePaygateMenu
       return;
     }
 
-    if (action.action().equals(ACTION_WITHDRAW)) {
-      if (player instanceof ServerPlayer serverPlayer) blockEntity.withdraw(serverPlayer);
-      return;
+    if (action.action().equals(ACTION_WITHDRAW) && player instanceof ServerPlayer serverPlayer) {
+      blockEntity.withdraw(serverPlayer);
     }
   }
 }

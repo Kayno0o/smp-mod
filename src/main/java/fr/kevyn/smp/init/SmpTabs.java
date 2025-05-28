@@ -9,8 +9,11 @@ import net.neoforged.neoforge.registries.DeferredHolder;
 import net.neoforged.neoforge.registries.DeferredRegister;
 
 public class SmpTabs {
+  private SmpTabs() {}
+
   public static final DeferredRegister<CreativeModeTab> REGISTRY =
       DeferredRegister.create(Registries.CREATIVE_MODE_TAB, SmpMod.MODID);
+
   public static final DeferredHolder<CreativeModeTab, CreativeModeTab> SMP_TAB =
       REGISTRY.register("smp_tab", () -> CreativeModeTab.builder()
           .title(Component.translatable("item_group.smp.smp_tab"))

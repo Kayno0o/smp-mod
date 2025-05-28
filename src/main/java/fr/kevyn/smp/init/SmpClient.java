@@ -13,6 +13,8 @@ import net.neoforged.neoforge.client.event.RegisterMenuScreensEvent;
 
 @EventBusSubscriber(modid = SmpMod.MODID, bus = EventBusSubscriber.Bus.MOD, value = Dist.CLIENT)
 public class SmpClient {
+  private SmpClient() {}
+
   @SubscribeEvent
   public static void registerScreens(RegisterMenuScreensEvent event) {
     event.register(SmpMenus.ATM_MENU.get(), ATMScreen::new);

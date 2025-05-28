@@ -15,10 +15,13 @@ public abstract class AbstractMenuScreen<T extends AbstractMenu<?>>
     extends AbstractContainerScreen<T> {
   protected abstract ResourceLocation getTexture();
 
-  public static int INVENTORY_HEIGHT = 101;
-  public boolean hasInventory = true;
+  public static final int INVENTORY_HEIGHT = 101;
 
-  public AbstractMenuScreen(T menu, Inventory inv, Component title) {
+  protected boolean hasInventory() {
+    return true;
+  }
+
+  protected AbstractMenuScreen(T menu, Inventory inv, Component title) {
     super(menu, inv, title);
     this.imageWidth = 176;
     this.imageHeight = 166;
@@ -49,7 +52,7 @@ public abstract class AbstractMenuScreen<T extends AbstractMenu<?>>
     guiGraphics.drawString(
         this.font, this.title, this.titleLabelX, this.titleLabelY, SmpMod.LABEL_COLOR, false);
 
-    if (this.hasInventory)
+    if (hasInventory())
       guiGraphics.drawString(
           this.font,
           this.playerInventoryTitle,
@@ -69,12 +72,12 @@ public abstract class AbstractMenuScreen<T extends AbstractMenu<?>>
 
   protected int getCenterY() {
     return GuiUtils.getCenterY(
-        this.topPos, this.imageHeight - (this.hasInventory ? INVENTORY_HEIGHT : 0));
+        this.topPos, this.imageHeight - (hasInventory() ? INVENTORY_HEIGHT : 0));
   }
 
   protected int getCenterY(int height) {
     return GuiUtils.getCenterY(
-        this.topPos, this.imageHeight - (this.hasInventory ? INVENTORY_HEIGHT : 0), height);
+        this.topPos, this.imageHeight - (hasInventory() ? INVENTORY_HEIGHT : 0), height);
   }
 
   protected int getTop() {
@@ -100,7 +103,7 @@ public abstract class AbstractMenuScreen<T extends AbstractMenu<?>>
   protected int getBottom(int height, int padding) {
     return this.topPos
         + this.imageHeight
-        - (this.hasInventory ? INVENTORY_HEIGHT : 0)
+        - (hasInventory() ? INVENTORY_HEIGHT : 0)
         - padding
         - height;
   }

@@ -13,6 +13,7 @@ import net.neoforged.neoforge.registries.DeferredHolder;
 import net.neoforged.neoforge.registries.DeferredRegister;
 
 public class SmpMenus {
+  private SmpMenus() {}
 
   public static final DeferredRegister<MenuType<?>> REGISTRY =
       DeferredRegister.create(Registries.MENU, SmpMod.MODID);

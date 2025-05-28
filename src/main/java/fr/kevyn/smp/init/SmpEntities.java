@@ -10,6 +10,8 @@ import net.neoforged.neoforge.registries.DeferredHolder;
 import net.neoforged.neoforge.registries.DeferredRegister;
 
 public class SmpEntities {
+  private SmpEntities() {}
+
   public static final DeferredRegister<EntityType<?>> REGISTRY =
       DeferredRegister.create(Registries.ENTITY_TYPE, SmpMod.MODID);
 

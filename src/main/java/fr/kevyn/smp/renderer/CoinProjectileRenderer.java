@@ -27,7 +27,7 @@ public class CoinProjectileRenderer extends ThrownItemRenderer<CoinProjectile> {
       MultiBufferSource buffer,
       int packedLight) {
     if (entity.tickCount >= 4
-        || !(this.entityRenderDispatcher.camera.getEntity().distanceToSqr(entity) < 12.25)) {
+        || this.entityRenderDispatcher.camera.getEntity().distanceToSqr(entity) >= 12.25) {
       poseStack.pushPose();
 
       poseStack.scale(0.2f, 0.2f, 0.2f);

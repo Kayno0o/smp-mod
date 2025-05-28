@@ -11,6 +11,8 @@ import net.minecraft.world.level.storage.DimensionDataStorage;
 public class WorldAccountManager {
   private static final String DATA_NAME = "smp_world_accounts";
 
+  private WorldAccountManager() {}
+
   public static WorldAccountSavedData getSavedData(ServerLevel level) {
     DimensionDataStorage storage = level.getDataStorage();
     return storage.computeIfAbsent(

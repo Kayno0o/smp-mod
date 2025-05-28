@@ -39,23 +39,23 @@ public class CardItem extends Item {
   @Override
   public InteractionResultHolder<ItemStack> use(
       Level level, Player player, InteractionHand usedHand) {
-    if (level.isClientSide() && player instanceof LocalPlayer localPlayer) {
-      if (localPlayer.hasData(SmpDataAttachments.LOCAL_ACCOUNTS)) {
-        var accounts = localPlayer.getData(SmpDataAttachments.LOCAL_ACCOUNTS);
+    if (level.isClientSide()
+        && player instanceof LocalPlayer localPlayer
+        && localPlayer.hasData(SmpDataAttachments.LOCAL_ACCOUNTS)) {
+      var accounts = localPlayer.getData(SmpDataAttachments.LOCAL_ACCOUNTS);
 
-        UUID currentAccount = AccountUtils.getAccountUUID(localPlayer.getItemInHand(usedHand));
+      UUID currentAccount = AccountUtils.getAccountUUID(localPlayer.getItemInHand(usedHand));
 
-        AccountSelectionMenu menu = new AccountSelectionMenu(0, localPlayer.getInventory());
+      AccountSelectionMenu menu = new AccountSelectionMenu(0, localPlayer.getInventory());
 
-        Minecraft.getInstance()
-            .setScreen(new AccountSelectionScreen(
-                menu,
-                localPlayer.getInventory(),
-                Component.literal("Account selection"),
-                usedHand,
-                new ArrayList<>(accounts.values()),
-                currentAccount));
-      }
+      Minecraft.getInstance()
+          .setScreen(new AccountSelectionScreen(
+              menu,
+              localPlayer.getInventory(),
+              Component.literal("Account selection"),
+              usedHand,
+              new ArrayList<>(accounts.values()),
+              currentAccount));
     }
     return super.use(level, player, usedHand);
   }

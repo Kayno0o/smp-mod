@@ -8,6 +8,8 @@ import net.neoforged.neoforge.registries.DeferredHolder;
 import net.neoforged.neoforge.registries.DeferredRegister;
 
 public class SmpComponents {
+  private SmpComponents() {}
+
   public static final DeferredRegister.DataComponents REGISTRY =
       DeferredRegister.createDataComponents(Registries.DATA_COMPONENT_TYPE, SmpMod.MODID);
 

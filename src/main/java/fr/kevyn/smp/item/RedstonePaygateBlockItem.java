@@ -7,7 +7,7 @@ import net.minecraft.world.level.block.Block;
 import net.neoforged.neoforge.registries.DeferredBlock;
 
 public class RedstonePaygateBlockItem extends BlockItem {
-  public static DeferredBlock<Block> BLOCK = SmpBlocks.REDSTONE_PAYGATE;
+  public static final DeferredBlock<Block> BLOCK = SmpBlocks.REDSTONE_PAYGATE;
 
   public RedstonePaygateBlockItem() {
     super(BLOCK.get(), new Item.Properties().stacksTo(16));

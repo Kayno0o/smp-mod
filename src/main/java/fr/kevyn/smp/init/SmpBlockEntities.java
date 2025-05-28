@@ -9,6 +9,8 @@ import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.neoforged.neoforge.registries.DeferredRegister;
 
 public class SmpBlockEntities {
+  private SmpBlockEntities() {}
+
   public static final DeferredRegister<BlockEntityType<?>> REGISTRY =
       DeferredRegister.create(Registries.BLOCK_ENTITY_TYPE, SmpMod.MODID);
 

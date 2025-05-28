@@ -24,18 +24,21 @@ import net.neoforged.neoforge.items.SlotItemHandler;
 import net.neoforged.neoforge.network.PacketDistributor;
 
 public class ATMMenu extends AbstractBlockEntityMenu<ATMMenu, ATMBlockEntity> {
-  public static int CARD_SLOT = 0;
-  public static int DEPOSIT_SLOT = 1;
+  public static final int CARD_SLOT = 0;
+  public static final int DEPOSIT_SLOT = 1;
 
   public final ItemStackHandler inventory = new ItemStackHandler(2) {
+    @Override
     protected int getStackLimit(int slot, net.minecraft.world.item.ItemStack stack) {
       return 1;
     }
 
+    @Override
     protected void onContentsChanged(int slot) {
       deposit();
     }
 
+    @Override
     public boolean isItemValid(int slot, net.minecraft.world.item.ItemStack stack) {
       if (slot == CARD_SLOT) {
         return stack.getItem() instanceof CardItem;
