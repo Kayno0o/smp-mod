@@ -16,7 +16,7 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.player.Inventory;
 import net.neoforged.neoforge.network.PacketDistributor;
 
-public class RedstonePaygateScreen extends AbstractScreen<RedstonePaygateMenu> {
+public class RedstonePaygateScreen extends AbstractMenuScreen<RedstonePaygateMenu> {
   private static final ResourceLocation TEXTURE = ResourceLocation.fromNamespaceAndPath(
       SmpMod.MODID, "textures/gui/redstone_paygate/redstone_paygate_gui.png");
 

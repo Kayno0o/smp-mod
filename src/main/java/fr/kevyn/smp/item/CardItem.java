@@ -1,17 +1,19 @@
 package fr.kevyn.smp.item;
 
 import fr.kevyn.smp.component.LocalAccountEntry;
+import fr.kevyn.smp.init.SmpDataAttachments;
+import fr.kevyn.smp.ui.menu.AccountSelectionMenu;
+import fr.kevyn.smp.ui.screen.AccountSelectionScreen;
 import fr.kevyn.smp.utils.AccountUtils;
 import fr.kevyn.smp.utils.NumberUtils;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerLevel;
-import net.minecraft.server.level.ServerPlayer;
-import net.minecraft.sounds.SoundEvents;
-import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResultHolder;
 import net.minecraft.world.entity.player.Player;
@@ -37,29 +39,24 @@ public class CardItem extends Item {
   @Override
   public InteractionResultHolder<ItemStack> use(
       Level level, Player player, InteractionHand usedHand) {
-    if (player.isCrouching() && player instanceof ServerPlayer serverPlayer) {
-      ItemStack stack = serverPlayer.getItemInHand(usedHand);
-      if (AccountUtils.getAccountUUID(stack) != null) {
-        AccountUtils.clearAccount(stack);
-        level.playSound(
-            serverPlayer,
-            serverPlayer.getOnPos(),
-            SoundEvents.GLASS_BREAK,
-            SoundSource.BLOCKS,
-            1f,
-            0f);
-      } else {
-        AccountUtils.setAccount(stack, serverPlayer.getUUID(), (ServerLevel) level);
-        level.playSound(
-            serverPlayer,
-            serverPlayer.getOnPos(),
-            SoundEvents.EXPERIENCE_ORB_PICKUP,
-            SoundSource.BLOCKS,
-            1f,
-            1f);
+    if (level.isClientSide() && player instanceof LocalPlayer localPlayer) {
+      if (localPlayer.hasData(SmpDataAttachments.LOCAL_ACCOUNTS)) {
+        var accounts = localPlayer.getData(SmpDataAttachments.LOCAL_ACCOUNTS);
+
+        UUID currentAccount = AccountUtils.getAccountUUID(localPlayer.getItemInHand(usedHand));
+
+        AccountSelectionMenu menu = new AccountSelectionMenu(0, localPlayer.getInventory());
+
+        Minecraft.getInstance()
+            .setScreen(new AccountSelectionScreen(
+                menu,
+                localPlayer.getInventory(),
+                Component.literal("Account selection"),
+                usedHand,
+                new ArrayList<>(accounts.values()),
+                currentAccount));
       }
     }
-
     return super.use(level, player, usedHand);
   }
 

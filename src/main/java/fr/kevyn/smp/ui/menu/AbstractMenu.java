@@ -6,21 +6,13 @@ import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.inventory.MenuType;
 import net.minecraft.world.inventory.Slot;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.level.Level;
-import net.minecraft.world.level.block.entity.BlockEntity;
 
-public abstract class AbstractMenu<T extends AbstractContainerMenu, B extends BlockEntity>
-    extends AbstractContainerMenu {
-  public final B blockEntity;
-  public final Level level;
+public abstract class AbstractMenu<T extends AbstractContainerMenu> extends AbstractContainerMenu {
   public final Player player;
   public final int slotsCount;
 
-  protected AbstractMenu(
-      MenuType<T> menuType, int containerId, B blockEntity, Player player, int slotsCount) {
+  protected AbstractMenu(MenuType<T> menuType, int containerId, Player player, int slotsCount) {
     super(menuType, containerId);
-    this.blockEntity = blockEntity;
-    this.level = blockEntity.getLevel();
     this.player = player;
     this.slotsCount = slotsCount;
   }

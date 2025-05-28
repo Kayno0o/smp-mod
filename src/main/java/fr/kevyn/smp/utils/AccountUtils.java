@@ -89,17 +89,6 @@ public class AccountUtils {
     if (account == null) return;
 
     stack.set(SmpComponents.OWNERSHIP, AccountData.create(accountId));
-    // String accountName = account.name();
-
-    // Component originalName = stack.has(DataComponents.CUSTOM_NAME)
-    //     ? stack.get(DataComponents.CUSTOM_NAME)
-    //     : Component.translatable(stack.getDescriptionId());
-
-    // Component newName = originalName
-    //     .copy()
-    //     .append(Component.literal(" [" + accountName + "]").withStyle(ChatFormatting.BLUE));
-
-    // stack.set(DataComponents.CUSTOM_NAME, newName);
   }
 
   public static void clearAccount(ItemStack stack) {

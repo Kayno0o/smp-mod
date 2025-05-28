@@ -23,7 +23,7 @@ import net.neoforged.neoforge.items.ItemStackHandler;
 import net.neoforged.neoforge.items.SlotItemHandler;
 import net.neoforged.neoforge.network.PacketDistributor;
 
-public class ATMMenu extends AbstractMenu<ATMMenu, ATMBlockEntity> {
+public class ATMMenu extends AbstractBlockEntityMenu<ATMMenu, ATMBlockEntity> {
   public static int CARD_SLOT = 0;
   public static int DEPOSIT_SLOT = 1;
 

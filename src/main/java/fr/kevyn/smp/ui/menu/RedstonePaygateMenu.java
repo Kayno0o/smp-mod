@@ -14,7 +14,7 @@ import net.minecraft.world.level.block.entity.BlockEntity;
 import net.neoforged.neoforge.items.SlotItemHandler;
 
 public class RedstonePaygateMenu
-    extends AbstractMenu<RedstonePaygateMenu, RedstonePaygateBlockEntity>
+    extends AbstractBlockEntityMenu<RedstonePaygateMenu, RedstonePaygateBlockEntity>
     implements IMenuActionHandler {
   public static String ACTION_SET_PRICE = "set_price";
   public static String ACTION_WITHDRAW = "withdraw";

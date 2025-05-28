@@ -2,6 +2,7 @@ package fr.kevyn.smp.init;
 
 import fr.kevyn.smp.SmpMod;
 import fr.kevyn.smp.ui.menu.ATMMenu;
+import fr.kevyn.smp.ui.menu.AccountSelectionMenu;
 import fr.kevyn.smp.ui.menu.RedstonePaygateMenu;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.world.inventory.AbstractContainerMenu;
@@ -15,10 +16,16 @@ public class SmpMenus {
 
   public static final DeferredRegister<MenuType<?>> REGISTRY =
       DeferredRegister.create(Registries.MENU, SmpMod.MODID);
+
   public static final DeferredHolder<MenuType<?>, MenuType<ATMMenu>> ATM_MENU =
       registerMenuType("atm_menu", ATMMenu::new);
+
   public static final DeferredHolder<MenuType<?>, MenuType<RedstonePaygateMenu>>
       REDSTONE_PAYGATE_MENU = registerMenuType("redstone_paygate_menu", RedstonePaygateMenu::new);
+
+  public static final DeferredHolder<MenuType<?>, MenuType<AccountSelectionMenu>>
+      ACCOUNT_SELECTION_MENU =
+          registerMenuType("account_selection_menu", AccountSelectionMenu::new);
 
   private static <T extends AbstractContainerMenu>
       DeferredHolder<MenuType<?>, MenuType<T>> registerMenuType(

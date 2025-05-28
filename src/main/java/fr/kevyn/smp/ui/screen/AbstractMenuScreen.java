@@ -11,11 +11,14 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.player.Inventory;
 
-public abstract class AbstractScreen<T extends AbstractMenu<?, ?>>
+public abstract class AbstractMenuScreen<T extends AbstractMenu<?>>
     extends AbstractContainerScreen<T> {
   protected abstract ResourceLocation getTexture();
 
-  public AbstractScreen(T menu, Inventory inv, Component title) {
+  public static int INVENTORY_HEIGHT = 101;
+  public boolean hasInventory = true;
+
+  public AbstractMenuScreen(T menu, Inventory inv, Component title) {
     super(menu, inv, title);
     this.imageWidth = 176;
     this.imageHeight = 166;
@@ -45,13 +48,15 @@ public abstract class AbstractScreen<T extends AbstractMenu<?, ?>>
   protected void renderLabels(GuiGraphics guiGraphics, int mouseX, int mouseY) {
     guiGraphics.drawString(
         this.font, this.title, this.titleLabelX, this.titleLabelY, SmpMod.LABEL_COLOR, false);
-    guiGraphics.drawString(
-        this.font,
-        this.playerInventoryTitle,
-        this.inventoryLabelX,
-        this.inventoryLabelY,
-        SmpMod.LABEL_COLOR,
-        false);
+
+    if (this.hasInventory)
+      guiGraphics.drawString(
+          this.font,
+          this.playerInventoryTitle,
+          this.inventoryLabelX,
+          this.inventoryLabelY,
+          SmpMod.LABEL_COLOR,
+          false);
   }
 
   protected int getCenterX() {
@@ -63,27 +68,49 @@ public abstract class AbstractScreen<T extends AbstractMenu<?, ?>>
   }
 
   protected int getCenterY() {
-    return GuiUtils.getCenterY(this.topPos, this.imageHeight);
+    return GuiUtils.getCenterY(
+        this.topPos, this.imageHeight - (this.hasInventory ? INVENTORY_HEIGHT : 0));
   }
 
   protected int getCenterY(int height) {
-    return GuiUtils.getCenterY(this.topPos, this.imageHeight, height);
+    return GuiUtils.getCenterY(
+        this.topPos, this.imageHeight - (this.hasInventory ? INVENTORY_HEIGHT : 0), height);
   }
 
-  protected int getLeft() {
-    return this.leftPos + 8;
+  protected int getTop() {
+    return getTop(8);
   }
 
-  protected int getLeft(int padding) {
-    return this.leftPos + padding;
+  protected int getTop(int padding) {
+    return this.topPos + 21 + padding;
   }
 
   protected int getRight(int width) {
-    return this.leftPos + this.imageWidth - width - 8;
+    return getRight(width, 8);
   }
 
   protected int getRight(int width, int padding) {
     return this.leftPos + this.imageWidth - width - padding;
+  }
+
+  protected int getBottom(int height) {
+    return getBottom(height, 8);
+  }
+
+  protected int getBottom(int height, int padding) {
+    return this.topPos
+        + this.imageHeight
+        - (this.hasInventory ? INVENTORY_HEIGHT : 0)
+        - padding
+        - height;
+  }
+
+  protected int getLeft() {
+    return getLeft(8);
+  }
+
+  protected int getLeft(int padding) {
+    return this.leftPos + padding;
   }
 
   protected int getRightLabel(int width) {
