@@ -2,51 +2,44 @@ package fr.kevyn.smp.ui.screen;
 
 import fr.kevyn.smp.SmpMod;
 import fr.kevyn.smp.component.LocalAccountEntry;
-import fr.kevyn.smp.network.server.ClearCardAccountPacket;
-import fr.kevyn.smp.network.server.SetCardAccountPacket;
-import fr.kevyn.smp.ui.menu.AccountSelectionMenu;
+import fr.kevyn.smp.ui.menu.AccountsManagerMenu;
 import fr.kevyn.smp.ui.widget.SilentButton;
+import fr.kevyn.smp.ui.widget.SilentImageButton;
 import fr.kevyn.smp.utils.NumberUtils;
 import java.util.List;
 import java.util.UUID;
 import net.minecraft.ChatFormatting;
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.components.WidgetSprites;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.player.Inventory;
-import net.neoforged.neoforge.network.PacketDistributor;
-import org.jetbrains.annotations.Nullable;
 
-public class AccountSelectionScreen extends AbstractMenuScreen<AccountSelectionMenu> {
-  private final InteractionHand hand;
+public class AccountsManagerScreen extends AbstractMenuScreen<AccountsManagerMenu> {
   private final List<LocalAccountEntry> accounts;
-  private final boolean hasExistingAccount;
-
-  @Nullable private final UUID currentAccount;
 
   public static final int HEIGHT = 194;
 
   private static final ResourceLocation TEXTURE = ResourceLocation.fromNamespaceAndPath(
       SmpMod.MODID, "textures/gui/account_selection/account_selection_gui.png");
 
+  private static final WidgetSprites EDIT_ICON = new WidgetSprites(
+      ResourceLocation.fromNamespaceAndPath(SmpMod.MODID, "icons/edit"),
+      ResourceLocation.fromNamespaceAndPath(SmpMod.MODID, "icons/edit_highlighted"));
+
   public ResourceLocation getTexture() {
     return TEXTURE;
   }
 
-  public AccountSelectionScreen(
-      AccountSelectionMenu menu,
+  public AccountsManagerScreen(
+      AccountsManagerMenu menu,
       Inventory playerInventory,
       Component title,
-      InteractionHand hand,
-      List<LocalAccountEntry> accounts,
-      @Nullable UUID currentAccount) {
+      List<LocalAccountEntry> accounts) {
     super(menu, playerInventory, title);
-    this.hand = hand;
     this.accounts = accounts;
-    this.hasExistingAccount = currentAccount != null;
     this.imageHeight = HEIGHT;
-    this.currentAccount = currentAccount;
   }
 
   @Override
@@ -61,42 +54,45 @@ public class AccountSelectionScreen extends AbstractMenuScreen<AccountSelectionM
     int buttonWidth = 160;
     int buttonHeight = 16;
     int paddingY = 6;
+    int paddingX = 8;
     int startY = getTop();
-    int centerX = this.getCenterX(buttonWidth);
+    int startX = getLeft();
+    int editButtonSize = 16;
+
+    var playerId = Minecraft.getInstance().player.getUUID();
 
     // account buttons
     for (int i = 0; i < accounts.size(); i++) {
       LocalAccountEntry account = accounts.get(i);
       int y = startY + i * (buttonHeight + paddingY);
 
+      boolean canEdit = account.owner().equals(playerId) && !account.id().equals(playerId);
       SilentButton accountButton = new SilentButton(
-          centerX,
+          startX,
           y,
-          buttonWidth,
+          buttonWidth - editButtonSize - paddingX,
           buttonHeight,
           Component.literal(account.name())
               .append(Component.literal(" - "))
               .append(Component.literal(NumberUtils.CURRENCY_FORMAT.format(account.money())))
-              .withStyle(
-                  account.id().equals(this.currentAccount)
-                      ? ChatFormatting.GREEN
-                      : ChatFormatting.YELLOW),
-          btn -> selectAccount(account.id()));
+              .append(canEdit ? " *" : "")
+              .withStyle(canEdit ? ChatFormatting.GREEN : ChatFormatting.BLUE),
+          btn -> {});
+      accountButton.active = false;
 
       this.addRenderableWidget(accountButton);
-    }
 
-    // clear button if there's an existing account
-    if (hasExistingAccount) {
-      SilentButton clearButton = new SilentButton(
-          getLeft(),
-          getBottom(buttonHeight),
-          80,
-          buttonHeight,
-          Component.literal("Clear Account").withStyle(ChatFormatting.RED),
-          btn -> clearAccount());
+      if (canEdit) {
+        SilentImageButton editButton = new SilentImageButton(
+            getRight(editButtonSize),
+            y,
+            editButtonSize,
+            editButtonSize,
+            EDIT_ICON,
+            btn -> editAccount(account.id())); // Your edit method
 
-      this.addRenderableWidget(clearButton);
+        this.addRenderableWidget(editButton);
+      }
     }
 
     // cancel button
@@ -111,15 +107,7 @@ public class AccountSelectionScreen extends AbstractMenuScreen<AccountSelectionM
     this.addRenderableWidget(cancelButton);
   }
 
-  private void selectAccount(UUID accountId) {
-    PacketDistributor.sendToServer(new SetCardAccountPacket(hand, accountId));
-    this.onClose();
-  }
-
-  private void clearAccount() {
-    PacketDistributor.sendToServer(new ClearCardAccountPacket(hand));
-    this.onClose();
-  }
+  private void editAccount(UUID accountId) {}
 
   @Override
   public void render(GuiGraphics guiGraphics, int mouseX, int mouseY, float partialTick) {

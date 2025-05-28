@@ -1,8 +1,8 @@
 package fr.kevyn.smp.ui.screen;
 
 import fr.kevyn.smp.SmpMod;
-import fr.kevyn.smp.ui.SilentButton;
 import fr.kevyn.smp.ui.menu.ATMMenu;
+import fr.kevyn.smp.ui.widget.SilentButton;
 import fr.kevyn.smp.utils.AccountUtils;
 import fr.kevyn.smp.utils.NumberUtils;
 import net.minecraft.client.Minecraft;

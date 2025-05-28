@@ -27,6 +27,8 @@ public record UpdatePlayerAccountsNet(List<LocalAccountEntry> accounts)
       StreamCodec.composite(
           CustomByteBufCodecs.UUID,
           LocalAccountEntry::id,
+          CustomByteBufCodecs.UUID,
+          LocalAccountEntry::owner,
           ByteBufCodecs.STRING_UTF8,
           LocalAccountEntry::name,
           ByteBufCodecs.VAR_INT,

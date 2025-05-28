@@ -1,4 +1,4 @@
-package fr.kevyn.smp.ui;
+package fr.kevyn.smp.ui.widget;
 
 import net.minecraft.client.sounds.SoundManager;
 import net.minecraft.network.chat.Component;

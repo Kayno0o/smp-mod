@@ -2,7 +2,7 @@ package fr.kevyn.smp.utils;
 
 import fr.kevyn.smp.component.AccountData;
 import fr.kevyn.smp.component.LocalAccountEntry;
-import fr.kevyn.smp.component.WorldAccountEntry;
+import fr.kevyn.smp.data.WorldAccountEntry;
 import fr.kevyn.smp.data.WorldAccountManager;
 import fr.kevyn.smp.init.SmpComponents;
 import fr.kevyn.smp.init.SmpDataAttachments;
@@ -151,8 +151,8 @@ public class AccountUtils {
     // Filter only accounts the player has access to
     var playerAccounts = accounts.entrySet().stream()
         .filter(e -> e.getValue().allowedAccess().contains(playerId))
-        .map(e ->
-            new LocalAccountEntry(e.getKey(), e.getValue().name(), e.getValue().money()))
+        .map(e -> new LocalAccountEntry(
+            e.getKey(), e.getValue().owner(), e.getValue().name(), e.getValue().money()))
         .toList();
 
     if (!playerAccounts.isEmpty()) {

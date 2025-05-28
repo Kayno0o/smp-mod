@@ -1,7 +1,7 @@
-package fr.kevyn.smp.init;
+package fr.kevyn.smp.event;
 
 import fr.kevyn.smp.SmpMod;
-import fr.kevyn.smp.component.WorldAccountEntry;
+import fr.kevyn.smp.data.WorldAccountEntry;
 import fr.kevyn.smp.data.WorldAccountManager;
 import fr.kevyn.smp.utils.AccountUtils;
 import java.util.List;
@@ -19,8 +19,8 @@ import net.neoforged.neoforge.event.level.BlockEvent.EntityPlaceEvent;
 import vectorwing.farmersdelight.common.block.entity.CookingPotBlockEntity;
 
 @EventBusSubscriber(modid = SmpMod.MODID, bus = EventBusSubscriber.Bus.GAME)
-public class SmpServer {
-  private SmpServer() {}
+public class GameEvent {
+  private GameEvent() {}
 
   @SubscribeEvent
   public static void onBlockPlaced(EntityPlaceEvent event) {
@@ -42,8 +42,8 @@ public class SmpServer {
     UUID playerId = player.getUUID();
 
     if (!WorldAccountManager.hasAccount(level, playerId)) {
-      WorldAccountEntry newAccount =
-          new WorldAccountEntry(playerId, player.getName().getString(), 0, List.of(playerId));
+      WorldAccountEntry newAccount = new WorldAccountEntry(
+          playerId, playerId, player.getName().getString(), 0, List.of(playerId));
       WorldAccountManager.putAccount(level, playerId, newAccount);
     }
 

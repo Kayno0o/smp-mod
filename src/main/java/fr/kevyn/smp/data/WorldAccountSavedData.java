@@ -1,7 +1,6 @@
 package fr.kevyn.smp.data;
 
 import fr.kevyn.smp.SmpMod;
-import fr.kevyn.smp.component.WorldAccountEntry;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;

@@ -1,4 +1,4 @@
-package fr.kevyn.smp.ui;
+package fr.kevyn.smp.ui.widget;
 
 import com.mojang.blaze3d.systems.RenderSystem;
 import fr.kevyn.smp.SmpMod;
@@ -16,7 +16,8 @@ public abstract class AbstractButton extends Button {
       ResourceLocation.fromNamespaceAndPath(SmpMod.MODID, "widget/button_disabled"),
       ResourceLocation.fromNamespaceAndPath(SmpMod.MODID, "widget/button_highlighted"));
 
-  public AbstractButton(int x, int y, int width, int height, Component message, OnPress onPress) {
+  protected AbstractButton(
+      int x, int y, int width, int height, Component message, OnPress onPress) {
     super(x, y, width, height, message, onPress, DEFAULT_NARRATION);
   }
 

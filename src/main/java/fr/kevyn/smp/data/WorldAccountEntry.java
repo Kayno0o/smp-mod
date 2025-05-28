@@ -1,4 +1,4 @@
-package fr.kevyn.smp.component;
+package fr.kevyn.smp.data;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -7,14 +7,16 @@ import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
 import net.minecraft.nbt.Tag;
 
-public record WorldAccountEntry(UUID id, String name, int money, List<UUID> allowedAccess) {
+public record WorldAccountEntry(
+    UUID id, UUID owner, String name, int money, List<UUID> allowedAccess) {
   public WorldAccountEntry withUpdatedBalance(int newMoney) {
-    return new WorldAccountEntry(this.id, this.name, newMoney, this.allowedAccess);
+    return new WorldAccountEntry(this.id, this.owner, this.name, newMoney, this.allowedAccess);
   }
 
   public CompoundTag toNBT() {
     CompoundTag tag = new CompoundTag();
     tag.putUUID("id", this.id());
+    tag.putUUID("owner", this.owner());
     tag.putString("name", this.name());
     tag.putInt("money", this.money());
 
@@ -31,6 +33,7 @@ public record WorldAccountEntry(UUID id, String name, int money, List<UUID> allo
 
   public static WorldAccountEntry fromNBT(CompoundTag tag) {
     UUID id = tag.getUUID("id");
+    UUID owner = tag.getUUID("owner");
     String name = tag.getString("name");
     int money = tag.getInt("money");
 
@@ -43,6 +46,6 @@ public record WorldAccountEntry(UUID id, String name, int money, List<UUID> allo
       }
     }
 
-    return new WorldAccountEntry(id, name, money, allowedAccess);
+    return new WorldAccountEntry(id, owner, name, money, allowedAccess);
   }
 }
