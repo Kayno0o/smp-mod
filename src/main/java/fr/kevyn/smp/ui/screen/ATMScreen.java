@@ -11,7 +11,10 @@ import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.player.Inventory;
+import net.neoforged.api.distmarker.Dist;
+import net.neoforged.api.distmarker.OnlyIn;
 
+@OnlyIn(Dist.CLIENT)
 public class ATMScreen extends AbstractMenuScreen<ATMMenu> {
   private static final ResourceLocation TEXTURE =
       ResourceLocation.fromNamespaceAndPath(SmpMod.MODID, "textures/gui/atm/atm_gui.png");

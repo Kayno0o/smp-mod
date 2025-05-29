@@ -19,8 +19,11 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
+import net.neoforged.api.distmarker.Dist;
+import net.neoforged.api.distmarker.OnlyIn;
 import net.neoforged.neoforge.network.PacketDistributor;
 
+@OnlyIn(Dist.CLIENT)
 public class EditAccountScreen extends AbstractMenuScreen<BaseMenu> {
   private String name = "";
   private final AccountEntry account;

@@ -19,8 +19,11 @@ import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.player.Inventory;
+import net.neoforged.api.distmarker.Dist;
+import net.neoforged.api.distmarker.OnlyIn;
 import net.neoforged.neoforge.network.PacketDistributor;
 
+@OnlyIn(Dist.CLIENT)
 public class AccountsManagerScreen extends AbstractMenuScreen<BaseMenu> {
   private List<AccountEntry> accounts = new ArrayList<>();
   private final LocalPlayer player;

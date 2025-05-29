@@ -14,8 +14,11 @@ import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.player.Inventory;
+import net.neoforged.api.distmarker.Dist;
+import net.neoforged.api.distmarker.OnlyIn;
 import net.neoforged.neoforge.network.PacketDistributor;
 
+@OnlyIn(Dist.CLIENT)
 public class RedstonePaygateScreen extends AbstractMenuScreen<RedstonePaygateMenu> {
   private static final ResourceLocation TEXTURE = ResourceLocation.fromNamespaceAndPath(
       SmpMod.MODID, "textures/gui/redstone_paygate/redstone_paygate_gui.png");
