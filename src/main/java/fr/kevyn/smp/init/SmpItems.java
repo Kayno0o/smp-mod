@@ -6,7 +6,10 @@ import fr.kevyn.smp.item.CardItem;
 import fr.kevyn.smp.item.CoinItem;
 import fr.kevyn.smp.item.MoneyItem;
 import fr.kevyn.smp.item.RedstonePaygateBlockItem;
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import net.minecraft.world.item.Item;
@@ -48,5 +51,30 @@ public class SmpItems {
   public static Optional<ItemStack> moneyStackFromValue(int value, int count) {
     Item item = VALUE_TO_MONEY.get(value);
     return item != null ? Optional.of(new ItemStack(item, count)) : Optional.empty();
+  }
+
+  public static List<ItemStack> createChangeFromAmount(int amount) {
+    List<ItemStack> stacks = new ArrayList<>();
+    int remaining = amount;
+
+    List<Integer> values =
+        VALUE_TO_MONEY.keySet().stream().sorted(Collections.reverseOrder()).toList();
+
+    for (int value : values) {
+      if (remaining >= value) {
+        int count = remaining / value;
+        Item item = VALUE_TO_MONEY.get(value);
+
+        while (count > 0) {
+          int stackCount = Math.min(count, item.getMaxStackSize(new ItemStack(item)));
+          stacks.add(new ItemStack(item, stackCount));
+          count -= stackCount;
+        }
+
+        remaining %= value;
+      }
+    }
+
+    return stacks;
   }
 }

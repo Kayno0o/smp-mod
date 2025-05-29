@@ -1,6 +1,7 @@
 package fr.kevyn.smp.block;
 
 import fr.kevyn.smp.init.SmpBlockEntities;
+import fr.kevyn.smp.init.SmpItems;
 import fr.kevyn.smp.item.CardItem;
 import fr.kevyn.smp.ui.menu.RedstonePaygateMenu;
 import fr.kevyn.smp.utils.AccountUtils;
@@ -25,7 +26,7 @@ import org.jetbrains.annotations.Nullable;
 
 public class RedstonePaygateBlockEntity extends AbstractBlockEntity {
   public static final int CARD_SLOT = 0;
-  public static final int MAX_BALANCE = 100;
+  public static final int MAX_BALANCE = 50;
 
   @Nullable private UUID ownerId;
 
@@ -136,7 +137,13 @@ public class RedstonePaygateBlockEntity extends AbstractBlockEntity {
   }
 
   public void withdraw(ServerPlayer player) {
-    if (!(this.inventory.getStackInSlot(CARD_SLOT).getItem() instanceof CardItem)) return;
+    if (!(this.inventory.getStackInSlot(CARD_SLOT).getItem() instanceof CardItem)) {
+      var moneyStacks = SmpItems.createChangeFromAmount(this.balance);
+      for (var moneyStack : moneyStacks) player.getInventory().add(moneyStack);
+
+      this.setBalance(0);
+      return;
+    }
 
     var blockOwner = ((ServerPlayer) level.getPlayerByUUID(this.ownerId));
     if (blockOwner == null || !player.getUUID().equals(blockOwner.getUUID())) return;
@@ -145,11 +152,8 @@ public class RedstonePaygateBlockEntity extends AbstractBlockEntity {
         player.serverLevel(), this.inventory.getStackInSlot(RedstonePaygateBlockEntity.CARD_SLOT));
     if (blockAccount == null) return;
 
-    if (AccountUtils.addMoneyWithAuthorization(blockAccount, blockOwner, this.balance)) {
+    if (AccountUtils.addMoneyWithAuthorization(blockAccount, blockOwner, this.balance))
       this.setBalance(0);
-      this.level.sendBlockUpdated(
-          this.worldPosition, this.getBlockState(), this.getBlockState(), 3);
-    }
   }
 
   public boolean pay(ServerPlayer player) {
