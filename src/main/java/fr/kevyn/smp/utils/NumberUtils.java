@@ -4,6 +4,8 @@ import java.text.NumberFormat;
 import java.util.Locale;
 
 public class NumberUtils {
+  private NumberUtils() {}
+
   public static final NumberFormat CURRENCY_FORMAT;
 
   static {

@@ -135,10 +135,11 @@ public class RedstonePaygateBlockEntity extends AbstractBlockEntity {
         player.serverLevel(), this.inventory.getStackInSlot(RedstonePaygateBlockEntity.CARD_SLOT));
     if (blockAccount == null) return;
 
-    AccountUtils.addMoneyWithAuthorization(blockAccount, blockOwner, this.balance);
-
-    this.setBalance(0);
-    this.level.sendBlockUpdated(this.worldPosition, this.getBlockState(), this.getBlockState(), 3);
+    if (AccountUtils.addMoneyWithAuthorization(blockAccount, blockOwner, this.balance)) {
+      this.setBalance(0);
+      this.level.sendBlockUpdated(
+          this.worldPosition, this.getBlockState(), this.getBlockState(), 3);
+    }
   }
 
   public boolean pay(ServerPlayer player) {
