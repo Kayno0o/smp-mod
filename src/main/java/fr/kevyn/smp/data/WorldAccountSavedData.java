@@ -10,7 +10,7 @@ import net.minecraft.nbt.Tag;
 import net.minecraft.world.level.saveddata.SavedData;
 
 public class WorldAccountSavedData extends SavedData {
-  private Map<UUID, WorldAccountEntry> accounts = new HashMap<>();
+  private Map<UUID, AccountEntry> accounts = new HashMap<>();
 
   // Create new instance of saved data
   public static WorldAccountSavedData create() {
@@ -30,7 +30,7 @@ public class WorldAccountSavedData extends SavedData {
           CompoundTag accountTag = accountsTag.getCompound(key);
 
           // Deserialize WorldAccountEntry from NBT
-          WorldAccountEntry entry = WorldAccountEntry.fromNBT(accountTag);
+          AccountEntry entry = AccountEntry.fromNBT(accountTag);
           data.accounts.put(accountId, entry);
         } catch (IllegalArgumentException e) {
           // Skip invalid UUID keys
@@ -46,7 +46,7 @@ public class WorldAccountSavedData extends SavedData {
   public CompoundTag save(CompoundTag tag, HolderLookup.Provider registries) {
     CompoundTag accountsTag = new CompoundTag();
 
-    for (Map.Entry<UUID, WorldAccountEntry> entry : accounts.entrySet()) {
+    for (Map.Entry<UUID, AccountEntry> entry : accounts.entrySet()) {
       CompoundTag accountTag = entry.getValue().toNBT();
       accountsTag.put(entry.getKey().toString(), accountTag);
     }
@@ -56,19 +56,19 @@ public class WorldAccountSavedData extends SavedData {
   }
 
   // Getter for accounts
-  public Map<UUID, WorldAccountEntry> getAccounts() {
+  public Map<UUID, AccountEntry> getAccounts() {
     return accounts;
   }
 
   // Add or update an account
-  public void putAccount(UUID accountId, WorldAccountEntry account) {
+  public void putAccount(UUID accountId, AccountEntry account) {
     accounts.put(accountId, account);
     setDirty(); // Mark as dirty so it gets saved
   }
 
   // Remove an account
-  public WorldAccountEntry removeAccount(UUID accountId) {
-    WorldAccountEntry removed = accounts.remove(accountId);
+  public AccountEntry removeAccount(UUID accountId) {
+    AccountEntry removed = accounts.remove(accountId);
     if (removed != null) {
       setDirty();
     }
@@ -81,7 +81,7 @@ public class WorldAccountSavedData extends SavedData {
   }
 
   // Get specific account
-  public WorldAccountEntry getAccount(UUID accountId) {
+  public AccountEntry getAccount(UUID accountId) {
     return accounts.get(accountId);
   }
 
@@ -89,5 +89,18 @@ public class WorldAccountSavedData extends SavedData {
   public void clearAccounts() {
     accounts.clear();
     setDirty();
+  }
+
+  public boolean removeAllowedPlayer(UUID accountId, UUID playerId) {
+    var data = getAccount(accountId);
+    if (data.owner().equals(playerId)) {
+      return false;
+    }
+
+    var removed = data.allowedAccess().remove(playerId);
+    if (removed != null) {
+      setDirty();
+    }
+    return removed != null;
   }
 }

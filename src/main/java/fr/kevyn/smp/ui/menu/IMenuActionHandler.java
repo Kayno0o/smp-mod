@@ -1,9 +1,9 @@
 package fr.kevyn.smp.ui.menu;
 
-import fr.kevyn.smp.network.server.MenuActionNet;
+import fr.kevyn.smp.network.server.MenuActionPacket;
 
 public interface IMenuActionHandler {
   public String getMenuIdentifier();
 
-  public void handleMenuAction(MenuActionNet action);
+  public void handleMenuAction(MenuActionPacket action);
 }

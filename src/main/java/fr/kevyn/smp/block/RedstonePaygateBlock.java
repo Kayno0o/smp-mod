@@ -41,6 +41,7 @@ public class RedstonePaygateBlock extends Block implements EntityBlock {
         .sound(SoundType.METAL)
         .strength(1f, 10f)
         .noOcclusion()
+        .explosionResistance(3600000.0F)
         .isRedstoneConductor((bs, br, bp) -> false));
 
     this.registerDefaultState(this.stateDefinition.any().setValue(POWERED, false));
@@ -83,11 +84,11 @@ public class RedstonePaygateBlock extends Block implements EntityBlock {
 
   @Override
   public int getSignal(BlockState state, BlockGetter level, BlockPos pos, Direction direction) {
-    return state.getValue(POWERED) ? 15 : 0;
+    return Boolean.TRUE.equals(state.getValue(POWERED)) ? 15 : 0;
   }
 
   public void activate(Level level, BlockState state, BlockPos pos) {
-    if (!level.isClientSide && !state.getValue(POWERED)) {
+    if (!level.isClientSide && Boolean.FALSE.equals(state.getValue(POWERED))) {
       level.setBlock(pos, state.setValue(POWERED, true), 3);
       level.updateNeighborsAt(pos, this);
       level.scheduleTick(pos, this, 20);
@@ -113,8 +114,8 @@ public class RedstonePaygateBlock extends Block implements EntityBlock {
       Player player,
       boolean willHarvest,
       FluidState fluid) {
-    if (level.getBlockEntity(pos) instanceof RedstonePaygateBlockEntity paygate)
-      if (!player.getUUID().equals(paygate.getOwnerId())) return false;
+    if (level.getBlockEntity(pos) instanceof RedstonePaygateBlockEntity paygate
+        && !player.getUUID().equals(paygate.getOwnerId())) return false;
 
     return super.onDestroyedByPlayer(state, level, pos, player, willHarvest, fluid);
   }
@@ -128,22 +129,17 @@ public class RedstonePaygateBlock extends Block implements EntityBlock {
       Player player,
       InteractionHand hand,
       BlockHitResult hitResult) {
-    if (level.getBlockEntity(pos) instanceof RedstonePaygateBlockEntity paygate) {
-      if (!level.isClientSide()) {
+    if (level.getBlockEntity(pos) instanceof RedstonePaygateBlockEntity paygate
+        && !level.isClientSide()
+        && player instanceof ServerPlayer serverPlayer) {
+      if (!stack.isEmpty() && stack.getItem() instanceof CardItem) {
+        if (paygate.pay(serverPlayer)) this.activate(level, state, pos);
 
-        if (!stack.isEmpty() && stack.getItem() instanceof CardItem) {
-          if (
-          /*player.getUUID().equals(paygate.getOwnerId()) ||*/
-          paygate.pay((ServerPlayer) player)) {
-            this.activate(level, state, pos);
-          }
-
-          return ItemInteractionResult.SUCCESS;
-        }
-
-        if (player.getUUID().equals(paygate.getOwnerId()))
-          ((ServerPlayer) player).openMenu(paygate.getMenuProvider(), pos);
+        return ItemInteractionResult.SUCCESS;
       }
+
+      if (serverPlayer.getUUID().equals(paygate.getOwnerId()))
+        serverPlayer.openMenu(paygate.getMenuProvider(), pos);
     }
 
     return ItemInteractionResult.SUCCESS;
@@ -151,7 +147,7 @@ public class RedstonePaygateBlock extends Block implements EntityBlock {
 
   @Override
   protected void tick(BlockState state, ServerLevel level, BlockPos pos, RandomSource random) {
-    if (state.getValue(POWERED)) {
+    if (Boolean.TRUE.equals(state.getValue(POWERED))) {
       level.setBlock(pos, state.setValue(POWERED, false), 3);
       level.updateNeighborsAt(pos, this);
     }
@@ -160,11 +156,6 @@ public class RedstonePaygateBlock extends Block implements EntityBlock {
   @Override
   public PushReaction getPistonPushReaction(BlockState state) {
     return PushReaction.BLOCK;
-  }
-
-  @Override
-  public float getExplosionResistance() {
-    return 3600000.0F;
   }
 
   @Override

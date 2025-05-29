@@ -2,7 +2,7 @@ package fr.kevyn.smp.ui.screen;
 
 import fr.kevyn.smp.SmpMod;
 import fr.kevyn.smp.block.RedstonePaygateBlockEntity;
-import fr.kevyn.smp.network.server.MenuActionNet;
+import fr.kevyn.smp.network.server.MenuActionPacket;
 import fr.kevyn.smp.ui.menu.RedstonePaygateMenu;
 import fr.kevyn.smp.ui.widget.SilentButton;
 import fr.kevyn.smp.utils.AccountUtils;
@@ -22,8 +22,6 @@ public class RedstonePaygateScreen extends AbstractMenuScreen<RedstonePaygateMen
 
   public static final int HEIGHT = 162;
 
-  private EditBox amountInput;
-
   public ResourceLocation getTexture() {
     return TEXTURE;
   }
@@ -42,16 +40,16 @@ public class RedstonePaygateScreen extends AbstractMenuScreen<RedstonePaygateMen
     int inputX = getLeft();
     int inputY = topPos + 39;
 
-    amountInput = new EditBox(font, inputX, inputY, inputWidth, h, Component.literal("Amount"));
+    var amountInput = new EditBox(font, inputX, inputY, inputWidth, h, Component.literal("Amount"));
     amountInput.setFilter(s -> s.matches("\\d*"));
     amountInput.setMaxLength(3);
     amountInput.setValue(String.valueOf(menu.blockEntity.getPrice()));
     amountInput.setResponder((String value) -> {
-      int price = value.length() > 0 ? Integer.parseInt(value) : 0;
+      int price = !value.isEmpty() ? Integer.parseInt(value) : 0;
 
       menu.blockEntity.setPrice(price);
-      PacketDistributor.sendToServer(
-          new MenuActionNet(menu.getMenuIdentifier(), RedstonePaygateMenu.ACTION_SET_PRICE, price));
+      PacketDistributor.sendToServer(new MenuActionPacket(
+          menu.getMenuIdentifier(), RedstonePaygateMenu.ACTION_SET_PRICE, price));
     });
     this.addRenderableWidget(amountInput);
 
@@ -59,10 +57,13 @@ public class RedstonePaygateScreen extends AbstractMenuScreen<RedstonePaygateMen
     int withdrawX = getRight(withdrawWidth);
     int withdrawY = topPos + 39;
     this.addRenderableWidget(new SilentButton(
-        withdrawX, withdrawY, withdrawWidth, h, Component.literal("Withdraw"), btn -> {
-          PacketDistributor.sendToServer(
-              new MenuActionNet(menu.getMenuIdentifier(), RedstonePaygateMenu.ACTION_WITHDRAW, -1));
-        }));
+        withdrawX,
+        withdrawY,
+        withdrawWidth,
+        h,
+        Component.literal("Withdraw"),
+        btn -> PacketDistributor.sendToServer(new MenuActionPacket(
+            menu.getMenuIdentifier(), RedstonePaygateMenu.ACTION_WITHDRAW, -1))));
   }
 
   @Override
@@ -70,8 +71,6 @@ public class RedstonePaygateScreen extends AbstractMenuScreen<RedstonePaygateMen
     super.renderLabels(guiGraphics, mouseX, mouseY);
 
     guiGraphics.drawString(font, "Price", 8, 27, SmpMod.LABEL_COLOR, false);
-    // guiGraphics.drawString(font, "Balance:", 114, 27, SmpMod.LABEL_COLOR, false);
-
   }
 
   @Override
@@ -80,7 +79,7 @@ public class RedstonePaygateScreen extends AbstractMenuScreen<RedstonePaygateMen
     this.renderTooltip(guiGraphics, mouseX, mouseY);
 
     var balanceStr = String.valueOf(menu.blockEntity.getBalance()) + "/"
-        + String.valueOf(RedstonePaygateBlockEntity.MAX_BALANCE) + " €";
+        + RedstonePaygateBlockEntity.MAX_BALANCE + " €";
     guiGraphics.drawString(
         font,
         balanceStr,

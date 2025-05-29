@@ -3,7 +3,7 @@ package fr.kevyn.smp.ui.menu;
 import fr.kevyn.smp.block.RedstonePaygateBlockEntity;
 import fr.kevyn.smp.init.SmpBlocks;
 import fr.kevyn.smp.init.SmpMenus;
-import fr.kevyn.smp.network.server.MenuActionNet;
+import fr.kevyn.smp.network.server.MenuActionPacket;
 import fr.kevyn.smp.ui.screen.RedstonePaygateScreen;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.server.level.ServerPlayer;
@@ -55,7 +55,7 @@ public class RedstonePaygateMenu
   }
 
   @Override
-  public void handleMenuAction(MenuActionNet action) {
+  public void handleMenuAction(MenuActionPacket action) {
     if (action.action().equals(ACTION_SET_PRICE)) {
       blockEntity.setPrice(action.amount());
       return;

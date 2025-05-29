@@ -1,6 +1,6 @@
 package fr.kevyn.smp.item;
 
-import fr.kevyn.smp.component.LocalAccountEntry;
+import fr.kevyn.smp.data.AccountEntry;
 import fr.kevyn.smp.init.SmpDataAttachments;
 import fr.kevyn.smp.ui.menu.AccountSelectionMenu;
 import fr.kevyn.smp.ui.screen.AccountSelectionScreen;
@@ -41,8 +41,8 @@ public class CardItem extends Item {
       Level level, Player player, InteractionHand usedHand) {
     if (level.isClientSide()
         && player instanceof LocalPlayer localPlayer
-        && localPlayer.hasData(SmpDataAttachments.LOCAL_ACCOUNTS)) {
-      var accounts = localPlayer.getData(SmpDataAttachments.LOCAL_ACCOUNTS);
+        && localPlayer.hasData(SmpDataAttachments.ACCOUNTS)) {
+      var accounts = localPlayer.getData(SmpDataAttachments.ACCOUNTS);
 
       UUID currentAccount = AccountUtils.getAccountUUID(localPlayer.getItemInHand(usedHand));
 
@@ -71,7 +71,7 @@ public class CardItem extends Item {
     LocalPlayer player = Minecraft.getInstance().player;
     if (player == null) return;
 
-    LocalAccountEntry account = AccountUtils.getAccount(stack, player);
+    AccountEntry account = AccountUtils.getLocalAccount(stack, player);
     if (account == null) return;
 
     tooltipComponents.add(Component.literal("Account: ")

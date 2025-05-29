@@ -1,13 +1,10 @@
 package fr.kevyn.smp.event;
 
 import fr.kevyn.smp.SmpMod;
-import fr.kevyn.smp.init.SmpDataAttachments;
-import fr.kevyn.smp.ui.menu.AccountsManagerMenu;
+import fr.kevyn.smp.ui.menu.BaseMenu;
 import fr.kevyn.smp.ui.screen.AccountsManagerScreen;
-import java.util.ArrayList;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.player.LocalPlayer;
-import net.minecraft.network.chat.Component;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
@@ -23,13 +20,8 @@ public class GameClientEvent {
       Minecraft instance = Minecraft.getInstance();
       LocalPlayer player = instance.player;
 
-      var accounts = player.getData(SmpDataAttachments.LOCAL_ACCOUNTS);
-      AccountsManagerMenu menu = new AccountsManagerMenu(0, player.getInventory());
-      instance.setScreen(new AccountsManagerScreen(
-          menu,
-          player.getInventory(),
-          Component.literal("Accounts management"),
-          new ArrayList<>(accounts.values())));
+      BaseMenu menu = new BaseMenu(0, player.getInventory());
+      instance.setScreen(new AccountsManagerScreen(menu, player.getInventory()));
     }
   }
 }

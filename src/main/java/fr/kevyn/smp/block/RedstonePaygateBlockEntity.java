@@ -4,6 +4,7 @@ import fr.kevyn.smp.init.SmpBlockEntities;
 import fr.kevyn.smp.item.CardItem;
 import fr.kevyn.smp.ui.menu.RedstonePaygateMenu;
 import fr.kevyn.smp.utils.AccountUtils;
+import fr.kevyn.smp.utils.SoundUtils;
 import java.util.UUID;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.HolderLookup;
@@ -12,8 +13,6 @@ import net.minecraft.network.protocol.Packet;
 import net.minecraft.network.protocol.game.ClientGamePacketListener;
 import net.minecraft.network.protocol.game.ClientboundBlockEntityDataPacket;
 import net.minecraft.server.level.ServerPlayer;
-import net.minecraft.sounds.SoundEvents;
-import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
@@ -41,7 +40,9 @@ public class RedstonePaygateBlockEntity extends AbstractBlockEntity {
     @Override
     public boolean isItemValid(int slot, ItemStack stack) {
       if (slot == CARD_SLOT) {
-        return stack.getItem() instanceof CardItem;
+        return stack.getItem() instanceof CardItem
+            && AccountUtils.getAccountUUID(stack) != null
+            && AccountUtils.getAccount(level, stack) != null;
       }
       return super.isItemValid(slot, stack);
     }
@@ -134,7 +135,7 @@ public class RedstonePaygateBlockEntity extends AbstractBlockEntity {
         player.serverLevel(), this.inventory.getStackInSlot(RedstonePaygateBlockEntity.CARD_SLOT));
     if (blockAccount == null) return;
 
-    AccountUtils.addMoney(blockAccount, blockOwner, this.balance);
+    AccountUtils.addMoneyWithAuthorization(blockAccount, blockOwner, this.balance);
 
     this.setBalance(0);
     this.level.sendBlockUpdated(this.worldPosition, this.getBlockState(), this.getBlockState(), 3);
@@ -156,20 +157,18 @@ public class RedstonePaygateBlockEntity extends AbstractBlockEntity {
 
       if (!(this.inventory.getStackInSlot(CARD_SLOT).getItem() instanceof CardItem)) {
         if (this.price > MAX_BALANCE - this.balance) {
-          level.playSound(
-              player, player.getOnPos(), SoundEvents.VILLAGER_NO, SoundSource.BLOCKS, 1f, 0f);
+          SoundUtils.notify(player, SoundUtils.DISABLED);
 
           return false;
         }
 
-        level.playSound(
-            player, player.getOnPos(), SoundEvents.AMETHYST_BLOCK_HIT, SoundSource.BLOCKS, 1f, 1f);
+        if (AccountUtils.addMoneyWithAuthorization(playerAccount, player, -price)) {
+          SoundUtils.notify(player, SoundUtils.SUCCESS);
+          this.setBalance(this.balance + this.price);
+          return true;
+        }
 
-        AccountUtils.addMoney(playerAccount, player, -price);
-
-        this.setBalance(this.balance + this.price);
-
-        return true;
+        return false;
       }
 
       var blockAccount = AccountUtils.getAccount(
@@ -177,12 +176,10 @@ public class RedstonePaygateBlockEntity extends AbstractBlockEntity {
       if (blockAccount == null || !AccountUtils.hasAccessToAccount(blockAccount, blockOwner))
         return false;
 
-      if (!AccountUtils.addMoney(playerAccount, player, -this.price)) return false;
+      if (!AccountUtils.addMoneyWithAuthorization(playerAccount, player, -this.price)) return false;
 
-      AccountUtils.addMoney(blockAccount, blockOwner, this.price);
-
-      level.playSound(
-          player, player.getOnPos(), SoundEvents.AMETHYST_BLOCK_HIT, SoundSource.BLOCKS, 1f, 1f);
+      AccountUtils.addMoneyWithAuthorization(blockAccount, blockOwner, this.price);
+      SoundUtils.notify(player, SoundUtils.SUCCESS);
 
       return true;
     }

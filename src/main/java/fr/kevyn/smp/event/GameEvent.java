@@ -1,10 +1,11 @@
 package fr.kevyn.smp.event;
 
 import fr.kevyn.smp.SmpMod;
-import fr.kevyn.smp.data.WorldAccountEntry;
-import fr.kevyn.smp.data.WorldAccountManager;
+import fr.kevyn.smp.data.AccountEntry;
+import fr.kevyn.smp.data.ServerAccountManager;
 import fr.kevyn.smp.utils.AccountUtils;
-import java.util.List;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.UUID;
 import net.minecraft.core.BlockPos;
 import net.minecraft.server.level.ServerLevel;
@@ -41,10 +42,13 @@ public class GameEvent {
     ServerLevel level = player.serverLevel();
     UUID playerId = player.getUUID();
 
-    if (!WorldAccountManager.hasAccount(level, playerId)) {
-      WorldAccountEntry newAccount = new WorldAccountEntry(
-          playerId, playerId, player.getName().getString(), 0, List.of(playerId));
-      WorldAccountManager.putAccount(level, playerId, newAccount);
+    if (!ServerAccountManager.hasAccount(level, playerId)) {
+      Map<UUID, String> allowedAccess = new HashMap<>();
+      allowedAccess.put(playerId, player.getName().getString());
+
+      AccountEntry newAccount =
+          new AccountEntry(playerId, playerId, player.getName().getString(), 0, allowedAccess);
+      ServerAccountManager.putAccount(level, playerId, newAccount);
     }
 
     AccountUtils.notifyPlayer(level, playerId);

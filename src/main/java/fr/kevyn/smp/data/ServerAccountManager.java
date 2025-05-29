@@ -7,10 +7,10 @@ import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.level.saveddata.SavedData;
 import net.minecraft.world.level.storage.DimensionDataStorage;
 
-public class WorldAccountManager {
+public class ServerAccountManager {
   private static final String DATA_NAME = "smp_world_accounts";
 
-  private WorldAccountManager() {}
+  private ServerAccountManager() {}
 
   public static WorldAccountSavedData getSavedData(ServerLevel level) {
     DimensionDataStorage storage = level.getDataStorage();
@@ -24,17 +24,17 @@ public class WorldAccountManager {
     return getSavedData(overworld);
   }
 
-  public static Map<UUID, WorldAccountEntry> getAccounts(ServerLevel level) {
+  public static Map<UUID, AccountEntry> getAccounts(ServerLevel level) {
     WorldAccountSavedData data = getSavedData(level);
     return data.getAccounts();
   }
 
-  public static void putAccount(ServerLevel level, UUID accountId, WorldAccountEntry account) {
+  public static void putAccount(ServerLevel level, UUID accountId, AccountEntry account) {
     WorldAccountSavedData data = getSavedData(level);
     data.putAccount(accountId, account);
   }
 
-  public static WorldAccountEntry getAccount(ServerLevel level, UUID accountId) {
+  public static AccountEntry getAccount(ServerLevel level, UUID accountId) {
     WorldAccountSavedData data = getSavedData(level);
     return data.getAccount(accountId);
   }
@@ -44,8 +44,13 @@ public class WorldAccountManager {
     return data.hasAccount(accountId);
   }
 
-  public static WorldAccountEntry removeAccount(ServerLevel level, UUID accountId) {
+  public static AccountEntry removeAccount(ServerLevel level, UUID accountId) {
     WorldAccountSavedData data = getSavedData(level);
     return data.removeAccount(accountId);
+  }
+
+  public static boolean leaveAccount(ServerLevel level, UUID accountId, UUID playerId) {
+    WorldAccountSavedData data = getSavedData(level);
+    return data.removeAllowedPlayer(accountId, playerId);
   }
 }

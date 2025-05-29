@@ -1,7 +1,7 @@
 package fr.kevyn.smp.ui.screen;
 
 import fr.kevyn.smp.SmpMod;
-import fr.kevyn.smp.component.LocalAccountEntry;
+import fr.kevyn.smp.data.AccountEntry;
 import fr.kevyn.smp.network.server.ClearCardAccountPacket;
 import fr.kevyn.smp.network.server.SetCardAccountPacket;
 import fr.kevyn.smp.ui.menu.AccountSelectionMenu;
@@ -20,7 +20,7 @@ import org.jetbrains.annotations.Nullable;
 
 public class AccountSelectionScreen extends AbstractMenuScreen<AccountSelectionMenu> {
   private final InteractionHand hand;
-  private final List<LocalAccountEntry> accounts;
+  private final List<AccountEntry> accounts;
   private final boolean hasExistingAccount;
 
   @Nullable private final UUID currentAccount;
@@ -39,7 +39,7 @@ public class AccountSelectionScreen extends AbstractMenuScreen<AccountSelectionM
       Inventory playerInventory,
       Component title,
       InteractionHand hand,
-      List<LocalAccountEntry> accounts,
+      List<AccountEntry> accounts,
       @Nullable UUID currentAccount) {
     super(menu, playerInventory, title);
     this.hand = hand;
@@ -65,8 +65,9 @@ public class AccountSelectionScreen extends AbstractMenuScreen<AccountSelectionM
     int centerX = this.getCenterX(buttonWidth);
 
     // account buttons
+    accounts.sort((a, b) -> a.name().compareTo(b.name()));
     for (int i = 0; i < accounts.size(); i++) {
-      LocalAccountEntry account = accounts.get(i);
+      AccountEntry account = accounts.get(i);
       int y = startY + i * (buttonHeight + paddingY);
 
       SilentButton accountButton = new SilentButton(
@@ -80,7 +81,7 @@ public class AccountSelectionScreen extends AbstractMenuScreen<AccountSelectionM
               .withStyle(
                   account.id().equals(this.currentAccount)
                       ? ChatFormatting.GREEN
-                      : ChatFormatting.YELLOW),
+                      : ChatFormatting.DARK_GRAY),
           btn -> selectAccount(account.id()));
 
       this.addRenderableWidget(accountButton);

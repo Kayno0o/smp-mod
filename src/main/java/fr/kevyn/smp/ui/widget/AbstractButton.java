@@ -9,7 +9,10 @@ import net.minecraft.client.gui.components.WidgetSprites;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.Mth;
+import net.neoforged.api.distmarker.Dist;
+import net.neoforged.api.distmarker.OnlyIn;
 
+@OnlyIn(Dist.CLIENT)
 public abstract class AbstractButton extends Button {
   protected static final WidgetSprites SPRITES = new WidgetSprites(
       ResourceLocation.fromNamespaceAndPath(SmpMod.MODID, "widget/button"),

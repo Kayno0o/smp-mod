@@ -5,6 +5,7 @@ import fr.kevyn.smp.SmpMod;
 import fr.kevyn.smp.ui.menu.AbstractMenu;
 import fr.kevyn.smp.utils.GuiUtils;
 import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.components.WidgetSprites;
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
 import net.minecraft.client.renderer.GameRenderer;
 import net.minecraft.network.chat.Component;
@@ -15,7 +16,18 @@ public abstract class AbstractMenuScreen<T extends AbstractMenu<?>>
     extends AbstractContainerScreen<T> {
   protected abstract ResourceLocation getTexture();
 
+  protected final Inventory playerInventory;
+
+  public static final WidgetSprites EDIT_BUTTON = new WidgetSprites(
+      ResourceLocation.fromNamespaceAndPath(SmpMod.MODID, "icons/edit"),
+      ResourceLocation.fromNamespaceAndPath(SmpMod.MODID, "icons/edit_highlighted"));
+
+  public static final WidgetSprites DELETE_BUTTON = new WidgetSprites(
+      ResourceLocation.fromNamespaceAndPath(SmpMod.MODID, "icons/delete"),
+      ResourceLocation.fromNamespaceAndPath(SmpMod.MODID, "icons/delete_highlighted"));
+
   public static final int INVENTORY_HEIGHT = 101;
+  public static final int PADDING_X = 8;
 
   protected boolean hasInventory() {
     return true;
@@ -25,6 +37,7 @@ public abstract class AbstractMenuScreen<T extends AbstractMenu<?>>
     super(menu, inv, title);
     this.imageWidth = 176;
     this.imageHeight = 166;
+    this.playerInventory = inv;
   }
 
   @Override
@@ -86,6 +99,14 @@ public abstract class AbstractMenuScreen<T extends AbstractMenu<?>>
 
   protected int getTop(int padding) {
     return this.topPos + 21 + padding;
+  }
+
+  protected int getHeaderTop() {
+    return this.getHeaderTop(8);
+  }
+
+  protected int getHeaderTop(int padding) {
+    return this.topPos + padding;
   }
 
   protected int getRight(int width) {

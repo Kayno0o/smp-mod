@@ -2,7 +2,10 @@ package fr.kevyn.smp.ui.widget;
 
 import net.minecraft.client.sounds.SoundManager;
 import net.minecraft.network.chat.Component;
+import net.neoforged.api.distmarker.Dist;
+import net.neoforged.api.distmarker.OnlyIn;
 
+@OnlyIn(Dist.CLIENT)
 public class SilentButton extends AbstractButton {
   public SilentButton(int x, int y, int width, int height, Component message, OnPress onPress) {
     super(x, y, width, height, message, onPress);
