@@ -2,10 +2,12 @@ package fr.kevyn.smp.ui.screen;
 
 import fr.kevyn.smp.SmpMod;
 import fr.kevyn.smp.data.AccountEntry;
+import fr.kevyn.smp.init.SmpDataAttachments;
 import fr.kevyn.smp.network.server.ClearCardAccountPacket;
 import fr.kevyn.smp.network.server.SetCardAccountPacket;
 import fr.kevyn.smp.ui.menu.AccountSelectionMenu;
 import fr.kevyn.smp.ui.widget.SilentButton;
+import fr.kevyn.smp.utils.AccountUtils;
 import fr.kevyn.smp.utils.NumberUtils;
 import java.util.List;
 import java.util.UUID;
@@ -83,8 +85,8 @@ public class AccountSelectionScreen extends AbstractMenuScreen<AccountSelectionM
               .append(Component.literal(NumberUtils.CURRENCY_FORMAT.format(account.money())))
               .withStyle(
                   account.id().equals(this.currentAccount)
-                      ? ChatFormatting.GREEN
-                      : ChatFormatting.DARK_GRAY),
+                      ? ChatFormatting.YELLOW
+                      : ChatFormatting.WHITE),
           btn -> selectAccount(account.id()));
 
       this.addRenderableWidget(accountButton);
@@ -129,5 +131,8 @@ public class AccountSelectionScreen extends AbstractMenuScreen<AccountSelectionM
   public void render(GuiGraphics guiGraphics, int mouseX, int mouseY, float partialTick) {
     super.render(guiGraphics, mouseX, mouseY, partialTick);
     this.renderTooltip(guiGraphics, mouseX, mouseY);
+
+    if (AccountUtils.accountsChanged(
+        this.player.getData(SmpDataAttachments.ACCOUNTS), this.accounts)) this.rebuildWidgets();
   }
 }

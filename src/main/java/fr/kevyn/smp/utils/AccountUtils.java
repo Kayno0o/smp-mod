@@ -8,6 +8,7 @@ import fr.kevyn.smp.init.SmpDataAttachments;
 import fr.kevyn.smp.network.client.UpdatePlayerAccountsPacket;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.UUID;
 import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.server.level.ServerLevel;
@@ -180,5 +181,21 @@ public class AccountUtils {
     for (var playerId : account.allowedAccess().entrySet()) {
       notifyPlayer(level, playerId.getKey());
     }
+  }
+
+  public static boolean accountsChanged(
+      Map<UUID, AccountEntry> oldMap, List<AccountEntry> newAccounts) {
+    if (oldMap.size() != newAccounts.size()) return true;
+
+    for (AccountEntry newAccount : newAccounts) {
+      AccountEntry oldAccount = oldMap.get(newAccount.id());
+      if (oldAccount == null
+          || oldAccount.money() != newAccount.money()
+          || !Objects.equals(oldAccount.name(), newAccount.name())
+          || !Objects.equals(oldAccount.allowedAccess(), newAccount.allowedAccess())) {
+        return true;
+      }
+    }
+    return false;
   }
 }

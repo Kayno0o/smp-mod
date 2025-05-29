@@ -8,8 +8,8 @@ import fr.kevyn.smp.item.MoneyItem;
 import fr.kevyn.smp.network.server.ATMWithdrawPacket;
 import fr.kevyn.smp.ui.screen.ATMScreen;
 import fr.kevyn.smp.utils.AccountUtils;
+import fr.kevyn.smp.utils.SoundUtils;
 import java.util.UUID;
-import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvents;
@@ -41,23 +41,13 @@ public class ATMMenu extends AbstractBlockEntityMenu<ATMMenu, ATMBlockEntity> {
 
     @Override
     public boolean isItemValid(int slot, net.minecraft.world.item.ItemStack stack) {
-      if (slot == CARD_SLOT) {
-        if (!(stack.getItem() instanceof CardItem && AccountUtils.getAccountUUID(stack) != null))
-          return false;
-
-        if (player instanceof LocalPlayer localPlayer)
-          return AccountUtils.getLocalAccount(stack, localPlayer) != null;
-        return AccountUtils.getAccount(level, stack) != null;
-      }
+      if (slot == CARD_SLOT)
+        return stack.getItem() instanceof CardItem && AccountUtils.getAccountUUID(stack) != null;
 
       ItemStack cardStack = inventory.getStackInSlot(CARD_SLOT);
-      if (cardStack.isEmpty() || !(cardStack.getItem() instanceof CardItem)) {
-        return false;
-      }
+      if (cardStack.isEmpty() || !(cardStack.getItem() instanceof CardItem)) return false;
 
-      if (slot == DEPOSIT_SLOT) {
-        return stack.getItem() instanceof MoneyItem;
-      }
+      if (slot == DEPOSIT_SLOT) return stack.getItem() instanceof MoneyItem;
 
       return super.isItemValid(slot, stack);
     }
@@ -101,15 +91,17 @@ public class ATMMenu extends AbstractBlockEntityMenu<ATMMenu, ATMBlockEntity> {
     ItemStack depositStack = inventory.getStackInSlot(DEPOSIT_SLOT);
 
     if (!depositStack.isEmpty() && depositStack.getItem() instanceof MoneyItem item) {
-      var amount = item.getValue() * depositStack.getCount();
-      inventory.setStackInSlot(DEPOSIT_SLOT, ItemStack.EMPTY);
+      if (!AccountUtils.hasAccessToAccount(cardStack, player, level)) {
+        SoundUtils.notify(player, SoundUtils.DISABLED);
+        return;
+      }
 
-      if (!AccountUtils.hasAccessToAccount(cardStack, player, level)) return;
+      var amount = item.getValue() * depositStack.getCount();
 
       UUID accountId = AccountUtils.getAccountUUID(cardStack);
       if (AccountUtils.addMoneyWithAuthorization(accountId, player, amount)) {
-        player.playNotifySound(
-            SoundEvents.NOTE_BLOCK_BELL.value(), SoundSource.PLAYERS, 1.0f, 1.0f);
+        inventory.setStackInSlot(DEPOSIT_SLOT, ItemStack.EMPTY);
+        SoundUtils.notify(player, SoundUtils.SUCCESS);
       }
     }
   }

@@ -12,6 +12,7 @@ import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.protocol.Packet;
 import net.minecraft.network.protocol.game.ClientGamePacketListener;
 import net.minecraft.network.protocol.game.ClientboundBlockEntityDataPacket;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.player.Inventory;
@@ -125,6 +126,15 @@ public class RedstonePaygateBlockEntity extends AbstractBlockEntity {
     this.setChanged();
   }
 
+  @Override
+  public void setChanged() {
+    super.setChanged();
+
+    if (level != null && !level.isClientSide()) {
+      level.sendBlockUpdated(worldPosition, getBlockState(), getBlockState(), 3);
+    }
+  }
+
   public void withdraw(ServerPlayer player) {
     if (!(this.inventory.getStackInSlot(CARD_SLOT).getItem() instanceof CardItem)) return;
 
@@ -145,12 +155,9 @@ public class RedstonePaygateBlockEntity extends AbstractBlockEntity {
   public boolean pay(ServerPlayer player) {
     if (this.ownerId == null) return false;
 
-    if (level != null) {
+    if (level != null && level instanceof ServerLevel serverLevel) {
       if (level.getBlockState(this.worldPosition) instanceof BlockState bs
           && Boolean.TRUE.equals(bs.getValue(RedstonePaygateBlock.POWERED))) return false;
-
-      var blockOwner = ((ServerPlayer) level.getPlayerByUUID(this.ownerId));
-      if (blockOwner == null) return false;
 
       var playerAccount =
           AccountUtils.getAccount(level, player.getItemInHand(InteractionHand.MAIN_HAND));
@@ -174,12 +181,11 @@ public class RedstonePaygateBlockEntity extends AbstractBlockEntity {
 
       var blockAccount = AccountUtils.getAccount(
           level, this.inventory.getStackInSlot(RedstonePaygateBlockEntity.CARD_SLOT));
-      if (blockAccount == null || !AccountUtils.hasAccessToAccount(blockAccount, blockOwner))
-        return false;
+      if (blockAccount == null) return false;
 
       if (!AccountUtils.addMoneyWithAuthorization(playerAccount, player, -this.price)) return false;
 
-      AccountUtils.addMoneyWithAuthorization(blockAccount, blockOwner, this.price);
+      AccountUtils.addMoney(blockAccount.id(), serverLevel, this.price);
       SoundUtils.notify(player, SoundUtils.SUCCESS);
 
       return true;

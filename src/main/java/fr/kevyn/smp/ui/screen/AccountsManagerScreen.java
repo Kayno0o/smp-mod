@@ -15,7 +15,6 @@ import java.util.UUID;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
-import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.player.Inventory;
@@ -26,7 +25,6 @@ import net.neoforged.neoforge.network.PacketDistributor;
 @OnlyIn(Dist.CLIENT)
 public class AccountsManagerScreen extends AbstractMenuScreen<BaseMenu> {
   private List<AccountEntry> accounts = new ArrayList<>();
-  private final LocalPlayer player;
 
   public static final int HEIGHT = 194;
 
@@ -40,7 +38,6 @@ public class AccountsManagerScreen extends AbstractMenuScreen<BaseMenu> {
   public AccountsManagerScreen(BaseMenu menu, Inventory playerInventory) {
     super(menu, playerInventory, Component.literal("Accounts management"));
     this.imageHeight = HEIGHT;
-    this.player = Minecraft.getInstance().player;
   }
 
   @Override
@@ -77,9 +74,7 @@ public class AccountsManagerScreen extends AbstractMenuScreen<BaseMenu> {
       boolean canEdit = account.owner().equals(playerId) && !account.id().equals(playerId);
       boolean canLeave = !account.owner().equals(playerId) && !account.id().equals(playerId);
 
-      ChatFormatting buttonColor = canEdit
-          ? ChatFormatting.GREEN
-          : (canLeave ? ChatFormatting.DARK_PURPLE : ChatFormatting.WHITE);
+      ChatFormatting buttonColor = ChatFormatting.WHITE;
 
       SilentButton accountButton = new SilentButton(
           startX,
@@ -162,8 +157,7 @@ public class AccountsManagerScreen extends AbstractMenuScreen<BaseMenu> {
     super.render(guiGraphics, mouseX, mouseY, partialTick);
     this.renderTooltip(guiGraphics, mouseX, mouseY);
 
-    if (this.player.getData(SmpDataAttachments.ACCOUNTS).size() != this.accounts.size()) {
-      this.rebuildWidgets();
-    }
+    if (AccountUtils.accountsChanged(
+        this.player.getData(SmpDataAttachments.ACCOUNTS), this.accounts)) this.rebuildWidgets();
   }
 }

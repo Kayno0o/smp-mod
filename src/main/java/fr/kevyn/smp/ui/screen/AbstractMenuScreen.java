@@ -4,9 +4,11 @@ import com.mojang.blaze3d.systems.RenderSystem;
 import fr.kevyn.smp.SmpMod;
 import fr.kevyn.smp.ui.menu.AbstractMenu;
 import fr.kevyn.smp.utils.GuiUtils;
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.WidgetSprites;
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
+import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.client.renderer.GameRenderer;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
@@ -19,6 +21,7 @@ public abstract class AbstractMenuScreen<T extends AbstractMenu<?>>
     extends AbstractContainerScreen<T> {
   protected abstract ResourceLocation getTexture();
 
+  protected final LocalPlayer player;
   protected final Inventory playerInventory;
 
   public static final WidgetSprites EDIT_BUTTON = new WidgetSprites(
@@ -41,6 +44,7 @@ public abstract class AbstractMenuScreen<T extends AbstractMenu<?>>
     this.imageWidth = 176;
     this.imageHeight = 166;
     this.playerInventory = inv;
+    this.player = Minecraft.getInstance().player;
   }
 
   @Override

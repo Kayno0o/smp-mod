@@ -8,7 +8,9 @@ import fr.kevyn.smp.network.PacketHandlerUtils;
 import fr.kevyn.smp.utils.AccountUtils;
 import fr.kevyn.smp.utils.SoundUtils;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
+import java.util.Set;
 import java.util.UUID;
 import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.codec.ByteBufCodecs;
@@ -40,10 +42,10 @@ public record UpdateAccountPacket(UUID accountId, String name, Map<UUID, String>
   public static void handleOnServer(UpdateAccountPacket packet, IPayloadContext context) {
     PacketHandlerUtils.enqueueServerWork(context, player -> {
       var accounts = ServerAccountManager.getAccounts(player.serverLevel());
-      var account = accounts.get(packet.accountId());
+      var oldAccount = accounts.get(packet.accountId());
 
       var playerId = player.getUUID();
-      if (!account.owner().equals(playerId)) {
+      if (!oldAccount.owner().equals(playerId)) {
         SoundUtils.notify(player, SoundUtils.DISABLED);
         return;
       }
@@ -60,11 +62,16 @@ public record UpdateAccountPacket(UUID accountId, String name, Map<UUID, String>
       }
 
       var newAccount = new AccountEntry(
-          account.id(), account.owner(), packet.name(), account.money(), allowedAccessMap);
+          oldAccount.id(), oldAccount.owner(), packet.name(), oldAccount.money(), allowedAccessMap);
 
-      ServerAccountManager.putAccount(player.serverLevel(), account.id(), newAccount);
-      AccountUtils.notifyPlayersWithAccess(player.serverLevel(), account);
+      ServerAccountManager.putAccount(player.serverLevel(), oldAccount.id(), newAccount);
       SoundUtils.notify(player, SoundUtils.SUCCESS);
+
+      Set<UUID> usersToNotify = new HashSet<>();
+      usersToNotify.addAll(allowedAccessMap.keySet());
+      usersToNotify.addAll(oldAccount.allowedAccess().keySet());
+
+      for (var user : usersToNotify) AccountUtils.notifyPlayer(player.serverLevel(), user);
     });
   }
 }

@@ -6,6 +6,7 @@ import fr.kevyn.smp.network.server.ATMWithdrawPacket;
 import fr.kevyn.smp.network.server.ClearCardAccountPacket;
 import fr.kevyn.smp.network.server.CreateAccountPacket;
 import fr.kevyn.smp.network.server.DeleteAccountPacket;
+import fr.kevyn.smp.network.server.LeaveAccountPacket;
 import fr.kevyn.smp.network.server.MenuActionPacket;
 import fr.kevyn.smp.network.server.SetCardAccountPacket;
 import fr.kevyn.smp.network.server.UpdateAccountPacket;
@@ -45,6 +46,10 @@ public class NetworkHandler {
         UpdateAccountPacket.TYPE,
         UpdateAccountPacket.STREAM_CODEC,
         UpdateAccountPacket::handleOnServer);
+    registrar.playToServer(
+        LeaveAccountPacket.TYPE,
+        LeaveAccountPacket.STREAM_CODEC,
+        LeaveAccountPacket::handleOnServer);
     registrar.playToServer(
         DeleteAccountPacket.TYPE,
         DeleteAccountPacket.STREAM_CODEC,

@@ -32,12 +32,12 @@ public record LeaveAccountPacket(UUID accountId) implements CustomPacketPayload 
       UUID playerId = player.getUUID();
 
       var account = ServerAccountManager.getAccount(level, packet.accountId());
-      if (!account.owner().equals(playerId)) {
+      if (account.owner().equals(playerId)) {
         SoundUtils.notify(player, SoundUtils.DISABLED);
         return;
       }
 
-      var removed = ServerAccountManager.leaveAccount(level, playerId, packet.accountId());
+      var removed = ServerAccountManager.leaveAccount(level, packet.accountId(), playerId);
       if (removed) {
         SoundUtils.notify(player, SoundUtils.DELETE);
         AccountUtils.notifyPlayer(level, playerId);
