@@ -18,7 +18,7 @@
     }
   },
   "result": {
-    "id": "smp:redstone_paygate",
+    "id": "artisanspath:redstone_paygate",
     "count": 1
   },
   "show_notification": false

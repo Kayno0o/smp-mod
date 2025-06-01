@@ -1,0 +1,13 @@
+{
+  "parent": "block/cube",
+  "textures": {
+    "north": "artisanspath:block/redstone_paygate_powered_1",
+    "south": "artisanspath:block/redstone_paygate_powered_0",
+    "east": "artisanspath:block/redstone_paygate_powered_0",
+    "west": "artisanspath:block/redstone_paygate_powered_0",
+    "up": "artisanspath:block/redstone_paygate_powered_0",
+    "down": "artisanspath:block/redstone_paygate_powered_0",
+
+    "particle": "artisanspath:block/redstone_paygate_powered_0"
+  }
+}

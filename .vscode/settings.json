@@ -17,6 +17,6 @@
   "java.format.settings.profile": "GoogleStyle",
   "sonarlint.connectedMode.project": {
     "connectionId": "https-sonarqube-kevyn-fr",
-    "projectKey": "smp-mod"
+    "projectKey": "artisanspath-mod"
   },
 }

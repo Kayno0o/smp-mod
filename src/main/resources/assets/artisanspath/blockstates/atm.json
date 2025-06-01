@@ -1,0 +1,8 @@
+{
+  "variants": {
+    "facing=north": { "model": "artisanspath:block/small_atm", "y": 180 },
+    "facing=south": { "model": "artisanspath:block/small_atm", "y": 0 },
+    "facing=west": { "model": "artisanspath:block/small_atm", "y": 90 },
+    "facing=east": { "model": "artisanspath:block/small_atm", "y": 270 }
+  }
+}

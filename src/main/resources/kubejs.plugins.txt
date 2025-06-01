@@ -1,1 +1,1 @@
-fr.kevyn.smp.integration.kubejs.SmpKubeJSPlugin
+fr.kevyn.artisanspath.integration.kubejs.ArtisansPathKubeJSPlugin

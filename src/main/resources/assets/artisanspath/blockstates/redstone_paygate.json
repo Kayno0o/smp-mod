@@ -1,0 +1,17 @@
+{
+  "variants": {
+    "facing=north,powered=false": { "model": "artisanspath:block/redstone_paygate", "y": 180 },
+    "facing=south,powered=false": { "model": "artisanspath:block/redstone_paygate", "y": 0 },
+    "facing=west,powered=false": { "model": "artisanspath:block/redstone_paygate", "y": 90 },
+    "facing=east,powered=false": { "model": "artisanspath:block/redstone_paygate", "y": 270 },
+    "facing=up,powered=false": { "model": "artisanspath:block/redstone_paygate", "x": 90 },
+    "facing=down,powered=false": { "model": "artisanspath:block/redstone_paygate", "x": 270 },
+
+    "facing=north,powered=true": { "model": "artisanspath:block/redstone_paygate_powered", "y": 180 },
+    "facing=south,powered=true": { "model": "artisanspath:block/redstone_paygate_powered", "y": 0 },
+    "facing=west,powered=true": { "model": "artisanspath:block/redstone_paygate_powered", "y": 90 },
+    "facing=east,powered=true": { "model": "artisanspath:block/redstone_paygate_powered", "y": 270 },
+    "facing=up,powered=true": { "model": "artisanspath:block/redstone_paygate_powered", "x": 90 },
+    "facing=down,powered=true": { "model": "artisanspath:block/redstone_paygate_powered", "x": 270 }
+  }
+}

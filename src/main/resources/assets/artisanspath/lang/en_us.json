@@ -1,0 +1,36 @@
+{
+  "block.artisanspath.atm": "ATM",
+  "gui.artisanspath.atm.title": "ATM",
+  
+  "block.artisanspath.redstone_paygate": "Redstone Paygate",
+  "gui.artisanspath.redstone_paygate.title": "Redstone Paygate",
+  "gui.artisanspath.redstone_paygate.price": "Price: %s",
+
+  "item.artisanspath.payment_card": "Payment Card",
+  "tooltip.artisanspath.payment_card.account": "Account: %s",
+  "tooltip.artisanspath.payment_card.balance": "Balance: %s",
+  
+  "item.artisanspath.coin": "1$",
+  "item.artisanspath.pile_of_coins": "10$",
+  "item.artisanspath.large_pile_of_coins": "100$",
+  "item.artisanspath.coin_ingot": "1000$",
+  
+  "item_group.artisanspath.tab": "Artisan's Path",
+  
+  "networking.artisanspath.failed": "A networking error occured",
+
+  "gui.artisanspath.account_selection.title": "Account selection",
+  "gui.artisanspath.edit_account.title": "Edit Account",
+  "gui.artisanspath.accounts_management.title": "Accounts management",
+  "gui.artisanspath.create_account.title": "Create account",
+
+  "gui.artisanspath.confirm": "Confirm",
+  "gui.artisanspath.delete": "Delete",
+  "gui.artisanspath.cancel": "Cancel",
+  "gui.artisanspath.clear": "Clear",
+  "gui.artisanspath.create_account": "Create account",
+  "gui.artisanspath.name": "Name",
+  "gui.artisanspath.amount": "Amount",
+  "gui.artisanspath.withdraw": "Withdraw",
+  "gui.artisanspath.price": "Price"
+}

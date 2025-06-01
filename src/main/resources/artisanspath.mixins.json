@@ -1,0 +1,13 @@
+{
+  "required": true,
+  "package": "fr.kevyn.artisanspath.mixin",
+  "refmap": "artisanspath.refmap.json",
+  "compatibilityLevel": "JAVA_17",
+  "mixins": [
+    "farmersdelight.CookingPotBlockEntityMixin",
+    "farmersdelight.CuttingBoardBlockEntityMixin"
+  ],
+  "injectors": {
+    "defaultRequire": 1
+  }
+}

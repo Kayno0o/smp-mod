@@ -1,8 +1,0 @@
-{
-  "variants": {
-    "facing=north": { "model": "smp:block/small_atm", "y": 180 },
-    "facing=south": { "model": "smp:block/small_atm", "y": 0 },
-    "facing=west": { "model": "smp:block/small_atm", "y": 90 },
-    "facing=east": { "model": "smp:block/small_atm", "y": 270 }
-  }
-}

@@ -1,0 +1,9 @@
+{
+  "parent": "artisanspath:custom/small_atm",
+  "textures": {
+    "0": "artisanspath:block/atm",
+
+    "particle": "artisanspath:block/atm"
+  },
+  "render_type": "solid"
+}

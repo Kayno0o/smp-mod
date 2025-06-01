@@ -1,6 +1,0 @@
-{
-  "parent": "smp:custom/coin",
-  "textures": {
-    "layer0": "smp:item/coin"
-  }
-}

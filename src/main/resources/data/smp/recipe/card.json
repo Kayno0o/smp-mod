@@ -13,7 +13,7 @@
     }
   },
   "result": {
-    "id": "smp:card",
+    "id": "artisanspath:payment_card",
     "count": 1
   },
   "show_notification": false
