@@ -23,8 +23,7 @@ public class SmpItems {
   private static final Map<Integer, Item> VALUE_TO_MONEY = new HashMap<>();
 
   public static final DeferredRegister.Items REGISTRY = DeferredRegister.createItems(SmpMod.MODID);
-  public static final DeferredItem<Item> ATM =
-      REGISTRY.register(ATMBlockItem.BLOCK.getId().getPath(), ATMBlockItem::new);
+  public static final DeferredItem<Item> ATM = REGISTRY.register("atm", ATMBlockItem::new);
   public static final DeferredItem<Item> COIN =
       REGISTRY.register("coin", () -> registerMoneyItem(new CoinItem(), 1));
   public static final DeferredItem<Item> SMALL_BILL =

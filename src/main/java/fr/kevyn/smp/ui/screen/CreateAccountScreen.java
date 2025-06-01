@@ -28,12 +28,12 @@ public class CreateAccountScreen extends AbstractMenuScreen<BaseMenu> {
   }
 
   public CreateAccountScreen(BaseMenu menu, Inventory playerInventory) {
-    super(menu, playerInventory, Component.literal("Create Account"));
+    super(menu, playerInventory, Component.translatable("gui.smp.create_account.title"));
     this.imageHeight = HEIGHT;
   }
 
   @Override
-  protected boolean hasInventory() {
+  protected boolean showInventory() {
     return false;
   }
 
@@ -44,7 +44,8 @@ public class CreateAccountScreen extends AbstractMenuScreen<BaseMenu> {
   }
 
   private void addWidgets() {
-    nameInput = new EditBox(font, getCenterX(160), getTop(), 160, 16, Component.literal("Name"));
+    nameInput = new EditBox(
+        font, getCenterX(160), getTop(), 160, 16, Component.translatable("gui.smp.name"));
     nameInput.setMaxLength(16);
     this.addRenderableWidget(nameInput);
 
@@ -56,7 +57,7 @@ public class CreateAccountScreen extends AbstractMenuScreen<BaseMenu> {
         getBottom(btnH),
         60,
         btnH,
-        Component.literal("Confirm").withStyle(ChatFormatting.GREEN),
+        Component.translatable("gui.smp.confirm").withStyle(ChatFormatting.GREEN),
         btn -> this.createAccount());
 
     this.addRenderableWidget(confirmButton);
@@ -67,7 +68,7 @@ public class CreateAccountScreen extends AbstractMenuScreen<BaseMenu> {
         getBottom(btnH),
         40,
         btnH,
-        Component.literal("Cancel").withStyle(ChatFormatting.GRAY),
+        Component.translatable("gui.smp.cancel").withStyle(ChatFormatting.GRAY),
         btn -> this.goBack());
 
     this.addRenderableWidget(cancelButton);

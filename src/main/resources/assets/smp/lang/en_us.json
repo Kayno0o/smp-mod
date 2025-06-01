@@ -1,10 +1,36 @@
 {
   "block.smp.atm": "ATM",
+  "gui.smp.atm.title": "ATM",
+  
   "block.smp.redstone_paygate": "Redstone Paygate",
-  "item.smp.card": "CB",
-  "item.smp.coin": "1€",
-  "item.smp.small_bill": "10€",
-  "item.smp.big_bill": "100€",
-  "item.smp.money_ingot": "1000€",
-  "item_group.smp.smp_tab": "SMP"
+  "gui.smp.redstone_paygate.title": "Redstone Paygate",
+  "gui.smp.redstone_paygate.price": "Price: %s",
+
+  "item.smp.card": "Payment Card",
+  "tooltip.smp.card.account": "Account: %s",
+  "tooltip.smp.card.balance": "Balance: %s",
+  
+  "item.smp.coin": "1$",
+  "item.smp.small_bill": "10$",
+  "item.smp.big_bill": "100$",
+  "item.smp.money_ingot": "1000$",
+  
+  "item_group.smp.smp_tab": "SMP",
+  
+  "networking.smp.failed": "A networking error occured",
+
+  "gui.smp.account_selection.title": "Account selection",
+  "gui.smp.edit_account.title": "Edit Account",
+  "gui.smp.accounts_management.title": "Accounts management",
+  "gui.smp.create_account.title": "Create account",
+
+  "gui.smp.confirm": "Confirm",
+  "gui.smp.delete": "Delete",
+  "gui.smp.cancel": "Cancel",
+  "gui.smp.clear": "Clear",
+  "gui.smp.create_account": "Create account",
+  "gui.smp.name": "Name",
+  "gui.smp.amount": "Amount",
+  "gui.smp.withdraw": "Withdraw",
+  "gui.smp.price": "Price"
 }

@@ -7,6 +7,7 @@ import fr.kevyn.smp.network.server.UpdateAccountPacket;
 import fr.kevyn.smp.ui.menu.BaseMenu;
 import fr.kevyn.smp.ui.widget.MultiSearchablePlayerSelect;
 import fr.kevyn.smp.ui.widget.SilentButton;
+import fr.kevyn.smp.ui.widget.SilentImageButton;
 import fr.kevyn.smp.utils.NumberUtils;
 import java.util.Map;
 import java.util.UUID;
@@ -39,7 +40,7 @@ public class EditAccountScreen extends AbstractMenuScreen<BaseMenu> {
   }
 
   public EditAccountScreen(BaseMenu menu, Inventory playerInventory, AccountEntry account) {
-    super(menu, playerInventory, Component.literal("Edit Account"));
+    super(menu, playerInventory, Component.translatable("gui.smp.edit_account.title"));
     this.imageHeight = HEIGHT;
     this.account = account;
     this.name = account.name();
@@ -47,7 +48,7 @@ public class EditAccountScreen extends AbstractMenuScreen<BaseMenu> {
   }
 
   @Override
-  protected boolean hasInventory() {
+  protected boolean showInventory() {
     return false;
   }
 
@@ -58,8 +59,8 @@ public class EditAccountScreen extends AbstractMenuScreen<BaseMenu> {
   }
 
   private void addWidgets() {
-    var nameInput =
-        new EditBox(font, getCenterX(160), getTop(), 160, 16, Component.literal("Name"));
+    var nameInput = new EditBox(
+        font, getCenterX(160), getTop(), 160, 16, Component.translatable("gui.smp.name"));
     nameInput.setMaxLength(16);
     nameInput.setValue(this.account.name());
     nameInput.setResponder(newName -> this.name = newName);
@@ -92,29 +93,29 @@ public class EditAccountScreen extends AbstractMenuScreen<BaseMenu> {
         getBottom(btnH),
         60,
         btnH,
-        Component.literal("Confirm").withStyle(ChatFormatting.GREEN),
+        Component.translatable("gui.smp.confirm").withStyle(ChatFormatting.GREEN),
         btn -> this.updateAccount());
 
     this.addRenderableWidget(confirmButton);
 
     // delete button
-    SilentButton deleteButton = new SilentButton(
-        getRight(40) - 40 - PADDING_X,
+    SilentImageButton deleteButton = new SilentImageButton(
+        getRight(16) - 48 - PADDING_X,
         getBottom(btnH),
-        40,
+        16,
         btnH,
-        Component.literal("Delete").withStyle(ChatFormatting.RED),
+        DELETE_BUTTON,
         btn -> this.deleteAccount());
 
     this.addRenderableWidget(deleteButton);
 
     // cancel button
     SilentButton cancelButton = new SilentButton(
-        getRight(40),
+        getRight(48),
         getBottom(btnH),
-        40,
+        48,
         btnH,
-        Component.literal("Cancel").withStyle(ChatFormatting.GRAY),
+        Component.translatable("gui.smp.cancel").withStyle(ChatFormatting.GRAY),
         btn -> this.goBack());
 
     this.addRenderableWidget(cancelButton);
@@ -124,7 +125,7 @@ public class EditAccountScreen extends AbstractMenuScreen<BaseMenu> {
   public void render(GuiGraphics guiGraphics, int mouseX, int mouseY, float partialTick) {
     super.render(guiGraphics, mouseX, mouseY, partialTick);
 
-    var moneyStr = NumberUtils.CURRENCY_FORMAT.format(this.account.money());
+    var moneyStr = NumberUtils.getCurrencyFormat().format(this.account.money());
     guiGraphics.drawString(
         this.font,
         moneyStr,

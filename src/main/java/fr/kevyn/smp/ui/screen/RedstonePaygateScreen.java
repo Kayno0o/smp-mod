@@ -30,7 +30,7 @@ public class RedstonePaygateScreen extends AbstractMenuScreen<RedstonePaygateMen
   }
 
   public RedstonePaygateScreen(RedstonePaygateMenu menu, Inventory inv, Component title) {
-    super(menu, inv, title);
+    super(menu, inv, Component.translatable("gui.smp.redstone_paygate.title"));
     this.imageHeight = HEIGHT;
   }
 
@@ -43,7 +43,8 @@ public class RedstonePaygateScreen extends AbstractMenuScreen<RedstonePaygateMen
     int inputX = getLeft();
     int inputY = topPos + 39;
 
-    var amountInput = new EditBox(font, inputX, inputY, inputWidth, h, Component.literal("Amount"));
+    var amountInput =
+        new EditBox(font, inputX, inputY, inputWidth, h, Component.translatable("gui.smp.amount"));
     amountInput.setFilter(s -> s.matches("\\d*"));
     amountInput.setMaxLength(3);
     amountInput.setValue(String.valueOf(menu.blockEntity.getPrice()));
@@ -64,7 +65,7 @@ public class RedstonePaygateScreen extends AbstractMenuScreen<RedstonePaygateMen
         withdrawY,
         withdrawWidth,
         h,
-        Component.literal("Withdraw"),
+        Component.translatable("gui.smp.withdraw"),
         btn -> PacketDistributor.sendToServer(new MenuActionPacket(
             menu.getMenuIdentifier(), RedstonePaygateMenu.ACTION_WITHDRAW, -1))));
   }
@@ -73,7 +74,8 @@ public class RedstonePaygateScreen extends AbstractMenuScreen<RedstonePaygateMen
   protected void renderLabels(GuiGraphics guiGraphics, int mouseX, int mouseY) {
     super.renderLabels(guiGraphics, mouseX, mouseY);
 
-    guiGraphics.drawString(font, "Price", 8, 27, SmpMod.LABEL_COLOR, false);
+    guiGraphics.drawString(
+        font, Component.translatable("gui.smp.price"), 8, 27, SmpMod.LABEL_COLOR, false);
   }
 
   @Override
@@ -82,7 +84,7 @@ public class RedstonePaygateScreen extends AbstractMenuScreen<RedstonePaygateMen
     this.renderTooltip(guiGraphics, mouseX, mouseY);
 
     var balanceStr = String.valueOf(menu.blockEntity.getBalance()) + "/"
-        + RedstonePaygateBlockEntity.MAX_BALANCE + " €";
+        + NumberUtils.getCurrencyFormat().format(RedstonePaygateBlockEntity.MAX_BALANCE);
     guiGraphics.drawString(
         font,
         balanceStr,
@@ -99,7 +101,7 @@ public class RedstonePaygateScreen extends AbstractMenuScreen<RedstonePaygateMen
           player);
       if (money == -1) return;
 
-      var moneyStr = NumberUtils.CURRENCY_FORMAT.format(money);
+      var moneyStr = NumberUtils.getCurrencyFormat().format(money);
 
       guiGraphics.drawString(
           this.font,

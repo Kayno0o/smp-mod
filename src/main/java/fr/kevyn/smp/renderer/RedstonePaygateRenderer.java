@@ -11,6 +11,7 @@ import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.blockentity.BlockEntityRenderer;
 import net.minecraft.client.renderer.blockentity.BlockEntityRendererProvider;
 import net.minecraft.core.BlockPos;
+import net.minecraft.network.chat.Component;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.HitResult;
 import net.minecraft.world.phys.Vec3;
@@ -41,7 +42,9 @@ public class RedstonePaygateRenderer implements BlockEntityRenderer<RedstonePayg
     double distSq = player.distanceToSqr(Vec3.atCenterOf(blockEntity.getBlockPos()));
     if (distSq > 64) return;
 
-    String text = "Price: " + NumberUtils.CURRENCY_FORMAT.format(blockEntity.getPrice());
+    Component text = Component.translatable(
+        "gui.smp.redstone_paygate.price",
+        NumberUtils.getCurrencyFormat().format(blockEntity.getPrice()));
     Font font = mc.font;
 
     poseStack.pushPose();

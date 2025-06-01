@@ -4,13 +4,12 @@ import fr.kevyn.smp.SmpMod;
 import fr.kevyn.smp.data.AccountEntry;
 import fr.kevyn.smp.init.SmpDataAttachments;
 import fr.kevyn.smp.network.CustomByteBufCodecs;
+import fr.kevyn.smp.network.PacketHandlerUtils;
 import io.netty.buffer.ByteBuf;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
-import net.minecraft.client.player.LocalPlayer;
-import net.minecraft.network.chat.Component;
 import net.minecraft.network.codec.ByteBufCodecs;
 import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
@@ -48,18 +47,11 @@ public record UpdatePlayerAccountsPacket(List<AccountEntry> accounts)
 
   public static void handleOnClient(
       final UpdatePlayerAccountsPacket data, final IPayloadContext context) {
-    context
-        .enqueueWork(() -> {
-          if (context.player() instanceof LocalPlayer player) {
-            Map<UUID, AccountEntry> accountMap = new HashMap<>();
-            for (AccountEntry entry : data.accounts()) accountMap.put(entry.id(), entry);
+    PacketHandlerUtils.enqueueClientWork(context, player -> {
+      Map<UUID, AccountEntry> accountMap = new HashMap<>();
+      for (AccountEntry entry : data.accounts()) accountMap.put(entry.id(), entry);
 
-            player.setData(SmpDataAttachments.ACCOUNTS, accountMap);
-          }
-        })
-        .exceptionally(e -> {
-          context.disconnect(Component.translatable("smp.networking.failed", e.getMessage()));
-          return null;
-        });
+      player.setData(SmpDataAttachments.ACCOUNTS, accountMap);
+    });
   }
 }

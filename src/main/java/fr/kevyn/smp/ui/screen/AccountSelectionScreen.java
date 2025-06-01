@@ -42,11 +42,10 @@ public class AccountSelectionScreen extends AbstractMenuScreen<AccountSelectionM
   public AccountSelectionScreen(
       AccountSelectionMenu menu,
       Inventory playerInventory,
-      Component title,
       InteractionHand hand,
       List<AccountEntry> accounts,
       @Nullable UUID currentAccount) {
-    super(menu, playerInventory, title);
+    super(menu, playerInventory, Component.translatable("gui.smp.account_selection.title"));
     this.hand = hand;
     this.accounts = accounts;
     this.hasExistingAccount = currentAccount != null;
@@ -55,7 +54,7 @@ public class AccountSelectionScreen extends AbstractMenuScreen<AccountSelectionM
   }
 
   @Override
-  protected boolean hasInventory() {
+  protected boolean showInventory() {
     return false;
   }
 
@@ -82,7 +81,7 @@ public class AccountSelectionScreen extends AbstractMenuScreen<AccountSelectionM
           buttonHeight,
           Component.literal(account.name())
               .append(Component.literal(" - "))
-              .append(Component.literal(NumberUtils.CURRENCY_FORMAT.format(account.money())))
+              .append(Component.literal(NumberUtils.getCurrencyFormat().format(account.money())))
               .withStyle(
                   account.id().equals(this.currentAccount)
                       ? ChatFormatting.YELLOW
@@ -97,9 +96,9 @@ public class AccountSelectionScreen extends AbstractMenuScreen<AccountSelectionM
       SilentButton clearButton = new SilentButton(
           getLeft(),
           getBottom(buttonHeight),
-          80,
+          64,
           buttonHeight,
-          Component.literal("Clear Account").withStyle(ChatFormatting.RED),
+          Component.translatable("gui.smp.clear").withStyle(ChatFormatting.RED),
           btn -> clearAccount());
 
       this.addRenderableWidget(clearButton);
@@ -107,11 +106,11 @@ public class AccountSelectionScreen extends AbstractMenuScreen<AccountSelectionM
 
     // cancel button
     SilentButton cancelButton = new SilentButton(
-        getRight(40),
+        getRight(48),
         getBottom(buttonHeight),
-        40,
+        48,
         buttonHeight,
-        Component.literal("Cancel").withStyle(ChatFormatting.GRAY),
+        Component.translatable("gui.smp.cancel").withStyle(ChatFormatting.GRAY),
         btn -> this.onClose());
 
     this.addRenderableWidget(cancelButton);

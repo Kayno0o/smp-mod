@@ -8,7 +8,6 @@ import java.util.ArrayList;
 import java.util.UUID;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.player.LocalPlayer;
-import net.minecraft.network.chat.Component;
 import net.minecraft.world.InteractionHand;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.api.distmarker.OnlyIn;
@@ -28,7 +27,6 @@ public class ClientCardHandler {
         .setScreen(new AccountSelectionScreen(
             menu,
             localPlayer.getInventory(),
-            Component.literal("Account selection"),
             usedHand,
             new ArrayList<>(accounts.values()),
             currentAccount));

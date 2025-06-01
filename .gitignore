@@ -27,3 +27,5 @@ repo
 .Trash-1000
 
 libs
+
+sonar-project.properties

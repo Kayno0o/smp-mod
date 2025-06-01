@@ -10,7 +10,7 @@ import net.minecraft.world.level.block.state.BlockState;
 
 public class ATMBlockEntity extends AbstractBlockEntity {
   public ATMBlockEntity(BlockPos pos, BlockState state) {
-    super(SmpBlockEntities.ATM.get(), pos, state, "ATM");
+    super(SmpBlockEntities.ATM.get(), pos, state);
   }
 
   @Override

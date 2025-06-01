@@ -36,12 +36,12 @@ public class AccountsManagerScreen extends AbstractMenuScreen<BaseMenu> {
   }
 
   public AccountsManagerScreen(BaseMenu menu, Inventory playerInventory) {
-    super(menu, playerInventory, Component.literal("Accounts management"));
+    super(menu, playerInventory, Component.translatable("gui.smp.accounts_management.title"));
     this.imageHeight = HEIGHT;
   }
 
   @Override
-  protected boolean hasInventory() {
+  protected boolean showInventory() {
     return false;
   }
 
@@ -83,7 +83,7 @@ public class AccountsManagerScreen extends AbstractMenuScreen<BaseMenu> {
           buttonHeight,
           Component.literal(account.name())
               .append(Component.literal(" - "))
-              .append(Component.literal(NumberUtils.CURRENCY_FORMAT.format(account.money())))
+              .append(Component.literal(NumberUtils.getCurrencyFormat().format(account.money())))
               .append(canEdit ? " *" : "")
               .withStyle(buttonColor),
           btn -> {});
@@ -116,11 +116,11 @@ public class AccountsManagerScreen extends AbstractMenuScreen<BaseMenu> {
 
     // cancel button
     SilentButton cancelButton = new SilentButton(
-        getRight(40),
+        getRight(48),
         getBottom(buttonHeight),
-        40,
+        48,
         buttonHeight,
-        Component.literal("Cancel").withStyle(ChatFormatting.GRAY),
+        Component.translatable("gui.smp.cancel").withStyle(ChatFormatting.GRAY),
         btn -> this.onClose());
 
     this.addRenderableWidget(cancelButton);
@@ -132,7 +132,7 @@ public class AccountsManagerScreen extends AbstractMenuScreen<BaseMenu> {
           getBottom(buttonHeight),
           100,
           buttonHeight,
-          Component.literal("Create account").withStyle(ChatFormatting.GREEN),
+          Component.translatable("gui.smp.create_account").withStyle(ChatFormatting.GREEN),
           btn -> this.createAccount());
 
       this.addRenderableWidget(createAccountButton);

@@ -56,7 +56,7 @@ public class RedstonePaygateBlockEntity extends AbstractBlockEntity {
   };
 
   public RedstonePaygateBlockEntity(BlockPos pos, BlockState state) {
-    super(SmpBlockEntities.REDSTONE_PAYGATE.get(), pos, state, "Redstone Paygate");
+    super(SmpBlockEntities.REDSTONE_PAYGATE.get(), pos, state);
   }
 
   @Override

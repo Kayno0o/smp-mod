@@ -15,4 +15,8 @@
   "java.compile.nullAnalysis.mode": "disabled",
   "java.configuration.updateBuildConfiguration": "automatic",
   "java.format.settings.profile": "GoogleStyle",
+  "sonarlint.connectedMode.project": {
+    "connectionId": "https-sonarqube-kevyn-fr",
+    "projectKey": "smp-mod"
+  },
 }

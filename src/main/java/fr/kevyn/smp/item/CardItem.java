@@ -58,13 +58,15 @@ public class CardItem extends Item {
     AccountEntry account = AccountUtils.getLocalAccount(stack, player);
     if (account == null) return;
 
-    tooltipComponents.add(Component.literal("Account: ")
-        .withStyle(ChatFormatting.GRAY)
-        .append(Component.literal(account.name()).withStyle(ChatFormatting.BLUE)));
+    tooltipComponents.add(Component.translatable(
+            "tooltip.smp.card.account",
+            Component.literal(account.name()).withStyle(ChatFormatting.BLUE))
+        .withStyle(ChatFormatting.GRAY));
 
-    tooltipComponents.add(Component.literal("Balance: ")
-        .withStyle(ChatFormatting.GRAY)
-        .append(Component.literal(NumberUtils.CURRENCY_FORMAT.format(account.money()))
-            .withStyle(ChatFormatting.YELLOW)));
+    tooltipComponents.add(Component.translatable(
+            "tooltip.smp.card.balance",
+            Component.literal(NumberUtils.getCurrencyFormat().format(account.money()))
+                .withStyle(ChatFormatting.YELLOW))
+        .withStyle(ChatFormatting.GRAY));
   }
 }

@@ -26,7 +26,7 @@ public class ATMScreen extends AbstractMenuScreen<ATMMenu> {
   }
 
   public ATMScreen(ATMMenu menu, Inventory inv, Component title) {
-    super(menu, inv, title);
+    super(menu, inv, Component.translatable("gui.smp.atm.title"));
     this.imageHeight = HEIGHT;
   }
 
@@ -34,7 +34,7 @@ public class ATMScreen extends AbstractMenuScreen<ATMMenu> {
   protected void init() {
     super.init();
 
-    int w = 40;
+    int w = 48;
     int h = 16;
 
     int r1 = this.topPos + 29;
@@ -44,19 +44,39 @@ public class ATMScreen extends AbstractMenuScreen<ATMMenu> {
 
     // top left
     this.addRenderableWidget(new SilentButton(
-        l, r1, w, h, Component.literal("1€"), btn -> menu.withdraw(1, hasShiftDown())));
+        l,
+        r1,
+        w,
+        h,
+        Component.literal(NumberUtils.getCurrencyFormat().format(1)),
+        btn -> menu.withdraw(1, hasShiftDown())));
 
     // bottom left
     this.addRenderableWidget(new SilentButton(
-        l, r2, w, h, Component.literal("10€"), btn -> menu.withdraw(10, hasShiftDown())));
+        l,
+        r2,
+        w,
+        h,
+        Component.literal(NumberUtils.getCurrencyFormat().format(10)),
+        btn -> menu.withdraw(10, hasShiftDown())));
 
     // top right
     this.addRenderableWidget(new SilentButton(
-        r, r1, w, h, Component.literal("100€"), btn -> menu.withdraw(100, hasShiftDown())));
+        r,
+        r1,
+        w,
+        h,
+        Component.literal(NumberUtils.getCurrencyFormat().format(100)),
+        btn -> menu.withdraw(100, hasShiftDown())));
 
     // bottom right
     this.addRenderableWidget(new SilentButton(
-        r, r2, w, h, Component.literal("1000€"), btn -> menu.withdraw(1000, hasShiftDown())));
+        r,
+        r2,
+        w,
+        h,
+        Component.literal(NumberUtils.getCurrencyFormat().format(1000)),
+        btn -> menu.withdraw(1000, hasShiftDown())));
   }
 
   @Override
@@ -71,7 +91,7 @@ public class ATMScreen extends AbstractMenuScreen<ATMMenu> {
           AccountUtils.getMoney(this.menu.inventory.getStackInSlot(ATMMenu.CARD_SLOT), player);
       if (money == -1) return;
 
-      var moneyStr = NumberUtils.CURRENCY_FORMAT.format(money);
+      var moneyStr = NumberUtils.getCurrencyFormat().format(money);
 
       guiGraphics.drawString(
           this.font,

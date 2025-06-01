@@ -52,14 +52,14 @@ public record UpdateAccountPacket(UUID accountId, String name, Map<UUID, String>
 
       var allowedAccessMap = new HashMap<>(packet.allowedAccess());
 
-      if (!allowedAccessMap.containsKey(playerId))
-        allowedAccessMap.put(playerId, player.getName().getString());
-
       while (allowedAccessMap.size() > AccountUtils.MAX_ALLOWED_ACCESS_COUNT) {
         var iterator = allowedAccessMap.keySet().iterator();
         iterator.next();
         iterator.remove();
       }
+
+      if (!allowedAccessMap.containsKey(playerId))
+        allowedAccessMap.put(playerId, player.getName().getString());
 
       var newAccount = new AccountEntry(
           oldAccount.id(), oldAccount.owner(), packet.name(), oldAccount.money(), allowedAccessMap);
