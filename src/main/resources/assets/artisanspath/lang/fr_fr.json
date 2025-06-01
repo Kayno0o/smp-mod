@@ -10,10 +10,10 @@
   "tooltip.artisanspath.payment_card.account": "Compte : %s",
   "tooltip.artisanspath.payment_card.balance": "Solde : %s",
   
-  "item.artisanspath.coin": "1 €",
-  "item.artisanspath.pile_of_coins": "10 €",
-  "item.artisanspath.large_pile_of_coins": "100 €",
-  "item.artisanspath.coin_ingot": "1000 €",
+  "item.artisanspath.coin": "Pièce",
+  "item.artisanspath.pile_of_coins": "Pile de pièces",
+  "item.artisanspath.large_pile_of_coins": "Grande pile de pièces",
+  "item.artisanspath.coin_ingot": "Lingot de pièces",
   
   "item_group.artisanspath.tab": "Artisan's Path",
   
@@ -23,6 +23,8 @@
   "gui.artisanspath.edit_account.title": "Modifier le compte",
   "gui.artisanspath.accounts_management.title": "Gestion des comptes",
   "gui.artisanspath.create_account.title": "Créer un compte",
+
+  "tooltip.artisanspath.value": "Valeur : %s",
 
   "gui.artisanspath.confirm": "Confirmer",
   "gui.artisanspath.delete": "Supprimer",

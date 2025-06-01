@@ -10,10 +10,10 @@
   "tooltip.artisanspath.payment_card.account": "Account: %s",
   "tooltip.artisanspath.payment_card.balance": "Balance: %s",
   
-  "item.artisanspath.coin": "1$",
-  "item.artisanspath.pile_of_coins": "10$",
-  "item.artisanspath.large_pile_of_coins": "100$",
-  "item.artisanspath.coin_ingot": "1000$",
+  "item.artisanspath.coin": "Coin",
+  "item.artisanspath.pile_of_coins": "Pile of coins",
+  "item.artisanspath.large_pile_of_coins": "Large pile of coins",
+  "item.artisanspath.coin_ingot": "Coin ingot",
   
   "item_group.artisanspath.tab": "Artisan's Path",
   
@@ -23,6 +23,8 @@
   "gui.artisanspath.edit_account.title": "Edit Account",
   "gui.artisanspath.accounts_management.title": "Accounts management",
   "gui.artisanspath.create_account.title": "Create account",
+
+  "tooltip.artisanspath.value": "Value: %s",
 
   "gui.artisanspath.confirm": "Confirm",
   "gui.artisanspath.delete": "Delete",
