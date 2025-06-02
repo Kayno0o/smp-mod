@@ -1,0 +1,20 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "gll",
+    "lll"
+  ],
+  "key": {
+    "g": {
+      "item": "minecraft:gold_block"
+    },
+    "l": {
+      "item": "minecraft:lapis_block"
+    }
+  },
+  "result": {
+    "id": "artisanspath:payment_card",
+    "count": 1
+  },
+  "show_notification": false
+}

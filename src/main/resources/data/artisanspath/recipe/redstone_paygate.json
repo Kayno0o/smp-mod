@@ -1,0 +1,25 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "building",
+  "pattern": [
+    "rlr",
+    "lgl",
+    "rlr"
+  ],
+  "key": {
+    "g": {
+      "item": "minecraft:gold_block"
+    },
+    "r": {
+      "item": "minecraft:redstone_block"
+    },
+    "l": {
+      "item": "minecraft:lapis_block"
+    }
+  },
+  "result": {
+    "id": "artisanspath:redstone_paygate",
+    "count": 1
+  },
+  "show_notification": false
+}

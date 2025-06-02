@@ -27,10 +27,10 @@ public class MoneyItem extends Item {
       TooltipContext context,
       List<Component> tooltipComponents,
       TooltipFlag tooltipFlag) {
+    super.appendHoverText(stack, context, tooltipComponents, tooltipFlag);
+
     tooltipComponents.add(Component.translatable(
             "tooltip.artisanspath.value", NumberUtils.getCurrencyFormat().format(this.value))
         .withStyle(ChatFormatting.GRAY));
-
-    super.appendHoverText(stack, context, tooltipComponents, tooltipFlag);
   }
 }

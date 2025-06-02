@@ -1,0 +1,28 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "building",
+  "pattern": [
+    "idi",
+    "iri",
+    "ili"
+  ],
+  "key": {
+    "i": {
+      "item": "minecraft:iron_block"
+    },
+    "r": {
+      "item": "minecraft:redstone_block"
+    },
+    "d": {
+      "item": "minecraft:diamond"
+    },
+    "l": {
+      "item": "minecraft:lapis_block"
+    }
+  },
+  "result": {
+    "id": "artisanspath:atm",
+    "count": 1
+  },
+  "show_notification": false
+}
