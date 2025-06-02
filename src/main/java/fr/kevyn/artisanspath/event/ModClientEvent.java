@@ -71,7 +71,7 @@ public class ModClientEvent {
               && level.getBlockEntity(pos) instanceof ATMBlockEntity atm) {
             return atm.getColor();
           }
-          return 0xFFFFFF;
+          return 0xFFFFFFFF;
         },
         ArtisansBlocks.ATM.get());
   }

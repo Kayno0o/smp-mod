@@ -14,7 +14,8 @@ import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.level.block.state.BlockState;
 
 public class ATMBlockEntity extends AbstractBlockEntity {
-  private int color = 0xFFFFFFFF;
+  public static int DEFAULT_COLOR = 0xFFFFFFFF;
+  private int color = DEFAULT_COLOR;
 
   public ATMBlockEntity(BlockPos pos, BlockState state) {
     super(ArtisansBlockEntities.ATM.get(), pos, state);
