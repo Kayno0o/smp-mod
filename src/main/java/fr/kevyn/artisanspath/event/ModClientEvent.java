@@ -2,9 +2,7 @@ package fr.kevyn.artisanspath.event;
 
 import com.mojang.blaze3d.platform.InputConstants;
 import fr.kevyn.artisanspath.ArtisansMod;
-import fr.kevyn.artisanspath.block.ATMBlockEntity;
 import fr.kevyn.artisanspath.init.ArtisansBlockEntities;
-import fr.kevyn.artisanspath.init.ArtisansBlocks;
 import fr.kevyn.artisanspath.init.ArtisansEntities;
 import fr.kevyn.artisanspath.init.ArtisansItems;
 import fr.kevyn.artisanspath.init.ArtisansMenus;
@@ -59,21 +57,5 @@ public class ModClientEvent {
   @SubscribeEvent
   public static void registerItemColors(RegisterColorHandlersEvent.Item event) {
     event.register(PaymentCardItem::getColor, ArtisansItems.PAYMENT_CARD.get());
-  }
-
-  @SubscribeEvent
-  public static void registerBlockColors(RegisterColorHandlersEvent.Block event) {
-    event.register(
-        (state, level, pos, tintIndex) -> {
-          if (tintIndex != 0) return -1;
-          if (level != null
-              && pos != null
-              && level.getBlockEntity(pos) instanceof ATMBlockEntity atm) {
-            int color = atm.getColor();
-            return color != ATMBlockEntity.DEFAULT_COLOR ? color : 0xFFFFFFFF;
-          }
-          return 0xFFFFFFFF;
-        },
-        ArtisansBlocks.ATM.get());
   }
 }
