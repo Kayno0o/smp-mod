@@ -1,8 +1,8 @@
 {
   "variants": {
-    "facing=north": { "model": "artisanspath:block/small_atm", "y": 180 },
-    "facing=south": { "model": "artisanspath:block/small_atm", "y": 0 },
-    "facing=west": { "model": "artisanspath:block/small_atm", "y": 90 },
-    "facing=east": { "model": "artisanspath:block/small_atm", "y": 270 }
+    "facing=north": { "model": "artisanspath:block/atm", "y": 180 },
+    "facing=south": { "model": "artisanspath:block/atm", "y": 0 },
+    "facing=west": { "model": "artisanspath:block/atm", "y": 90 },
+    "facing=east": { "model": "artisanspath:block/atm", "y": 270 }
   }
 }

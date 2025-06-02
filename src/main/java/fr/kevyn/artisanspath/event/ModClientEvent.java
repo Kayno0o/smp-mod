@@ -69,7 +69,8 @@ public class ModClientEvent {
           if (level != null
               && pos != null
               && level.getBlockEntity(pos) instanceof ATMBlockEntity atm) {
-            return atm.getColor();
+            int color = atm.getColor();
+            return color != ATMBlockEntity.DEFAULT_COLOR ? color : 0xFFFFFFFF;
           }
           return 0xFFFFFFFF;
         },

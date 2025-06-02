@@ -1,9 +1,10 @@
 {
   "parent": "artisanspath:custom/atm",
   "textures": {
-    "0": "artisanspath:block/atm",
+    "base": "artisanspath:block/atm_base",
+    "mask": "artisanspath:block/atm_mask",
 
-    "particle": "artisanspath:block/atm"
+    "particle": "artisanspath:block/atm_base"
   },
   "render_type": "solid"
 }
