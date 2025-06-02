@@ -41,11 +41,6 @@ public class ATMBlock extends Block implements EntityBlock {
   }
 
   @Override
-  protected boolean useShapeForLightOcclusion(BlockState state) {
-    return false;
-  }
-
-  @Override
   public int getLightBlock(BlockState state, BlockGetter worldIn, BlockPos pos) {
     return 0;
   }
