@@ -4,7 +4,9 @@ import com.mojang.blaze3d.platform.InputConstants;
 import fr.kevyn.artisanspath.ArtisansMod;
 import fr.kevyn.artisanspath.init.ArtisansBlockEntities;
 import fr.kevyn.artisanspath.init.ArtisansEntities;
+import fr.kevyn.artisanspath.init.ArtisansItems;
 import fr.kevyn.artisanspath.init.ArtisansMenus;
+import fr.kevyn.artisanspath.item.PaymentCardItem;
 import fr.kevyn.artisanspath.renderer.CoinProjectileRenderer;
 import fr.kevyn.artisanspath.renderer.RedstonePaygateRenderer;
 import fr.kevyn.artisanspath.ui.screen.ATMScreen;
@@ -14,6 +16,7 @@ import net.neoforged.api.distmarker.Dist;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.client.event.EntityRenderersEvent;
+import net.neoforged.neoforge.client.event.RegisterColorHandlersEvent;
 import net.neoforged.neoforge.client.event.RegisterKeyMappingsEvent;
 import net.neoforged.neoforge.client.event.RegisterMenuScreensEvent;
 import net.neoforged.neoforge.common.util.Lazy;
@@ -49,5 +52,10 @@ public class ModClientEvent {
   @SubscribeEvent
   public static void registerBindings(RegisterKeyMappingsEvent event) {
     event.register(ACCOUNTS_MANAGER_MAPPING.get());
+  }
+
+  @SubscribeEvent
+  public static void registerItemColors(RegisterColorHandlersEvent.Item event) {
+    event.register(PaymentCardItem::getColor, ArtisansItems.PAYMENT_CARD.get());
   }
 }
